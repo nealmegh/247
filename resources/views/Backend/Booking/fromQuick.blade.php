@@ -6,7 +6,7 @@
     {{--    <link rel="stylesheet" type="text/css" href={{asset("css/theme/plugins/table/datatable/dt-global_style.css")}}>--}}
     <link rel="stylesheet" type="text/css" href={{asset("css/theme/plugins/font-icons/fontawesome/css/regular.css")}}>
     <link rel="stylesheet" type="text/css" href={{asset("css/theme/plugins/font-icons/fontawesome/css/fontawesome.css")}}>
-    <link href="{{asset('css/2Frontend/vendor/telephone/intlTelInput.css')}}" rel="stylesheet">
+    {{--    <link href="{{asset('css/2Frontend/vendor/telephone/intlTelInput.css')}}" rel="stylesheet">--}}
     <!-- END PAGE LEVEL CUSTOM STYLES -->
     <link href={{asset("css/theme/scrollspyNav.css")}} rel="stylesheet" type="text/css" />
     <link href={{asset("css/theme/plugins/animate/animate.css")}} rel="stylesheet" type="text/css" />
@@ -44,45 +44,6 @@
                 display: none !important;
             }
         }
-
-    </style>
-    <style>
-
-        .iti__flag {background-image: url("/css/2Frontend/vendor/img/flags.png");}
-
-        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-            .iti__flag {background-image: url("/css/2Frontend/vendor/img/flags@2x.png");}
-        }
-        .btn-filled-green:active {
-            background-color: #00CCC0;
-            border: 1px #000000 solid;
-
-        }
-        .btn-filled-green {
-            background-color: #4CAF50; /* Green */
-            border: 1px #000000 solid;
-
-        }
-        .iti {
-            display: flex !important;
-        }
-
-    </style>
-    <style>
-        .customNav{
-            display: flex !important;
-            width: 15% !important;
-            border-left:0px !important;
-            z-index: 99 !important;
-        }
-        @media only screen and (max-width: 900px) {
-            .customNav {
-                display: flex !important;
-                width: 40% !important;
-                border-left: 0px !important;
-                z-index: 99;
-            }
-        }
     </style>
 
 @endsection
@@ -90,40 +51,24 @@
 @section('main-content')
     @if(Session::has('message'))
         <div class="alert alert-gradient mb-4" role="alert">
-            <button  type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"  data-dismiss="alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x close"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
             <strong>{{ Session::get('message') }}</strong>
         </div>
     @endif
-
-<div class="custom-bipon-container container " style="max-width: 80% !important;">
-
-    <div class="container">
-{{--        <div id="navSection" data-spy="affix" class="customNav" style=" display: flex !important; width: 15% !important; border-left:0px !important; z-index: 99 !important;">--}}
-            <div id="navSection" data-spy="affix" class="customNav nav sidenav" >
-            <div class="sidenav-content">
-                <div id="priceUpdate" class="form-control" style="padding-bottom: 10px;font-weight: bold;">
-                    Price 0.00
-                </div>
-                <button class="btn btn-primary"  id="button_2" value="val_2" name="but2" style="margin-right: 0;margin-top: 5px;">
-                    Price Check
-                </button>
-            </div>
-        </div>
-
+    <div class="custom-bipon-container container " style="max-width: 80% !important;">
+        <div class="container">
             <div class="row layout-top-spacing">
                 <div id="flActionButtons" class="col-lg-12">
                     <div class="statbox widget box box-shadow">
                         <div class="widget-header">
                             <div class="row">
                                 <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                    <h2><small>create</small> Quick Booking</h2>
+                                    <h2><small>Finalize</small> Booking </h2>
                                 </div>
                             </div>
                         </div>
                         <div class="widget-content widget-content-area">
-                            <form class="" method="post" action="{{route('booking.quick.bookings.store')}}">
+                            <form class="" method="post" action="{{route('booking.create')}}">
                                 @csrf
                                 <input type="hidden" id="updateReturnPrice" value="">
                                 <input type="hidden" id="updatePriceInput" value="">
@@ -133,20 +78,28 @@
                                 <input type="hidden" id="calReturn" value="0">
                                 <input type="hidden" id="calTP" value="0">
                                 <input type="hidden" id="calReturnType" value="0">
-
-                                <div class="form-row " style="margin-bottom: 0px !important;">
+{{--                                {{dd($booking->location)}}--}}
+                                <div class="form-row " style="  margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6">
                                         <label for="selectFrom">From</label>
                                         <select id="selectFrom" name="selectFrom" class="form-control selectFrom">
                                             <option>Choose a Pick-Up Point</option>
                                             <optgroup label="Airports">
                                                 @foreach($airports as $airport)
-                                                    <option value="{{'air'.$airport->id}}">{{$airport->display_name}}</option>
+                                                    @if($booking->from_to != 'loc' && $booking->airport->id == $airport->id)
+                                                        <option value="{{'air'.$airport->id}}" selected>{{$airport->display_name}}</option>
+                                                    @else
+                                                        <option value="{{'air'.$airport->id}}">{{$airport->display_name}}</option>
+                                                    @endif
                                                 @endforeach
                                             </optgroup>
                                             <optgroup label="Area">
                                                 @foreach($locations as $location)
-                                                    <option value="{{'loc'.$location->id}}">{{$location->display_name}}</option>
+                                                    @if($booking->from_to == 'loc' && $booking->location->id == $location->id)
+                                                        <option value="{{'loc'.$location->id}}" selected>{{$location->display_name}}</option>
+                                                    @else
+                                                        <option value="{{'loc'.$location->id}}">{{$location->display_name}}</option>
+                                                    @endif
                                                 @endforeach
                                             </optgroup>
                                         </select>
@@ -155,167 +108,242 @@
                                         <label for="selectTo">To</label>
                                         <select id="selectTo" name="selectTo" class="form-control selectTo">
                                             <option selected>Choose a Drop-Off Point</option>
+                                            @if($booking->from_to == 'loc')
+                                                <optgroup label="Airports">
+
+                                                    @foreach($airports as $airport)
+                                                        @if( $booking->airport->id == $airport->id)
+                                                            <option value="{{$airport->id}}" selected>{{$airport->display_name}}</option>
+                                                        @else
+                                                            <option value="{{$airport->id}}">{{$airport->display_name}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </optgroup>
+                                            @else
+                                                <optgroup label="Area">
+                                                    @foreach($locations as $location)
+                                                        @if($booking->location->id == $location->id)
+                                                            <option value="{{$location->id}}" selected>{{$location->display_name}}</option>
+                                                        @else
+                                                            <option value="{{$location->id}}">{{$location->display_name}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </optgroup>
+                                            @endif
                                         </select>
                                     </div>
                                 </div>
+
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6">
                                         <label for="pickup_address">Pick Up Address <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="pickup_address" name="pickup_address" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" id="pickup_address" value="{{$booking->pickup_address}}" name="pickup_address" placeholder="1234 Main St">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="dropoff_address">Drop Off Address</label>
-                                        <input type="text" class="form-control" id="dropoff_address" name="dropoff_address" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" id="dropoff_address" value="{{$booking->dropoff_address}}" name="dropoff_address" placeholder="1234 Main St">
                                     </div>
                                 </div>
 
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6">
                                         <label for="journey_date">Journey Date <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="journey_date" name="journey_date" placeholder="Journey Date" required="required">
+                                        <input type="text" class="form-control" id="journey_date" value="{{date('d-m-Y',strtotime($booking->journey_date))}}" name="journey_date" placeholder="Journey Date" required="required">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="pickup_time">Journey Time</label>
-                                        <input type="text" class="form-control" id='pickup_time' name="pickup_time" placeholder="Pick Up Time">
+                                        <input type="text" class="form-control" id='pickup_time' value="{{date('H:i',strtotime($booking->journey_date))}}" name="pickup_time" placeholder="Pick Up Time">
                                     </div>
                                 </div>
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6">
                                         <label for="flight_number">Flight/Train No. <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="flight_number" name="flight_number" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" id="flight_number" name="flight_number" value="{{$booking->flight_number}}" placeholder="1234 Main St">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="flight_origin">Flight/Train Origin</label>
-                                        <input type="text" class="form-control" id="flight_origin" name="flight_origin" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" id="flight_origin" value="{{$booking->flight_origin}}" name="flight_origin" placeholder="1234 Main St">
                                     </div>
                                 </div>
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6">
-                                            <label for="car_type">Car Type</label>
-                                            <select id="car_type" class="form-control" name="car_id">
-{{--                                                <option selected>Choose Car Type</option>--}}
-                                                @foreach($cars as $carKey => $car)
-                                                    @if($carKey == 0)
-                                                        <option value="{{$car->id}}" selected>{{$car->name.' '.$car->description}}</option>
-                                                    @else
-                                                        <option value="{{$car->id}}">{{$car->name.' '.$car->description}}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
+                                        <label for="car_type">Car Type</label>
+                                        <select id="car_type" class="form-control" name="car_id">
+                                            <option selected>Choose Car Type</option>
+                                            @foreach($cars as $car)
+                                                @if($booking->car->id == $car->id)
+                                                    <option value="{{$car->id}}" selected>{{$car->name.' '.$car->description}}</option>
+                                                @else
+                                                    <option value="{{$car->id}}">{{$car->name.' '.$car->description}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="return">Round Trip</label>
                                         <select class="form-control" id="return" name="return" >
-                                            <option value=0>No</option>
-                                            <option value=1>Yes</option>
+                                            @if($booking->return == 0)
+                                                <option value=0 selected>No</option>
+                                                <option value=1>Yes</option>
+                                            @else
+                                                <option value=0 >No</option>
+                                                <option value=1 selected>Yes</option>
+                                            @endif
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
-                                    <div class="form-group col-md-6" id="rPA" style="display: none">
-                                        <label for="return_pickup_address">Return Pick Up Address <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="return_pickup_address" name="return_pickup_address" placeholder="1234 Main St" disabled>
-                                    </div>
-                                    <div class="form-group col-md-6" id="rDA" style="display: none">
-                                        <label for="return_dropoff_address">Return Drop Off Address</label>
-                                        <input type="text" class="form-control" id="return_dropoff_address" name="return_dropoff_address" placeholder="1234 Main St" disabled>
-                                    </div>
+                                    @if($booking->return != 1)
+                                        <div class="form-group col-md-6" id="rPA" style="display: none">
+                                            <label for="return_pickup_address">Return Pick Up Address <span class="required">*</span></label>
+                                            <input type="text" class="form-control" id="return_pickup_address" name="return_pickup_address" placeholder="1234 Main St" disabled>
+                                        </div>
+                                        <div class="form-group col-md-6" id="rDA" style="display: none">
+                                            <label for="return_dropoff_address">Return Drop Off Address</label>
+                                            <input type="text" class="form-control" id="return_dropoff_address" name="return_dropoff_address" placeholder="1234 Main St" disabled>
+                                        </div>
+                                    @else
+                                        <div class="form-group col-md-6" id="rPA" style="">
+                                            <label for="return_pickup_address">Return Pick Up Address <span class="required">*</span></label>
+                                            <input type="text" class="form-control" value="{{$booking->return_pickup_address}}" id="return_pickup_address" name="return_pickup_address" placeholder="1234 Main St" >
+                                        </div>
+                                        <div class="form-group col-md-6" id="rDA" style="">
+                                            <label for="return_dropoff_address">Return Drop Off Address</label>
+                                            <input type="text" class="form-control" value="{{$booking->return_dropoff_address}}" id="return_dropoff_address" name="return_dropoff_address" placeholder="1234 Main St" >
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
-                                    <div class="form-group col-md-6" id="rDate" style="display: none">
-                                        <label for="return_date">Return Date <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="return_date" name="return_date" placeholder="Return Date" required="required" disabled>
-                                    </div>
-                                    <div class="form-group col-md-6" id="rTime" style="display: none">
-                                        <label for="return_time">Return Time</label>
-                                        <input type="text" class="form-control" id='return_time' name="return_time" placeholder="Return Pick Up Time" disabled>
-                                    </div>
+                                    @if($booking->return != 1)
+                                        <div class="form-group col-md-6" id="rDate" style="display: none">
+                                            <label for="return_date">Return Date <span class="required">*</span></label>
+                                            <input type="text" class="form-control" id="return_date" name="return_date" placeholder="Return Date" required="required" disabled>
+                                        </div>
+                                        <div class="form-group col-md-6" id="rTime" style="display: none">
+                                            <label for="return_time">Return Time <span class="required">*</span></label>
+                                            <input type="text" class="form-control" id="return_time" name="return_time" placeholder="Return Date" required="required" disabled>
+                                        </div>
+                                    @else
+                                        <div class="form-group col-md-6" id="rDate" style="">
+                                            <label for="return_date">Return Date <span class="required">*</span></label>
+                                            <input type="text" class="form-control" id="return_date" value="{{date('d-m-Y',strtotime($booking->return_date))}}" name="return_date" placeholder="Return Date" required="required">
+                                        </div>
+                                        <div class="form-group col-md-6" id="rTime" style="">
+                                            <label for="return_time">Return Time <span class="required">*</span></label>
+                                            <input type="text" class="form-control" id="return_time" value="{{date('H:i',strtotime($booking->return_date))}}" name="return_time" placeholder="Return Date" required="required">
+                                        </div>
+                                    @endif
+
                                 </div>
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
-                                    <div class="form-group col-md-6" id="rFlight" style="display: none">
-                                        <label for="return_flight_number">Return Flight/Train No. <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="return_flight_number" name="return_flight_number" placeholder="Return Flight Number" disabled>
-                                    </div>
-                                    <div class="form-group col-md-6" id="rOrigin" style="display: none">
-                                        <label for="return_flight_origin">Return Flight/Train Origin</label>
-                                        <input type="text" class="form-control" id="return_flight_origin" name="return_flight_origin" placeholder="Return Flight Origin" disabled>
-                                    </div>
+                                    @if($booking->return != 1)
+                                        <div class="form-group col-md-6" id="rFlight" style="display: none">
+                                            <label for="return_flight_number">Return Flight/Train No. <span class="required">*</span></label>
+                                            <input type="text" class="form-control" id="return_flight_number" name="return_flight_number" placeholder="Return Flight Number" disabled>
+                                        </div>
+                                        <div class="form-group col-md-6" id="rOrigin" style="display: none">
+                                            <label for="return_flight_origin">Return Flight/Train Origin</label>
+                                            <input type="text" class="form-control" id="return_flight_origin" name="return_flight_origin" placeholder="Return Flight Origin" disabled>
+                                        </div>
+                                    @else
+                                        <div class="form-group col-md-6" id="rFlight" style="">
+                                            <label for="return_flight_number">Return Flight/Train No. <span class="required">*</span></label>
+                                            <input type="text" class="form-control" id="return_flight_number" value="{{$booking->return_flight_number}}" name="return_flight_number" placeholder="Return Flight Number" >
+                                        </div>
+                                        <div class="form-group col-md-6" id="rOrigin" style="">
+                                            <label for="return_flight_origin">Return Flight/Train Origin</label>
+                                            <input type="text" class="form-control" id="return_flight_origin" value="{{$booking->return_flight_origin}}" name="return_flight_origin" placeholder="Return Flight Origin" >
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6" style="" >
                                         <label class="control-label" for="meetF">Meet & Greet<span class="required">*</span></label> <br>
                                         <label class="switch s-icons s-outline s-outline-success mr-2">
-                                            <input id="meetF" name="meetF" type="checkbox" value="0">
+                                            @if($booking->meet == 0)
+                                                <input id="meetF" name="meetF" type="checkbox" value="0">
+                                            @else
+                                                <input id="meetF" name="meetF" type="checkbox" value="1" checked>
+                                            @endif
                                             <span class="slider round"></span>
                                         </label>
                                     </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="control-label" for="newCustomer">New Customer<span class="required">*</span></label> <br>
-                                        <label class="switch s-icons s-outline s-outline-success mr-2">
-                                            <input id="newCustomer" name="newCustomer" type="checkbox" value="0">
-                                            <span class="slider round"></span>
-                                        </label>
-                                    </div>
                                 </div>
-
-                            <div id="customerFormDiv" style="display: none">
-                                <div class="form-row mb-4" style="margin-bottom: 0px !important;">
-
-                                    <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Customer Name" disabled>
-
-                                </div>
-                                <div class="form-row mb-4" style="margin-bottom: 0px !important; margin-top: 10px;" >
-                                    <div class="form-group col-md-6">
-                                        <label for="email">Email <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="email" name="email" placeholder="Customer Email" disabled>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="phone">Phone</label> <br>
-                                        <input type="tel" class="form-control" id="phone" name="phone_number" placeholder="Customer Phone Number" disabled>
-                                    </div>
-                                    <input type="hidden" id="countryCode" name="countryCode" value="">
-                                </div>
-
-                            </div>
 
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;" id="oldCustomer">
                                     <label for="user_id">Customer</label>
-                                    <select id="user_id" class="form-control UserCustomer" name="user_id" required="required">
-                                        <option value selected>Choose One</option>
+                                    <select id="user_id" class="form-control UserCustomer" name="user_id">
+                                        <option>Chooose One</option>
                                         @foreach($users as $user)
-                                            <option value="{{$user->id}}">{{$user->name}} -+ {{$user->phone}}</option>
+                                            @if($booking->user->id == $user->id)
+                                                <option value="{{$user->id}}" selected>{{$user->name}} - {{$user->phone}}</option>
+                                            @else
+                                                <option value="{{$user->id}}" >{{$user->name}} - {{$user->phone}}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="form-row mb-4">
+                                    <div class="form-group col-md-3">
+                                        <label for="adult">Adult</label>
+                                        <input type="number" class="form-control" name="adult" value="2" id="adult">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="child">Child</label>
+                                        <input type="number" class="form-control" name="child" value="1" id="child">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="luggage">Luggage</label>
+                                        <input type="number" class="form-control" name="luggage" value="2" id="luggage">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="carryon">Carry On</label>
+                                        <input type="number" class="form-control" name="carryon" value="2" id="carryon">
+                                    </div>
+                                </div>
                                 <div class="form-group mb-4">
                                     <label for="addinfo">Additional Information</label>
-                                    <textarea type="text" class="form-control" id="addinfo" name="addinfo" placeholder="Apartment, studio, or floor"></textarea>
-                                </div>
-                                <div class="form-row mb-4">
-                                    <div class="form-group col-md-4">
-                                        <label for="discount_type">Discount Type</label>
-                                        <select class="form-control" id="discount_type" name="discount_type" >
-                                            <option value=0>Fixed</option>
-                                            <option value=1>Percentage</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="discount_value">Discount Value</label>
-                                        <input type="number" class="form-control" id="discount_value" value=0 name="discount_value" placeholder="Discount Value">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="custom_price">Custom Price</label>
-                                        <input type="number" class="form-control" id="custom_price" value=0 name="custom_price" placeholder="Enter Price for Custom Trip">
-                                    </div>
+                                    <textarea type="text" class="form-control" id="addinfo" name="addinfo" placeholder="Apartment, studio, or floor">{{$booking->add_info}}</textarea>
 
                                 </div>
                                 <div class="form-row mb-4">
+                                    <div class="form-group col-md-3">
+                                        <label for="discount_type">Discount Type</label>
+                                        <select class="form-control" id="discount_type" name="discount_type" >
+                                            @if($booking->discount_type == 0)
+                                                <option value=0 selected>Fixed</option>
+                                                <option value=1>Percentage</option>
+                                            @else
+                                                <option value=0 selected>Fixed</option>
+                                                <option value=1 selected>Percentage</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="discount_value">Discount Value</label>
+                                        <input type="number" class="form-control" id="discount_value" value="{{$booking->discount_value}}" name="discount_value" placeholder="Discount Value">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="extra_price">Extra Price</label>
+                                        <input type="number" class="form-control" id="extra_price" value="{{$booking->extra_price}}" name="extra_price" placeholder="Enter Price for Custom Trip">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="custom_price">Final Price</label>
+                                        <input type="number" class="form-control" id="custom_price" value="{{$booking->custom_price}}" name="custom_price" placeholder="Enter Price for Custom Trip">
+                                    </div>
+                                </div>
+                                {{--                                <div class="form-group mb-4">--}}
+                                {{--                                    <div class="form-group col-md-12">--}}
+                                {{--                                        <label for="custom_price">Custom Price</label>--}}
+                                {{--                                        <input type="number" class="form-control" id="custom_price" value={{$booking->custom_price}} name="custom_price" placeholder="Enter Price for Custom Trip">--}}
+                                {{--                                    </div>--}}
+                                {{--                                </div>--}}
+                                <div class="form-row mb-4">
                                     <label class="new-control new-checkbox checkbox-primary">
                                         <input type="checkbox" id="send_email" class="new-control-input" name="send_email" value="1" checked>
-                                        <span class="new-control-indicator"></span>Send Booking Confirmation Email to Customer
+                                        <span class="new-control-indicator"></span>Send Booking Update Email to Customer
                                     </label>
                                 </div>
 
@@ -330,6 +358,8 @@
 
         </div>
     </div>
+
+
 @endsection
 
 @section('js-customization')
@@ -343,9 +373,9 @@
     <script src={{asset("js/theme/plugins/table/datatable/button-ext/buttons.print.min.js")}}></script>
     <script src={{asset("js/theme/plugins/select2/select2.min.js")}}></script>
     <script src={{asset("js/theme/plugins/flatpickr/flatpickr.js")}}></script>
-{{--    <script src={{asset("js/theme/plugins/flatpickr/custom-flatpickr.js")}}></script>--}}
-    <script src="{{asset('js/2Frontend/vendor/telephone/intlTelInput.min.js')}}"></script>
-{{--    <script src={{asset("js/theme/plugins/select2/custom-select2.js")}}></script>--}}
+    {{--    <script src={{asset("js/theme/plugins/flatpickr/custom-flatpickr.js")}}></script>--}}
+    {{--    <script src="{{asset('js/2Frontend/vendor/telephone/intlTelInput.min.js')}}"></script>--}}
+    {{--    <script src={{asset("js/theme/plugins/select2/custom-select2.js")}}></script>--}}
 
 
     <!-- BEGIN THEME GLOBAL STYLE -->
@@ -391,17 +421,6 @@
             time_24hr: true,
             disableMobile: true
         });
-        $(document).on("click", "#newCustomer", function(){
-            if(document.getElementById('newCustomer').value === '1')
-            {
-                document.getElementById('newCustomer').value= '0';
-
-            }
-            else {
-                document.getElementById('newCustomer').value='1';
-            }
-            customerForm();
-        });
         $(document).on("click", "#meetF", function(){
             if(document.getElementById('meetF').value === '1')
             {
@@ -413,44 +432,9 @@
                 document.getElementById('meet').value='1';
             }
         });
-        $(document).on("click", "#send_email", function(){
-            if(document.getElementById('send_email').value === '1')
-            {
-                document.getElementById('send_email').value= '0';
-            }
-            else {
-                document.getElementById('send_email').value='1';
-            }
-        });
     </script>
 
     <script type="text/javascript">
-
-        function customerForm() {
-            // Get the checkbox
-            var checkBox = document.getElementById("newCustomer");
-            // Get the output text
-            var form = document.getElementById("customerFormDiv");
-            var oldCustomer =  document.getElementById("oldCustomer");
-
-            // If the checkbox is checked, display the output text
-            if (checkBox.value === '1'){
-                form.style.display = "block";
-                oldCustomer.style.display = "none";
-                document.getElementById("name").disabled = (this.value === '0');
-                document.getElementById("email").disabled = (this.value === '0');
-                document.getElementById("phone").disabled = (this.value === '0');
-                document.getElementById("user_id").disabled = true;
-
-            } else {
-                form.style.display = "none";
-                oldCustomer.style.display = "block";
-                document.getElementById("user_id").disabled = false;
-                document.getElementById("name").disabled = true;
-                document.getElementById("email").disabled = true;
-                document.getElementById("phone").disabled = true;
-            }
-        }
 
         document.getElementById('return').onchange = function () {
             document.getElementById("return_date").disabled = (this.value === '0');
@@ -602,158 +586,17 @@
                 }
             }
         });
-
-    </script>
-
-    <script>
-        var input = document.querySelector("#phone");
-        var iti = intlTelInput(input,({
-            initialCountry:"gb",
-            autoHideDialCode:true,
-            nationalMode: false,
-            separateDialCode: true,
-            utilsScript: "/js/2Frontend/vendor/telephone/utils.js"
-
-        }));
-        // var countryData = iti.intlTelInputGlobals.getCountryData();
-        var number = iti.getNumber();
-        var countryData = iti.getSelectedCountryData();
-
-        var t = Object.values(countryData);
-
-        document.getElementById("countryCode").value = t[2];
-
-        input.addEventListener("countrychange", function() {
-            var countryData = iti.getSelectedCountryData();
-
-            var t = Object.values(countryData);
-
-
-            document.getElementById("countryCode").value = t[2];
-        });
-    </script>
-    <script>
-        $("#button_2").click(function(e) {
-
-            var selectF = document.getElementById("selectFrom");
-            var selectFromValue = selectF.options[selectF.selectedIndex].value;
-            var selectT = document.getElementById("selectTo");
-            var selectToValue = selectT.options[selectT.selectedIndex].value;
-            if(selectToValue == '' || selectToValue == 'Choose a Drop-Off Point')
+        $(document).on("click", "#send_email", function(){
+            if(document.getElementById('send_email').value === '1')
             {
-                e.preventDefault();
-                return;
+                document.getElementById('send_email').value= '0';
             }
-            e.preventDefault();
-            $.ajax({
-                type: "POST",
-                url: "/admin/bookings/priceUpdate",
-                dataType: "JSON",
-                data: {
-                    selectFrom: selectFromValue,
-                    selectTo: selectToValue,// < note use of 'this' here
-                    "_token": "{{ csrf_token() }}",
-                },
-                success: function(result) {
-                    // var parsed_data = JSON.parse(result);
-                    document.getElementById("priceUpdate").innerHTML="Price "+result.price;
-                    document.getElementById('updateReturnPrice').value = result.returnPrice;
-                    document.getElementById('updatePriceInput').value = result.price;
-                },
-                error: function(result) {
-                    alert('Error');
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $('#car_type').on('change', function() {
-            var price = document.getElementById('updatePriceInput').value;
-            var e = document.getElementById("car_type");
-            var car_type = e.options[e.selectedIndex].value;
-            var cars = {!! json_encode($cars) !!};
-
-            var carPrice = parseFloat(0);
-
-            for(var i=0; i<cars.length; i++)
-            {
-                if (car_type == cars[i].id) {
-                    if(cars[i].fair == 500)
-                    {
-                        carPrice = parseFloat(price*.5);
-                    }
-                    else
-                    {
-                        carPrice = parseFloat(cars[i].fair);
-                    }
-                }
-
-            }
-            var retunType = document.getElementById("calReturnType").value;
-            if(retunType == 1)
-            {
-                carPrice = carPrice*2;
-            }
-            document.getElementById('calCar').value = carPrice;
-
-            var calReturn = document.getElementById('calReturn').value;
-            calReturn = parseFloat(calReturn);
-            var calMeet = document.getElementById('calMeet').value;
-            calMeet = parseFloat(calMeet);
-            var calCar = document.getElementById('calCar').value;
-            calCar = parseFloat(calCar)
-            var updatePriceInput = document.getElementById('updatePriceInput').value;
-            updatePriceInput = parseFloat(updatePriceInput);
-
-            var tp = calMeet + calReturn + updatePriceInput + calCar;
-            document.getElementById('calTP').value = tp;
-            document.getElementById("priceUpdate").innerHTML="Price "+tp;
-        });
-
-        $('#meet').on('change', function() {
-            var e = document.getElementById("meet");
-            var meet = e.options[e.selectedIndex].value;
-
-            var meetValue = {!! json_encode($siteSettings[0]->value) !!}
-                meetValue = parseFloat(meetValue);
-
-            if(meet == 1)
-            {
-                document.getElementById('calMeet').value = meetValue;
-                var calReturn = document.getElementById('calReturn').value;
-                calReturn = parseFloat(calReturn);
-                var calMeet = document.getElementById('calMeet').value;
-                calMeet = parseFloat(calMeet);
-                var calCar = document.getElementById('calCar').value;
-                calCar = parseFloat(calCar)
-                var updatePriceInput = document.getElementById('updatePriceInput').value;
-                updatePriceInput = parseFloat(updatePriceInput);
-
-
-                var tp = calMeet + calReturn + updatePriceInput + calCar;
-                document.getElementById('calTP').value = tp;
-                document.getElementById("priceUpdate").innerHTML="Price "+tp;
-
-            }
-            else
-            {
-                document.getElementById('calMeet').value = 0;
-                var calReturn = document.getElementById('calReturn').value;
-                calReturn = parseFloat(calReturn);
-                var calMeet = document.getElementById('calMeet').value;
-                calMeet = parseFloat(calMeet);
-                var calCar = document.getElementById('calCar').value;
-                calCar = parseFloat(calCar)
-                var updatePriceInput = document.getElementById('updatePriceInput').value;
-                updatePriceInput = parseFloat(updatePriceInput);
-
-                var tp = calMeet + calReturn + updatePriceInput + calCar;
-                document.getElementById('calTP').value = tp;
-                document.getElementById("priceUpdate").innerHTML="Price "+tp;
+            else {
+                document.getElementById('send_email').value='1';
             }
         });
     </script>
+
 
 @endsection
 

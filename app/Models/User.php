@@ -73,7 +73,10 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Booking');
     }
-
+    public function quick_bookings()
+    {
+        return $this->hasMany('App\Models\QuickBooking');
+    }
     public function breadCrumbs(){
         $router = Route::current()->action['prefix'];
 

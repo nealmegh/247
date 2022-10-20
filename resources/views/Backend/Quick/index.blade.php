@@ -96,7 +96,7 @@
 
                     <div class="col 12 button-holder" style="display: flex">
                         <div class="col-8">
-                            <h3>Bookings</h3>
+                            <h3>Quick Bookings</h3>
                         </div>
                         <div class="create-button col-4">
                             <a href="{{(request()->user()->can('Customer'))?'/#book':route('booking.create')}}" class="create-button-btn btn btn-success mb-6 mr-4 btn-lg"> New Booking</a>
@@ -106,13 +106,13 @@
                     <table id="html5-extension" class="table table-hover table-striped dataTable">
                         <thead>
                         <tr>
-                            <th class="text-center">Reference No.</th>
+{{--                            <th class="text-center">Reference No.</th>--}}
                             <th class="text-center">Booked By</th>
                             <th class="text-center">Customer Info</th>
                             <th class="text-center">Journey Info</th>
-                            <th class="text-center">Driver</th>
-                            <th class="text-center">Payment</th>
-                            <th class="text-center">Status</th>
+{{--                            <th class="text-center">Driver</th>--}}
+{{--                            <th class="text-center">Payment</th>--}}
+{{--                            <th class="text-center">Status</th>--}}
                             <th class="text-center">Actions</th>
                         </tr>
                         </thead>
@@ -121,13 +121,12 @@
                         <tbody>
                         @foreach($bookings as $booking)
                             <tr>
-                                <td class="text-center"><a class="badge outline-badge-success shadow-none showBooking" data-toggle="modal" data-value="{{$booking->id}}"  data-target="#exampleModal">{{$booking->ref_id}}</a></td>
+{{--                                <td class="text-center"><a class="badge outline-badge-success shadow-none showBooking" data-toggle="modal" data-value="{{$booking->id}}"  data-target="#exampleModal">{{$booking->ref_id}}</a></td>--}}
                                 @if($booking->user != null)
                                     @php
                                     $book_by = \App\Models\User::where(['id' => $booking->book_by])->first();
                                         if($booking->book_by != 1)
                                         {
-
                                            $role = 'Customer';
                                         }
                                         elseif($booking->book_by == 1)
@@ -143,7 +142,7 @@
                                         $completion = 0;
                                         $job_status = 0;
                                         $count = -1;
-                                        if(!$booking->trips->isEmpty())
+                                        if($booking->trips != null && !$booking->trips?->isEmpty())
                                             {
                                                 $count = count($booking->trips);
                                                 foreach ($booking->trips as $trip)
@@ -163,13 +162,12 @@
                                                 $job_status = 50;
                                             }
                                     @endphp
-                                    <td> {{$role}} <br>{{$book_by->name}} </td>
-                                    <td>{{$booking->user->name}}<br><a href="{{'mailto:'.$booking->user->email}}">{{$booking->user->email}}</a><br><a href="{{'tel:'.$booking->user->phone}}">{{$booking->user->phone}}</a></td>
+                                    <td class="text-center"> {{$role}} <br>{{$book_by->name}} </td>
+                                    <td class="text-center">{{$booking->user->name}}<br><a href="{{'mailto:'.$booking->user->email}}">{{$booking->user->email}}</a><br><a href="{{'tel:'.$booking->user->phone}}">{{$booking->user->phone}}</a></td>
                                 @else
-                                    <td>{{'Data is Not Available'}} </td>
-                                    <td>{{'Customer Data is Not Available'}}</td>
-                                    <td>{{'Customer Data is Not Available'}}</td>
-                                    <td>{{'Customer Data is Not Available'}}</td>
+                                    <td class="text-center">{{'Data is Not Available'}} </td>
+                                    <td class="text-center">{{'Customer Data is Not Available'}}</td>
+
                                 @endif
                                 @php
                                     if($booking->return == 1){
@@ -191,93 +189,98 @@
                                    //$days = $interval->format('%a');
                                       //    dd($diff);
                                 @endphp
-                                @if(strtotime($booking->journey_date) < strtotime('3 days') && strtotime($booking->journey_date) > strtotime('1 days'))
-                                <td style="color: #e1ad01">{{$booking->journey_date->format('d-m-Y H:i')}} <br>
-                                    {{($booking->return == 1)?date('d-m-Y H:i' , $return_date):''}}
-                                </td>
-                                @elseif (strtotime($booking->journey_date) < strtotime('1 days') && $booking->complete_status != 1)
-                                    <td style="color: red">{{$booking->journey_date->format('d-m-Y H:i')}} <br>
+                                @if($booking->journey_date != Null)
+                                    @if(strtotime($booking->journey_date) < strtotime('3 days') && strtotime($booking->journey_date) > strtotime('1 days'))
+                                    <td class="text-center" style="color: #e1ad01">{{$booking->journey_date->format('d-m-Y H:i')}} <br>
                                         {{($booking->return == 1)?date('d-m-Y H:i' , $return_date):''}}
                                     </td>
-                                @else
-                                    <td style="color: green">{{$booking->journey_date->format('d-m-Y H:i')}} <br>
-                                        {{($booking->return == 1)?date('d-m-Y H:i' , $return_date):''}}
-                                    </td>
-                                @endif
-                                @if($booking->trips->isEmpty())
-                                    <td class="text-center">
-                                        <a href="{{route('booking.assign', $booking->id)}}" class="btn btn-sm btn-danger">
-                                            Assign</a>
-                                    </td>
-                                @else
-                                    <td class="text-center"> <span class="text-success" style="font-size: 16px !important;">Original: {{$booking->trips[0]->driver->name}}</span> <br>
-                                        @if($booking->return == 1)
-                                            @if(isset($booking->trips[1]))
-                                                <span class="text-success" style="font-size: 16px !important;">Return: {{$booking->trips[1]->driver->name}}</span> <br>
-                                            @else
-                                                <span class="text-danger" style="font-size: 16px !important;"> Return: NEED TO ASSIGN RETURN DRIVER. </span>
-                                            @endif
-                                        @endif
-                                        @if($booking->complete_status == null && $job_status != 100)
-                                            <a href="{{route('booking.reassign', $booking->id)}}" class="btn btn-sm btn-dark " data-row-id="37">
-                                                Re-Assign</a>
-                                        @endif
-
-                                    </td>
-
-                                @endif
-                                <td class="text-center">
-
-                                    @if($booking->user_transaction_id == null)
-                                        <span class="badge outline-badge-danger shadow-none">
-                                            @if($booking->final_price == null)
-                                                {{'£'.$booking->price}}
-                                            @else
-                                                {{'£'.$booking->final_price}}
-                                            @endif
-                                        </span>
-                                        <br>
-                                        <a href="{{route('booking.payment', $booking->id)}}" class="btn btn-sm btn-secondary" style="margin-top: 3px; background-color: purple; border-color: purple!important;">
-                                                    Payment
-                                                </a>
+                                    @elseif (strtotime($booking->journey_date) < strtotime('1 days') && $booking->complete_status != 1)
+                                        <td class="text-center" style="color: red">{{$booking->journey_date->format('d-m-Y H:i')}} <br>
+                                            {{($booking->return == 1)?date('d-m-Y H:i' , $return_date):''}}
+                                        </td>
                                     @else
-                                        <span class="badge outline-badge-success shadow-none">
-                                            @if($booking->final_price == null)
-                                                {{'£'.$booking->price}}
-                                            @else
-                                                {{'£'.$booking->final_price}}
-                                            @endif
-                                            <br>
-                                                {{$booking->userTransaction->trans_id}}
-                                        </span>
+                                        <td class="text-center" style="color: green">{{$booking->journey_date->format('d-m-Y H:i')}} <br>
+                                            {{($booking->return == 1)?date('d-m-Y H:i' , $return_date):''}}
+                                        </td>
                                     @endif
-                                    </span>
-                                </td>
 
-                                @if($booking->complete_status == Null)
-                                    <td class="text-center">
+                                @else
+                                    <td class="text-center">{{'Journey Data is Not Available'}}</td>
+                                @endif
+{{--                                @if($booking->trips->isEmpty())--}}
+{{--                                    <td class="text-center">--}}
+{{--                                        <a href="{{route('booking.assign', $booking->id)}}" class="btn btn-sm btn-danger">--}}
+{{--                                            Assign</a>--}}
+{{--                                    </td>--}}
+{{--                                @else--}}
+{{--                                    <td class="text-center"> <span class="text-success" style="font-size: 16px !important;">Original: {{$booking->trips[0]->driver->name}}</span> <br>--}}
+{{--                                        @if($booking->return == 1)--}}
+{{--                                            @if(isset($booking->trips[1]))--}}
+{{--                                                <span class="text-success" style="font-size: 16px !important;">Return: {{$booking->trips[1]->driver->name}}</span> <br>--}}
+{{--                                            @else--}}
+{{--                                                <span class="text-danger" style="font-size: 16px !important;"> Return: NEED TO ASSIGN RETURN DRIVER. </span>--}}
+{{--                                            @endif--}}
+{{--                                        @endif--}}
+{{--                                        @if($booking->complete_status == null && $job_status != 100)--}}
+{{--                                            <a href="{{route('booking.reassign', $booking->id)}}" class="btn btn-sm btn-dark " data-row-id="37">--}}
+{{--                                                Re-Assign</a>--}}
+{{--                                        @endif--}}
+
+{{--                                    </td>--}}
+
+{{--                                @endif--}}
+{{--                                <td class="text-center">--}}
+
+{{--                                    @if($booking->user_transaction_id == null)--}}
+{{--                                        <span class="badge outline-badge-danger shadow-none">--}}
+{{--                                            @if($booking->final_price == null)--}}
+{{--                                                {{'£'.$booking->price}}--}}
+{{--                                            @else--}}
+{{--                                                {{'£'.$booking->final_price}}--}}
+{{--                                            @endif--}}
+{{--                                        </span>--}}
+{{--                                        <br>--}}
+{{--                                        <a href="{{route('booking.payment', $booking->id)}}" class="btn btn-sm btn-secondary" style="margin-top: 3px; background-color: purple; border-color: purple!important;">--}}
+{{--                                                    Payment--}}
+{{--                                                </a>--}}
+{{--                                    @else--}}
+{{--                                        <span class="badge outline-badge-success shadow-none">--}}
+{{--                                            @if($booking->final_price == null)--}}
+{{--                                                {{'£'.$booking->price}}--}}
+{{--                                            @else--}}
+{{--                                                {{'£'.$booking->final_price}}--}}
+{{--                                            @endif--}}
+{{--                                            <br>--}}
+{{--                                                {{$booking->userTransaction->trans_id}}--}}
+{{--                                        </span>--}}
+{{--                                    @endif--}}
+{{--                                    </span>--}}
+{{--                                </td>--}}
+
+{{--                                @if($booking->complete_status == Null)--}}
+{{--                                    <td class="text-center">--}}
 
 
-                                        @if($job_status == 100)
+{{--                                        @if($job_status == 100)--}}
 {{--                                            <span class="badge outline-badge-danger shadow-none">{{'JOB COMPLETION:'.$job_status.'%'}}</span> --}}
 {{--                                            <br>--}}
-                                            <a href="{{route('booking.complete', $booking->id)}}" class="btn btn-success" >
-                                                Complete Job</a>
-                                        @else
+{{--                                            <a href="{{route('booking.complete', $booking->id)}}" class="btn btn-success" >--}}
+{{--                                                Complete Job</a>--}}
+{{--                                        @else--}}
 {{--                                            <a href="#"  onClick="alert('Complete All the Trips first')" class="btn btn-danger " >--}}
 {{--                                                Job Completion</a>--}}
-                                            <span class="badge outline-badge-danger shadow-none">{{'JOB COMPLETION:'.$job_status.'%'}}</span>
-                                        @endif
+{{--                                            <span class="badge outline-badge-danger shadow-none">{{'JOB COMPLETION:'.$job_status.'%'}}</span>--}}
+{{--                                        @endif--}}
 
 
-                                    </td>
-                                @else
-                                    <td class="text-center"><span class="badge badge-success">{{'Completed'}}</span></td>
-                                @endif
+{{--                                    </td>--}}
+{{--                                @else--}}
+{{--                                    <td class="text-center"><span class="badge badge-success">{{'Completed'}}</span></td>--}}
+{{--                                @endif--}}
 
-                                <td>
-                                    <a  href="{{route('booking.edit', $booking->id)}}" class="btn btn-primary" title="Edit Booking" >
-                                        <i class="far fa-edit"></i>
+                                <td class="text-center">
+                                    <a  href="{{route('booking.quick.bookings.final', $booking->id)}}" class="btn btn-dark" title="Edit Booking" >
+                                        Finalize
                                     </a>
 {{--                                    <a id="{{$booking->id}}" class="btn btn-danger delete-booking" data-value="{{$booking->ref_id}}" onClick="destroy_booking(this.id)" >--}}
 {{--                                        <i class="far fa-trash-alt"></i>--}}

@@ -20,6 +20,7 @@ use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserTransactionController;
 use App\Mail\testEmail;
+use App\Models\QuickBooking;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\Mime\Email;
@@ -149,6 +150,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::group( ['prefix' => 'bookings', 'as' => 'booking.'], function() {
             Route::get('/', [BookingController::class, 'index'])->name('bookings');
             Route::get('quickBooking/create', [QuickBookingController::class, 'create'])->name('quick.bookings.create');
+            Route::get('quickBooking', [QuickBookingController::class, 'index'])->name('quick.bookings.index');
+            Route::get('quickBooking/{QuickBooking}/final', [QuickBookingController::class, 'finalize'])->name('quick.bookings.final');
+            Route::post('quickBooking/store', [QuickBookingController::class, 'store'])->name('quick.bookings.store');
             Route::get('create', [BookingController::class, 'create'])->name('create');
             Route::post('store', [BookingController::class, 'store'])->name('store');
             Route::get('edit/{id}', [BookingController::class, 'edit'])->name('edit');
@@ -206,18 +210,3 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 });
 
-//Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-//    Route::get('/admin', function () {
-//        return view('theme.base');
-//    })->name('admin');
-//
-//    Route::get('/check', function () {
-//        return view('theme.base');
-//    })->name('check');
-//});
-//Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-//
-//});
-//Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-//    return view('dashboard');
-//})->name('dashboard');

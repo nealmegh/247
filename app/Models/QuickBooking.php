@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class QuickBooking extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'user_id',
         'book_by',
@@ -29,4 +30,43 @@ class QuickBooking extends Model
         'custom_price'
     ];
     protected $dates = ['journey_date', 'return_date'];
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+    public function airport()
+    {
+        return $this->belongsTo('App\Models\Airport');
+    }
+    public function location()
+    {
+        return $this->belongsTo('App\Models\Location');
+    }
+    public function car()
+    {
+        return $this->belongsTo('App\Models\Car');
+    }
+    public function from()
+    {
+        if($this->from_to == 'loc')
+        {
+            return $this->location->display_name;
+        }
+        else
+        {
+            return $this->airport->display_name;
+        }
+    }
+    public function to()
+    {
+        if($this->from_to == 'loc')
+        {
+            return $this->airport->display_name;
+        }
+        else
+        {
+            return $this->location->display_name;
+        }
+    }
 }

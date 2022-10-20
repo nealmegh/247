@@ -113,7 +113,7 @@ class BookingController extends Controller
         $booking->save();
     }
 
-    private function newCustomer(Request $request){
+    public function newCustomer(Request $request){
         if($request->newCustomer == '1')
         {
             if(User::where('email', '=', $request->email)->exists())
@@ -295,7 +295,7 @@ class BookingController extends Controller
 
 
     }
-    private function destinationSet(Request $request){
+    public function destinationSet(Request $request){
         $price = 0;
         $returnPrice = 0;
         $to = $request->selectTo;

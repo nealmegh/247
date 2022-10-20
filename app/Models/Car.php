@@ -14,5 +14,9 @@ class Car extends Model
     {
         return $this->hasMany('App\Models\Booking');
     }
+    public function quick_bookings()
+    {
+        return $this->hasMany('App\Models\QuickBooking');
+    }
 
 }

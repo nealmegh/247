@@ -68,9 +68,10 @@
                             </div>
                         </div>
                         <div class="widget-content widget-content-area">
-                            <form class="" method="post" action="{{route('booking.create')}}">
+                            <form class="" method="post" action="{{route('booking.store')}}">
                                 @csrf
                                 <input type="hidden" id="updateReturnPrice" value="">
+                                <input type="hidden" id="quickBook" name="quickBook" value="{{$booking->id}}">
                                 <input type="hidden" id="updatePriceInput" value="">
                                 <input type="hidden" id="calMeet" value="0">
                                 <input type="hidden" id="meet" name="meet" value="0">
@@ -82,55 +83,11 @@
                                 <div class="form-row " style="  margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6">
                                         <label for="selectFrom">From</label>
-                                        <select id="selectFrom" name="selectFrom" class="form-control selectFrom">
-                                            <option>Choose a Pick-Up Point</option>
-                                            <optgroup label="Airports">
-                                                @foreach($airports as $airport)
-                                                    @if($booking->from_to != 'loc' && $booking->airport->id == $airport->id)
-                                                        <option value="{{'air'.$airport->id}}" selected>{{$airport->display_name}}</option>
-                                                    @else
-                                                        <option value="{{'air'.$airport->id}}">{{$airport->display_name}}</option>
-                                                    @endif
-                                                @endforeach
-                                            </optgroup>
-                                            <optgroup label="Area">
-                                                @foreach($locations as $location)
-                                                    @if($booking->from_to == 'loc' && $booking->location->id == $location->id)
-                                                        <option value="{{'loc'.$location->id}}" selected>{{$location->display_name}}</option>
-                                                    @else
-                                                        <option value="{{'loc'.$location->id}}">{{$location->display_name}}</option>
-                                                    @endif
-                                                @endforeach
-                                            </optgroup>
-                                        </select>
+                                        @include('Backend.Booking.fromSelect')
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="selectTo">To</label>
-                                        <select id="selectTo" name="selectTo" class="form-control selectTo">
-                                            <option selected>Choose a Drop-Off Point</option>
-                                            @if($booking->from_to == 'loc')
-                                                <optgroup label="Airports">
-
-                                                    @foreach($airports as $airport)
-                                                        @if( $booking->airport->id == $airport->id)
-                                                            <option value="{{$airport->id}}" selected>{{$airport->display_name}}</option>
-                                                        @else
-                                                            <option value="{{$airport->id}}">{{$airport->display_name}}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </optgroup>
-                                            @else
-                                                <optgroup label="Area">
-                                                    @foreach($locations as $location)
-                                                        @if($booking->location->id == $location->id)
-                                                            <option value="{{$location->id}}" selected>{{$location->display_name}}</option>
-                                                        @else
-                                                            <option value="{{$location->id}}">{{$location->display_name}}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </optgroup>
-                                            @endif
-                                        </select>
+                                        @include('Backend.Booking.toSelect')
                                     </div>
                                 </div>
 
@@ -323,11 +280,11 @@
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="discount_value">Discount Value</label>
-                                        <input type="number" class="form-control" id="discount_value" value="{{$booking->discount_value}}" name="discount_value" placeholder="Discount Value">
+                                        <input type="number" class="form-control" id="discount_value" value="0" name="discount_value" placeholder="Discount Value">
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="extra_price">Extra Price</label>
-                                        <input type="number" class="form-control" id="extra_price" value="{{$booking->extra_price}}" name="extra_price" placeholder="Enter Price for Custom Trip">
+                                        <input type="number" class="form-control" id="extra_price" value="0" name="extra_price" placeholder="Enter Price for Custom Trip">
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="custom_price">Final Price</label>

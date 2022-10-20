@@ -208,10 +208,10 @@
                                                     </td>
                                                     <td style="width:70%;padding:15px 0;">
                                                         <p style="margin:0">
-                                                            {{$data['booking']->pickup_address.' '}}   {{'('.$data['booking']->location->display_name.')'}}
+                                                            {{$data['booking']->pickup_address.' '}}   @if($data['booking']->from_to != 'other'){{'('.$data['booking']->location->display_name.')'}}@endif
                                                         </p>
                                                         <p style="margin:0">
-                                                            {{$data['booking']->dropoff_address.' '}}   {{'('.$data['booking']->airport->display_name.')'}}
+                                                            {{$data['booking']->dropoff_address.' '}}   @if($data['booking']->from_to != 'other'){{'('.$data['booking']->airport->display_name.')'}}@endif
                                                         </p>
                                                         @if($data['booking']->return == 1)
                                                             <p style="margin:0">Yes</p>
@@ -220,10 +220,10 @@
                                                         @endif
                                                         @if($data['booking']->return == 1)
                                                             <p style="margin:0">
-                                                                {{$data['booking']->return_pickup_address.' '}}   {{'('.$data['booking']->airport->display_name.')'}}
+                                                                {{$data['booking']->return_pickup_address.' '}}   @if($data['booking']->from_to != 'other'){{'('.$data['booking']->airport->display_name.')'}}@endif
                                                             </p>
                                                             <p style="margin:0">
-                                                                {{$data['booking']->return_dropoff_address.' '}}   {{'('.$data['booking']->location->display_name.')'}}
+                                                                {{$data['booking']->return_dropoff_address.' '}}   @if($data['booking']->from_to != 'other'){{'('.$data['booking']->location->display_name.')'}}@endif
                                                             </p>
                                                         @endif
 
@@ -237,7 +237,7 @@
                                                                 <td style="width:30%;vertical-align: top;"><p style="margin:0">Pickup</p></td>
                                                                 <td>
                                                                     <p style="margin:0">
-                                                                        {{$data['booking']->pickup_address.' '}}  {{ '('.$data['booking']->airport->display_name.')'}}
+                                                                        {{$data['booking']->pickup_address.' '}}  @if($data['booking']->from_to != 'other'){{'('.$data['booking']->airport->display_name.')'}}@endif
                                                                     </p>
                                                                 </td>
                                                             </tr>
@@ -245,7 +245,7 @@
                                                                 <td style="width:30%;vertical-align: top;"><p style="margin:0">Destination</p></td>
                                                                 <td>
                                                                     <p style="margin:0">
-                                                                        {{$data['booking']->dropoff_address.' '}}  {{'('.$data['booking']->location->display_name.')'}}
+                                                                        {{$data['booking']->dropoff_address.' '}}  @if($data['booking']->from_to != 'other'){{'('.$data['booking']->location->display_name.')'}}@endif
                                                                     </p>
                                                                 </td>
                                                             </tr>
@@ -264,7 +264,7 @@
                                                                     <td style="width:30%;vertical-align: top;"><p style="margin:0;">Return Pickup</p></td>
                                                                     <td>
                                                                         <p style="margin:0">
-                                                                            {{$data['booking']->return_pickup_address.' '}}   {{'('.$data['booking']->location->display_name.')'}}
+                                                                            {{$data['booking']->return_pickup_address.' '}}   @if($data['booking']->from_to != 'other'){{'('.$data['booking']->location->display_name.')'}}@endif
                                                                         </p>
                                                                     </td>
                                                                 </tr>
@@ -272,7 +272,7 @@
                                                                 <td style="width:30%;vertical-align: top;"><p style="margin:0;">Return Destination</p></td>
                                                                 <td>
                                                                     <p style="margin:0">
-                                                                        {{$data['booking']->return_dropoff_address.' '}}   {{'('.$data['booking']->airport->display_name.')'}}
+                                                                        {{$data['booking']->return_dropoff_address.' '}}   @if($data['booking']->from_to != 'other'){{'('.$data['booking']->airport->display_name.')'}}@endif
                                                                     </p>
                                                                 </td>
                                                             </tr>

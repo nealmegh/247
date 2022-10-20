@@ -27,7 +27,8 @@ class QuickBooking extends Model
         'add_info',
         'pickup_time',
         'return_time',
-        'custom_price'
+        'custom_price',
+        'final_price'
     ];
     protected $dates = ['journey_date', 'return_date'];
 

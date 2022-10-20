@@ -138,11 +138,12 @@
                                     <div class="form-group col-md-6">
                                         <label for="selectFrom">From</label>
                                         <select id="selectFrom" name="selectFrom" class="form-control selectFrom">
-                                            <option>Choose a Pick-Up Point</option>
+                                            <option value >Choose a Pick-Up Point</option>
                                             <optgroup label="Airports">
                                                 @foreach($airports as $airport)
                                                     <option value="{{'air'.$airport->id}}">{{$airport->display_name}}</option>
                                                 @endforeach
+                                                    <option value="{{'other'}}" selected>{{__('Other')}}</option>
                                             </optgroup>
                                             <optgroup label="Area">
                                                 @foreach($locations as $location)
@@ -154,7 +155,8 @@
                                     <div class="form-group col-md-6">
                                         <label for="selectTo">To</label>
                                         <select id="selectTo" name="selectTo" class="form-control selectTo">
-                                            <option selected>Choose a Drop-Off Point</option>
+                                            <option value>Choose a Drop-Off Point</option>
+                                            <option value="{{'other'}}" selected>{{__('Other')}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -172,11 +174,11 @@
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6">
                                         <label for="journey_date">Journey Date <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="journey_date" name="journey_date" placeholder="Journey Date" required="required">
+                                        <input type="text" class="form-control" id="journey_date" name="journey_date" placeholder="Journey Date" required="required" style="color: black">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="pickup_time">Journey Time</label>
-                                        <input type="text" class="form-control" id='pickup_time' name="pickup_time" placeholder="Pick Up Time">
+                                        <input type="text" class="form-control" id='pickup_time' name="pickup_time" placeholder="Pick Up Time" style="color: black">
                                     </div>
                                 </div>
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
@@ -225,11 +227,11 @@
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6" id="rDate" style="display: none">
                                         <label for="return_date">Return Date <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="return_date" name="return_date" placeholder="Return Date" required="required" disabled>
+                                        <input type="text" class="form-control" id="return_date" name="return_date" placeholder="Return Date" required="required" disabled style="color: black">
                                     </div>
                                     <div class="form-group col-md-6" id="rTime" style="display: none">
                                         <label for="return_time">Return Time</label>
-                                        <input type="text" class="form-control" id='return_time' name="return_time" placeholder="Return Pick Up Time" disabled>
+                                        <input type="text" class="form-control" id='return_time' name="return_time" placeholder="Return Pick Up Time" disabled style="color: black">
                                     </div>
                                 </div>
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
@@ -373,13 +375,15 @@
 
         var f1 = flatpickr(document.getElementById('journey_date'), {
             minDate: "today",
-            dateFormat: "d-m-Y"
+            dateFormat: "d-m-Y",
+            defaultDate: "today",
         });
         var f2 = flatpickr(document.getElementById('pickup_time'), {
             enableTime: true,
             noCalendar: true,
             time_24hr: true,
-            disableMobile: true
+            disableMobile: true,
+            defaultDate: new Date(),
         });
         var f3 = flatpickr(document.getElementById('return_date'), {
             minDate: "today",

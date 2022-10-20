@@ -16,38 +16,53 @@ trait DestinationTrait {
             $returnPrice = 0;
             $to = $request->selectTo;
             $fromString = $request->selectFrom;
-            $maintain = mb_substr($fromString, 0, 3);
-            $from = substr($fromString, 3);
-            $request->request->add(['from_to' => $maintain]);
-            if($maintain == 'loc')
+            if($request->selectFrom == 'other')
             {
-                $location = Location::find($from);
-                $request->request->add(['location_id' => $from]);
-                $request->request->add(['airport_id' => $to]);
-                foreach ($location->airports as $airport)
+                $request->request->add(['from_to' => 'other']);
+                $request->request->add(['location_id' => 0]);
+                $request->request->add(['airport_id' => 0]);
+                $price = $request->custom_price;
+                if($request->return == 1)
                 {
-                    if($airport->id == $to)
-                    {
-                        $price = round($airport->pivot->price,2);
-                        $returnPrice = round($airport->pivot->return_price, 2);
-                    }
+                    $price = $request->custom_price/2;
+                    $returnPrice = $request->custom_price/2;
                 }
             }
-            else
-            {
-                $location = Location::find($to);
+            else{
+                $maintain = mb_substr($fromString, 0, 3);
+                $from = substr($fromString, 3);
+                $request->request->add(['from_to' => $maintain]);
+                if($maintain == 'loc')
+                {
+                    $location = Location::find($from);
+                    $request->request->add(['location_id' => $from]);
+                    $request->request->add(['airport_id' => $to]);
+                    foreach ($location->airports as $airport)
+                    {
+                        if($airport->id == $to)
+                        {
+                            $price = round($airport->pivot->price,2);
+                            $returnPrice = round($airport->pivot->return_price, 2);
+                        }
+                    }
+                }
+                else
+                {
+                    $location = Location::find($to);
 
-                $request->request->add(['airport_id' => $from]);
-                $request->request->add(['location_id' => $to]);
-                foreach ($location->airports as $airport)
-                {
-                    if($airport->id == $from)
+                    $request->request->add(['airport_id' => $from]);
+                    $request->request->add(['location_id' => $to]);
+                    foreach ($location->airports as $airport)
                     {
-                        $price = round($airport->pivot->return_price, 2);
-                        $returnPrice = round($airport->pivot->price,2);;
+                        if($airport->id == $from)
+                        {
+                            $price = round($airport->pivot->return_price, 2);
+                            $returnPrice = round($airport->pivot->price,2);;
+                        }
                     }
                 }
             }
+
             return $this->priceSet($request, $price, $returnPrice);
     }
     private function priceSet(Request $request, $price, $returnPrice){
@@ -95,6 +110,7 @@ trait DestinationTrait {
 
         }
         else{
+
             $totalPrice = round($request->custom_price,2);
             $finalPrice = round(($totalPrice - $discount) + $request->extra_price, 2);
 

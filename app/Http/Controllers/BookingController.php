@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Fortify\CreateNewUser;
+use App\Http\Traits\DestinationTrait;
 use App\Models\Airport;
 use App\Models\Booking;
 use App\Models\Car;
@@ -10,6 +11,7 @@ use App\Models\Driver;
 use App\Models\Invoice;
 use App\Models\Location;
 use App\Mail\BookingUpdated;
+use App\Models\QuickBooking;
 use App\Models\SiteSettings;
 use App\Models\Trip;
 use App\Models\User;
@@ -23,12 +25,14 @@ use App\Mail\DriverAssigned;
 use Illuminate\Support\Facades\Redirect;
 use Carbon\Carbon;
 use Laravel\Fortify\Fortify;
+use mysql_xdevapi\Exception;
 
 
 class BookingController extends Controller
 {
 
 //    use RegistersUsers;
+use DestinationTrait;
     public function __construct()
     {
         $this->middleware('auth');
@@ -74,24 +78,34 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        $siteSettings = SiteSettings::all();
-        $request = $this->destinationSet($request);
-        $request = $this->newCustomer($request);
+        try{
 
-        $authUser = Auth::user();
-        $request->request->add(['book_by' => $authUser->id]);
+            $siteSettings = SiteSettings::all();
 
-        $booking = Booking::create($request->all());
-        $this->generateRefId($booking);
+            $request = $this->setDestination($request);
+            $request = $this->newCustomer($request);
 
-        if($request->send_email ==1 || $siteSettings[22]->value == 1)
-        {
-            $data = array(
-                'booking' => $booking,
-            );
-            Mail::to($booking->user->email)->send(new BookingSuccessful($data));
+            $authUser = Auth::user();
+            $request->request->add(['book_by' => $authUser->id]);
+
+            $booking = Booking::create($request->all());
+            $this->generateRefId($booking);
+
+            if($request->send_email == 1 || $siteSettings[22]->value == 1)
+            {
+                $data = array(
+                    'booking' => $booking,
+                );
+                Mail::to($booking->user->email)->send(new BookingSuccessful($data));
+            }
         }
+        catch (Exception $e)
+        {
 
+        }
+        if($request->quickBook != Null){
+            QuickBooking::destroy($request->quickBook);
+        }
         if($authUser->role_id == 4)
         {
             return redirect()->route('agent.bookings')->with('message', 'Booking Created');
@@ -207,7 +221,7 @@ class BookingController extends Controller
     public function update(Request $request, $id)
     {
         $siteSettings = SiteSettings::all();
-        $request = $this->destinationSet($request);
+        $request = $this->setDestination($request);
         $booking =Booking::find($id);
 
         if($booking->complete_status == 1)

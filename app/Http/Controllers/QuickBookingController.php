@@ -62,7 +62,6 @@ class QuickBookingController extends Controller
      */
     public function store(StoreQuickBookingRequest $request)
     {
-
         $request = $this->setDestination($request);
         $request = $this->newCustomer($request);
 

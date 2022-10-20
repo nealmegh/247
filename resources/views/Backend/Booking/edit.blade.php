@@ -79,58 +79,14 @@
                                 <input type="hidden" id="calTP" value="0">
                                 <input type="hidden" id="calReturnType" value="0">
 
-                                <div class="form-row " style="margin-bottom: 0px !important;">
+                                <div class="form-row " style="  margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6">
                                         <label for="selectFrom">From</label>
-                                        <select id="selectFrom" name="selectFrom" class="form-control selectFrom">
-                                            <option>Choose a Pick-Up Point</option>
-                                            <optgroup label="Airports">
-                                                @foreach($airports as $airport)
-                                                    @if($booking->from_to != 'loc' && $booking->airport->id == $airport->id)
-                                                        <option value="{{'air'.$airport->id}}" selected>{{$airport->display_name}}</option>
-                                                    @else
-                                                        <option value="{{'air'.$airport->id}}">{{$airport->display_name}}</option>
-                                                    @endif
-                                                @endforeach
-                                            </optgroup>
-                                            <optgroup label="Area">
-                                                @foreach($locations as $location)
-                                                    @if($booking->from_to == 'loc' && $booking->location->id == $location->id)
-                                                        <option value="{{'loc'.$location->id}}" selected>{{$location->display_name}}</option>
-                                                    @else
-                                                        <option value="{{'loc'.$location->id}}">{{$location->display_name}}</option>
-                                                    @endif
-                                                @endforeach
-                                            </optgroup>
-                                        </select>
+                                        @include('Backend.Booking.fromSelect')
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="selectTo">To</label>
-                                        <select id="selectTo" name="selectTo" class="form-control selectTo">
-                                            <option selected>Choose a Drop-Off Point</option>
-                                            @if($booking->from_to == 'loc')
-                                                <optgroup label="Airports">
-
-                                                    @foreach($airports as $airport)
-                                                        @if( $booking->airport->id == $airport->id)
-                                                            <option value="{{$airport->id}}" selected>{{$airport->display_name}}</option>
-                                                        @else
-                                                            <option value="{{$airport->id}}">{{$airport->display_name}}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </optgroup>
-                                            @else
-                                                <optgroup label="Area">
-                                                    @foreach($locations as $location)
-                                                        @if($booking->location->id == $location->id)
-                                                            <option value="{{$location->id}}" selected>{{$location->display_name}}</option>
-                                                        @else
-                                                            <option value="{{$location->id}}">{{$location->display_name}}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </optgroup>
-                                            @endif
-                                        </select>
+                                        @include('Backend.Booking.toSelect')
                                     </div>
                                 </div>
 

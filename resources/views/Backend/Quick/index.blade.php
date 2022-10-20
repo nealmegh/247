@@ -11,10 +11,7 @@
     <!-- END PAGE LEVEL CUSTOM STYLES -->
     <link href={{asset("css/theme/scrollspyNav.css")}} rel="stylesheet" type="text/css" />
     <link href={{asset("css/theme/plugins/animate/animate.css")}} rel="stylesheet" type="text/css" />
-    <script src={{asset("css/theme/plugins/sweetalerts/promise-polyfill.js")}}></script>
-    <link href={{asset("css/theme/plugins/sweetalerts/sweetalert2.min.css")}} rel="stylesheet" type="text/css" />
-    <link href={{asset("css/theme/plugins/sweetalerts/sweetalert.css")}} rel="stylesheet" type="text/css" />
-    <link href={{asset("css/theme/components/custom-sweetalert.css" )}} rel="stylesheet" type="text/css" />
+
 
     <link rel="stylesheet" type="text/css" href="{{asset("css/theme/tables/table-basic.css" )}}">
 
@@ -138,30 +135,7 @@
                                           $role = 'Agent';
                                         }
                                     @endphp
-                                    @php
-                                        $completion = 0;
-                                        $job_status = 0;
-                                        $count = -1;
-                                        if($booking->trips != null && !$booking->trips?->isEmpty())
-                                            {
-                                                $count = count($booking->trips);
-                                                foreach ($booking->trips as $trip)
-                                                    {
-                                                        if($trip->trip_status == 1)
-                                                            {
-                                                                $completion ++;
-                                                            }
-                                                    }
-                                            }
-                                        if($completion == $count)
-                                            {
-                                                $job_status = 100;
-                                            }
-                                        elseif ($completion == $count/2)
-                                            {
-                                                $job_status = 50;
-                                            }
-                                    @endphp
+
                                     <td class="text-center"> {{$role}} <br>{{$book_by->name}} </td>
                                     <td class="text-center">{{$booking->user->name}}<br><a href="{{'mailto:'.$booking->user->email}}">{{$booking->user->email}}</a><br><a href="{{'tel:'.$booking->user->phone}}">{{$booking->user->phone}}</a></td>
                                 @else
@@ -180,14 +154,6 @@
                                         {
                                             $diff = true;
                                         }
-                                    //$diff =  Carbon\Carbon::now()->subDay()->diffForHumans(['options' => 0]);
-                                   //$diff =  Carbon\Carbon::parse($journey_date)->diffForHumans(Carbon\Carbon::now(), \Carbon\CarbonInterface::DIFF_RELATIVE_TO_NOW);
-                                   // Carbon::parse('2019-08-03')->diffForHumans('2019-08-13');
-                                   //$datetime1 = new DateTime($journey_date);
-                                   //$datetime2 = new DateTime($today);
-                                   //$interval = $datetime1->diff($datetime2);
-                                   //$days = $interval->format('%a');
-                                      //    dd($diff);
                                 @endphp
                                 @if($booking->journey_date != Null)
                                     @if(strtotime($booking->journey_date) < strtotime('3 days') && strtotime($booking->journey_date) > strtotime('1 days'))
@@ -207,84 +173,10 @@
                                 @else
                                     <td class="text-center">{{'Journey Data is Not Available'}}</td>
                                 @endif
-{{--                                @if($booking->trips->isEmpty())--}}
-{{--                                    <td class="text-center">--}}
-{{--                                        <a href="{{route('booking.assign', $booking->id)}}" class="btn btn-sm btn-danger">--}}
-{{--                                            Assign</a>--}}
-{{--                                    </td>--}}
-{{--                                @else--}}
-{{--                                    <td class="text-center"> <span class="text-success" style="font-size: 16px !important;">Original: {{$booking->trips[0]->driver->name}}</span> <br>--}}
-{{--                                        @if($booking->return == 1)--}}
-{{--                                            @if(isset($booking->trips[1]))--}}
-{{--                                                <span class="text-success" style="font-size: 16px !important;">Return: {{$booking->trips[1]->driver->name}}</span> <br>--}}
-{{--                                            @else--}}
-{{--                                                <span class="text-danger" style="font-size: 16px !important;"> Return: NEED TO ASSIGN RETURN DRIVER. </span>--}}
-{{--                                            @endif--}}
-{{--                                        @endif--}}
-{{--                                        @if($booking->complete_status == null && $job_status != 100)--}}
-{{--                                            <a href="{{route('booking.reassign', $booking->id)}}" class="btn btn-sm btn-dark " data-row-id="37">--}}
-{{--                                                Re-Assign</a>--}}
-{{--                                        @endif--}}
-
-{{--                                    </td>--}}
-
-{{--                                @endif--}}
-{{--                                <td class="text-center">--}}
-
-{{--                                    @if($booking->user_transaction_id == null)--}}
-{{--                                        <span class="badge outline-badge-danger shadow-none">--}}
-{{--                                            @if($booking->final_price == null)--}}
-{{--                                                {{'£'.$booking->price}}--}}
-{{--                                            @else--}}
-{{--                                                {{'£'.$booking->final_price}}--}}
-{{--                                            @endif--}}
-{{--                                        </span>--}}
-{{--                                        <br>--}}
-{{--                                        <a href="{{route('booking.payment', $booking->id)}}" class="btn btn-sm btn-secondary" style="margin-top: 3px; background-color: purple; border-color: purple!important;">--}}
-{{--                                                    Payment--}}
-{{--                                                </a>--}}
-{{--                                    @else--}}
-{{--                                        <span class="badge outline-badge-success shadow-none">--}}
-{{--                                            @if($booking->final_price == null)--}}
-{{--                                                {{'£'.$booking->price}}--}}
-{{--                                            @else--}}
-{{--                                                {{'£'.$booking->final_price}}--}}
-{{--                                            @endif--}}
-{{--                                            <br>--}}
-{{--                                                {{$booking->userTransaction->trans_id}}--}}
-{{--                                        </span>--}}
-{{--                                    @endif--}}
-{{--                                    </span>--}}
-{{--                                </td>--}}
-
-{{--                                @if($booking->complete_status == Null)--}}
-{{--                                    <td class="text-center">--}}
-
-
-{{--                                        @if($job_status == 100)--}}
-{{--                                            <span class="badge outline-badge-danger shadow-none">{{'JOB COMPLETION:'.$job_status.'%'}}</span> --}}
-{{--                                            <br>--}}
-{{--                                            <a href="{{route('booking.complete', $booking->id)}}" class="btn btn-success" >--}}
-{{--                                                Complete Job</a>--}}
-{{--                                        @else--}}
-{{--                                            <a href="#"  onClick="alert('Complete All the Trips first')" class="btn btn-danger " >--}}
-{{--                                                Job Completion</a>--}}
-{{--                                            <span class="badge outline-badge-danger shadow-none">{{'JOB COMPLETION:'.$job_status.'%'}}</span>--}}
-{{--                                        @endif--}}
-
-
-{{--                                    </td>--}}
-{{--                                @else--}}
-{{--                                    <td class="text-center"><span class="badge badge-success">{{'Completed'}}</span></td>--}}
-{{--                                @endif--}}
-
                                 <td class="text-center">
                                     <a  href="{{route('booking.quick.bookings.final', $booking->id)}}" class="btn btn-dark" title="Edit Booking" >
                                         Finalize
                                     </a>
-{{--                                    <a id="{{$booking->id}}" class="btn btn-danger delete-booking" data-value="{{$booking->ref_id}}" onClick="destroy_booking(this.id)" >--}}
-{{--                                        <i class="far fa-trash-alt"></i>--}}
-{{--                                    </a>--}}
                                 </td>
                             </tr>
                         @endforeach
@@ -292,55 +184,6 @@
                         </tbody>
                     </table>
                     @endcannot
-                    @can('Customer')
-                        <table id="html5-extension" class="table table-hover dataTable">
-                            <thead>
-                            <tr>
-                                <th class="text-center">Booking ID</th>
-                                <th class="text-center">Date</th>
-                                <th class="text-center">Booking Info</th>
-                                <th class="text-center">Price</th>
-                                <th class="text-center">Payment Status</th>
-                                <th class="text-center">Driver</th>
-                                {{--<th>Phone Number</th>--}}
-
-                            </tr>
-                            </thead>
-
-
-                            <tbody>
-                            @foreach($bookings as $booking)
-                                <tr>
-                                    <td>{{$booking->ref_id}}</td>
-                                    <td>{{date('d-m-Y', strtotime($booking->journey_date))}}</td>
-                                    <td>{{'From: '.$booking->from()}}<br>
-                                        {{'To: '.$booking->to()}}
-                                    </td>
-                                    {{--@endif--}}
-                                    <td>{{$booking->price}}</td>
-                                    <td>
-                                        @if($booking->user_transaction_id == null)
-                                            <a href="{{route('front.booking.confirm', $booking->id)}}" class="btn btn-sm btn-secondary ">
-                                                Make Payment
-                                            </a>
-
-                                        @else
-                                            {{$booking->userTransaction->trans_id}}
-                                        @endif
-                                    </td>
-                                    @if($booking->driver == null)
-                                        <td>
-                                            {{'Driver Yet to Assign'}}
-                                        </td>
-                                    @else
-                                        <td>{{$booking->driver->name}}</td>
-                                    @endif
-                                </tr>
-                            @endforeach
-
-                            </tbody>
-                        </table>
-                    @endcan
                 </div>
             </div>
         </div>
@@ -351,9 +194,9 @@
 
 @section('js-customization')
     <!-- BEGIN PAGE LEVEL CUSTOM SCRIPTS -->
-    @cannot('Customer')
+
     <script src= {{ asset("js/theme/plugins/perfect-scrollbar/perfect-scrollbar.min.js") }}></script>
-    @endcannot
+
     <script src={{ asset("js/theme/plugins/table/datatable/datatables.js") }}></script>
     <!-- NOTE TO Use Copy CSV Excel PDF Print Options You Must Include These Files  -->
     <script src={{asset("js/theme/plugins/table/datatable/button-ext/dataTables.buttons.min.js")}}></script>
@@ -388,83 +231,6 @@
     </script>
     <!-- BEGIN THEME GLOBAL STYLE -->
     <script src={{asset("js/theme/js/scrollspyNav.js")}}></script>
-    <script src={{asset("js/theme/plugins/sweetalerts/sweetalert2.min.js")}}></script>
-    <script src={{asset("js/theme/plugins/sweetalerts/custom-sweetalert.js")}}></script>
     <!-- END THEME GLOBAL STYLE -->
     <!-- END PAGE LEVEL CUSTOM SCRIPTS -->
-    <script>
-        // $('.delete-car').on('click', function () {
-        function destroy_booking(booking_id) {
-            const bookingName = $('#'+booking_id).attr("data-value");
-            const swalWithBootstrapButtons = swal.mixin({
-                confirmButtonClass: 'btn btn-success btn-rounded',
-                cancelButtonClass: 'btn btn-danger btn-rounded mr-3',
-                buttonsStyling: false,
-            })
-
-            swalWithBootstrapButtons({
-                title: 'Are you sure you want to delete Booking Number' +bookingName+'?',
-                text: "You won't be able to revert this!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'No, cancel!',
-                reverseButtons: true,
-                padding: '2em',
-                showLoaderOnConfirm: true,
-                preConfirm: ()=>{
-                    $.ajax({
-                        url: '/admin/bookings/delete/'+booking_id,
-                        method: 'POST',
-                        data:{"_token": "{{ csrf_token() }}"},
-                        success: function(resp)
-                        {
-                            console.log(resp)
-
-                        }
-                    })
-                }
-            }).then(function(result) {
-                if (result.value) {
-                    swalWithBootstrapButtons(
-                        {
-                            title: 'Deleted!',
-                            text: 'The car type has been deleted.',
-                            type: 'success'
-                        }
-                    ).then(function (result){
-                        location.reload();
-                    })
-                } else if (
-                    // Read more about handling dismissals
-                    result.dismiss === swal.DismissReason.cancel
-                ) {
-                    swalWithBootstrapButtons(
-                        'Cancelled',
-                        'The data is safe :)',
-                        'error'
-                    )
-                }
-            })
-
-            // })
-        }
-    </script>
-    <script>
-        $('.showBooking').on('click', function () {
-           let id = $(this).attr("data-value");
-            $.ajax
-            ({
-                url: '/admin/bookings/show/'+id,
-                dataType: 'json',
-                data: {"_token": "{{ csrf_token() }}"},
-                type: 'post',
-                success: function(response)
-                {
-                    document.getElementById('modal_booking_number').innerText = response.id;
-                }
-            });
-
-        });
-    </script>
 @endsection

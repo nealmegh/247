@@ -219,28 +219,28 @@
                                                 <tr>
                                                     <td style="width:30%;padding:5px 0;">Pickup</td>
                                                     <td style="width:70%;padding:5px 0;">
-                                                        {{$data['booking']->pickup_address.' '}}   {{'('.$data['booking']->location->display_name.')'}}
+                                                        {{$data['booking']->pickup_address.' '}}   @if($data['booking']->from_to != 'other'){{'('.$data['booking']->location->display_name.')'}}@endif
 
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td style="width:30%;padding:5px 0;">Destination</td>
                                                     <td style="width:70%;padding:5px 0;">
-                                                        {{$data['booking']->dropoff_address.' '}}   {{'('.$data['booking']->airport->display_name.')'}}
+                                                        {{$data['booking']->dropoff_address.' '}}   @if($data['booking']->from_to != 'other'){{'('.$data['booking']->airport->display_name.')'}}@endif
                                                     </td>
                                                 </tr>
                                             @else
                                                 <tr>
                                                     <td style="width:30%;padding:5px 0;">Pickup</td>
                                                     <td style="width:70%;padding:5px 0;">
-                                                        {{$data['booking']->pickup_address.' '}}   {{'('.$data['booking']->airport->display_name.')'}}
+                                                        {{$data['booking']->pickup_address.' '}}   @if($data['booking']->from_to != 'other'){{'('.$data['booking']->airport->display_name.')'}}@endif
 
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td style="width:30%;padding:5px 0;">Destination</td>
                                                     <td style="width:70%;padding:5px 0;">
-                                                        {{$data['booking']->dropoff_address.' '}}   {{'('.$data['booking']->location->display_name.')'}}
+                                                        {{$data['booking']->dropoff_address.' '}}   @if($data['booking']->from_to != 'other'){{'('.$data['booking']->location->display_name.')'}}@endif
                                                     </td>
                                                 </tr>
                                             @endif
@@ -259,28 +259,28 @@
                                                     <tr>
                                                         <td style="width:30%;padding:5px 0;"> Return Pickup</td>
                                                         <td style="width:70%;padding:5px 0;">
-                                                            {{$data['booking']->return_pickup_address.' '}}   {{'('.$data['booking']->airport->display_name.')'}}
+                                                            {{$data['booking']->return_pickup_address.' '}}   @if($data['booking']->from_to != 'other'){{'('.$data['booking']->airport->display_name.')'}}@endif
 
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td style="width:30%;padding:5px 0;">Return Destination</td>
                                                         <td style="width:70%;padding:5px 0;">
-                                                            {{$data['booking']->return_dropoff_address.' '}}  {{'('.$data['booking']->location->display_name.')'}}
+                                                            {{$data['booking']->return_dropoff_address.' '}}  @if($data['booking']->from_to != 'other'){{'('.$data['booking']->location->display_name.')'}}@endif
                                                         </td>
                                                     </tr>
                                                 @else
                                                         <tr>
                                                             <td style="width:30%;padding:5px 0;"> Return Pickup</td>
                                                             <td style="width:70%;padding:5px 0;">
-                                                                {{$data['booking']->return_pickup_address.' '}}   {{'('.$data['booking']->location->display_name.')'}}
+                                                                {{$data['booking']->return_pickup_address.' '}}   @if($data['booking']->from_to != 'other'){{'('.$data['booking']->location->display_name.')'}}@endif
 
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td style="width:30%;padding:5px 0;">Return Destination</td>
                                                             <td style="width:70%;padding:5px 0;">
-                                                                {{$data['booking']->return_dropoff_address.' '}}  {{'('.$data['booking']->airport->display_name.')'}}
+                                                                {{$data['booking']->return_dropoff_address.' '}} @if($data['booking']->from_to != 'other'){{'('.$data['booking']->airport->display_name.')'}}@endif
                                                             </td>
                                                         </tr>
                                                 @endif

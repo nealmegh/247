@@ -228,7 +228,6 @@
                                         </label>
                                     </div>
                                 </div>
-
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;" id="oldCustomer">
                                     <label for="user_id">Customer</label>
                                     <select id="user_id" class="form-control UserCustomer" name="user_id">
@@ -359,7 +358,6 @@
         });
 
         var f1 = flatpickr(document.getElementById('journey_date'), {
-            minDate: "today",
             dateFormat: "d-m-Y"
         });
         var f2 = flatpickr(document.getElementById('pickup_time'), {
@@ -369,7 +367,6 @@
             disableMobile: true
         });
         var f3 = flatpickr(document.getElementById('return_date'), {
-            minDate: "today",
             dateFormat: "d-m-Y"
         });
         var f4 = flatpickr(document.getElementById('return_time'), {

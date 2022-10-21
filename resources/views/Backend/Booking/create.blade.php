@@ -306,7 +306,7 @@
                                 </div>
                                 <div class="form-group mb-4">
                                     <label for="addinfo">Additional Information</label>
-                                    <textarea type="text" class="form-control" id="addinfo" name="addinfo" placeholder="Apartment, studio, or floor">
+                                    <textarea type="text" class="form-control" id="add_info" name="add_info" placeholder="Apartment, studio, or floor">
 
                                     </textarea>
                                 </div>

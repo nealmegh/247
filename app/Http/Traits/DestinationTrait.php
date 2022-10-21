@@ -4,7 +4,6 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Models\Car;
 use App\Models\Location;
 use App\Models\SiteSettings;
-use App\Models\Student;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -148,7 +147,7 @@ trait DestinationTrait {
                 $data['password'] = $password;
                 $data['password_confirmation'] = $password;
 //                $data['countryCode'] = $request->countryCode;
-                $data['role_id'] = 3;
+                $data['role_id'] = 2;
                 $data['phone_full'] = '+'.$request->countryCode.$request->phone_number;
 
                 try{
@@ -165,4 +164,15 @@ trait DestinationTrait {
         }
         return $request;
     }
+    public function randomPassword() {
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $pass = array(); //remember to declare $pass as an array
+        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+        for ($i = 0; $i < 8; $i++) {
+            $n = rand(0, $alphaLength);
+            $pass[] = $alphabet[$n];
+        }
+        return implode($pass); //turn the array into a string
+    }
+
 }

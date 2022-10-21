@@ -261,7 +261,7 @@
                                 </div>
                                 <div class="form-group mb-4">
                                     <label for="addinfo">Additional Information</label>
-                                    <textarea type="text" class="form-control" id="addinfo" name="addinfo" placeholder="Apartment, studio, or floor">{{$booking->add_info}}</textarea>
+                                    <textarea type="text" class="form-control" id="add_info" name="add_info" placeholder="Apartment, studio, or floor">{{$booking->add_info}}</textarea>
 
                                 </div>
                                 <div class="form-row mb-4">

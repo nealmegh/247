@@ -145,7 +145,7 @@ use DestinationTrait;
                 $data['password'] = $password;
                 $data['password_confirmation'] = $password;
 //                $data['countryCode'] = $request->countryCode;
-                $data['role_id'] = 3;
+                $data['role_id'] = 2;
                 $data['phone_full'] = '+'.$request->countryCode.$request->phone_number;
 
                 try{

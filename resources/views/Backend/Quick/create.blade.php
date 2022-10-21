@@ -102,14 +102,14 @@
     <div class="container">
 {{--        <div id="navSection" data-spy="affix" class="customNav" style=" display: flex !important; width: 15% !important; border-left:0px !important; z-index: 99 !important;">--}}
             <div id="navSection" data-spy="affix" class="customNav nav sidenav" >
-            <div class="sidenav-content">
-                <div id="priceUpdate" class="form-control" style="padding-bottom: 10px;font-weight: bold;">
-                    Price 0.00
-                </div>
-                <button class="btn btn-primary"  id="button_2" value="val_2" name="but2" style="margin-right: 0;margin-top: 5px;">
-                    Price Check
-                </button>
-            </div>
+{{--            <div class="sidenav-content">--}}
+{{--                <div id="priceUpdate" class="form-control" style="padding-bottom: 10px;font-weight: bold;">--}}
+{{--                    Price 0.00--}}
+{{--                </div>--}}
+{{--                <button class="btn btn-primary"  id="button_2" value="val_2" name="but2" style="margin-right: 0;margin-top: 5px;">--}}
+{{--                    Price Check--}}
+{{--                </button>--}}
+{{--            </div>--}}
         </div>
 
             <div class="row layout-top-spacing">
@@ -135,7 +135,7 @@
                                 <input type="hidden" id="calReturnType" value="0">
 
                                 <div class="form-row " style="margin-bottom: 0px !important;">
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-6" style="display: none">
                                         <label for="selectFrom">From</label>
                                         <select id="selectFrom" name="selectFrom" class="form-control selectFrom">
                                             <option value >Choose a Pick-Up Point</option>
@@ -152,7 +152,7 @@
                                             </optgroup>
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-6" style="display: none">
                                         <label for="selectTo">To</label>
                                         <select id="selectTo" name="selectTo" class="form-control selectTo">
                                             <option value>Choose a Drop-Off Point</option>
@@ -163,11 +163,11 @@
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6">
                                         <label for="pickup_address">Pick Up Address <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="pickup_address" name="pickup_address" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" id="pickup_address" name="pickup_address" value="{{old('pickup_address')}}" placeholder="1234 Main St">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="dropoff_address">Drop Off Address</label>
-                                        <input type="text" class="form-control" id="dropoff_address" name="dropoff_address" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" id="dropoff_address" name="dropoff_address" value="{{old('dropoff_address')}}" placeholder="1234 Main St">
                                     </div>
                                 </div>
 
@@ -181,9 +181,9 @@
                                         <input type="text" class="form-control" id='pickup_time' name="pickup_time" placeholder="Pick Up Time" style="color: black">
                                     </div>
                                 </div>
-                                <div class="form-row mb-4" style="margin-bottom: 0px !important;">
+                                <div class="form-row mb-4" style="margin-bottom: 0px !important; display: none">
                                     <div class="form-group col-md-6">
-                                        <label for="flight_number">Flight/Train No. <span class="required">*</span></label>
+                                        <label for="flight_number">Flight/Train No</label>
                                         <input type="text" class="form-control" id="flight_number" name="flight_number" placeholder="1234 Main St">
                                     </div>
                                     <div class="form-group col-md-6">
@@ -205,7 +205,7 @@
                                                 @endforeach
                                             </select>
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-6" style="display: none">
                                         <label for="return">Round Trip</label>
                                         <select class="form-control" id="return" name="return" >
                                             <option value=0>No</option>
@@ -246,7 +246,7 @@
                                 </div>
 
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
-                                    <div class="form-group col-md-6" style="" >
+                                    <div class="form-group col-md-6" style="display: none" >
                                         <label class="control-label" for="meetF">Meet & Greet<span class="required">*</span></label> <br>
                                         <label class="switch s-icons s-outline s-outline-success mr-2">
                                             <input id="meetF" name="meetF" type="checkbox" value="0">
@@ -266,17 +266,17 @@
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
 
                                     <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Customer Name" disabled>
+                                    <input type="text" class="form-control" id="name" name="name" value="{{old('name')}}" placeholder="Customer Name" disabled>
 
                                 </div>
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important; margin-top: 10px;" >
                                     <div class="form-group col-md-6">
                                         <label for="email">Email <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="email" name="email" placeholder="Customer Email" disabled>
+                                        <input type="text" class="form-control" id="email" name="email" value="{{old('email')}}"placeholder="Customer Email" disabled>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="phone">Phone</label> <br>
-                                        <input type="tel" class="form-control" id="phone" name="phone_number" placeholder="Customer Phone Number" disabled>
+                                        <input type="tel" class="form-control" id="phone" name="phone_number" value="{{old('phone_number')}}" placeholder="Customer Phone Number" disabled>
                                     </div>
                                     <input type="hidden" id="countryCode" name="countryCode" value="">
                                 </div>
@@ -294,23 +294,23 @@
                                 </div>
                                 <div class="form-group mb-4">
                                     <label for="addinfo">Additional Information</label>
-                                    <textarea type="text" class="form-control" id="addinfo" name="addinfo" placeholder="Apartment, studio, or floor"></textarea>
+                                    <textarea type="text" class="form-control" id="add_info" name="add_info" placeholder="Apartment, studio, or floor">{{old('add_info')}}</textarea>
                                 </div>
                                 <div class="form-row mb-4">
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-4" style="display: none">
                                         <label for="discount_type">Discount Type</label>
                                         <select class="form-control" id="discount_type" name="discount_type" >
                                             <option value=0>Fixed</option>
                                             <option value=1>Percentage</option>
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-4" style="display: none">
                                         <label for="discount_value">Discount Value</label>
                                         <input type="number" class="form-control" id="discount_value" value=0 name="discount_value" placeholder="Discount Value">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="custom_price">Custom Price</label>
-                                        <input type="number" class="form-control" id="custom_price" value=0 name="custom_price" placeholder="Enter Price for Custom Trip">
+                                        <input type="number" class="form-control" id="custom_price" value="{{old('pickup_address')}}" name="custom_price" placeholder="Enter Price for Custom Trip" required="required">
                                     </div>
 
                                 </div>
@@ -369,7 +369,7 @@
         });
         $(".UserCustomer").select2({
             tags: true,
-            placeholder: "Select Pickup Point",
+            placeholder: "Select Existing Customer",
             allowClear: true
         });
 

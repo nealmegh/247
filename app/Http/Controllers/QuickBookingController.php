@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\DestinationTrait;
+use App\Mail\BookingSuccessful;
 use App\Models\Airport;
 use App\Models\Booking;
 use App\Models\Car;
@@ -12,6 +13,8 @@ use App\Http\Requests\StoreQuickBookingRequest;
 use App\Http\Requests\UpdateQuickBookingRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class QuickBookingController extends Controller
 {
@@ -24,10 +27,11 @@ class QuickBookingController extends Controller
     public function index()
     {
         $bookings = QuickBooking::all();
-        return view('Backend.quick.index', compact('bookings'));
+        return view('Backend.Quick.index', compact('bookings'));
     }
     public function finalize($booking)
     {
+
         $booking = QuickBooking::find($booking);
         $cars = Car::all();
         $locations = Location::all();
@@ -62,13 +66,23 @@ class QuickBookingController extends Controller
      */
     public function store(StoreQuickBookingRequest $request)
     {
-        $request = $this->setDestination($request);
+        Validator::make($request->all(), [
+            'custom_price' => ['required'],
+        ])->validate();
         $request = $this->newCustomer($request);
+        $request = $this->setDestination($request);
 
         $authUser = Auth::user();
         $request->request->add(['book_by' => $authUser->id]);
 
-        QuickBooking::create($request->all());
+        $booking = QuickBooking::create($request->all());
+        if($request->send_email == 1)
+        {
+            $data = array(
+                'booking' => $booking,
+            );
+            Mail::to($booking->user->email)->send(new BookingSuccessful($data));
+        }
         return redirect()->route('booking.quick.bookings.index');
     }
 

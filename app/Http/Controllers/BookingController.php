@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Actions\Fortify\CreateNewUser;
 use App\Http\Traits\DestinationTrait;
+use App\Mail\BookingCancelled;
+use App\Mail\BookingCancelledDriver;
 use App\Models\Airport;
 use App\Models\Booking;
 use App\Models\Car;
@@ -15,6 +17,7 @@ use App\Models\QuickBooking;
 use App\Models\SiteSettings;
 use App\Models\Trip;
 use App\Models\User;
+use App\Models\UserTransaction;
 use Illuminate\Http\Request;
 //use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Mail\BookingSuccessful;
@@ -44,13 +47,19 @@ use DestinationTrait;
      */
     public function index()
     {
-        $bookings = Booking::all();
-//        $bookings = $bookings->sortByDesc('booking_ref_id');
-//         $bookings = Booking::latest()->take(3)->get();
-        // dd($bookingsCheck);
-//        dd($bookings[11]->trips->isEmpty());
-
+        $bookings = Booking::where('complete_status', null)->get();
         return view('Backend.Booking.index', compact('bookings'));
+    }
+    public function completed()
+    {
+        $bookings = Booking::where('complete_status', 1)->get();
+//        dd($bookings);
+        return view('Backend.Booking.completed', compact('bookings'));
+    }
+    public function cancelled()
+    {
+        $bookings = Booking::onlyTrashed()->get();
+        return view('Backend.Booking.cancelled', compact('bookings'));
     }
 
     /**
@@ -358,13 +367,60 @@ use DestinationTrait;
     {
 
         $booking = Booking::find($booking);
-        $invoice = Invoice::find($booking->id);
+//        $invoice = Invoice::find($booking->id);
+        $trips = Trip::where('booking_id', $booking->id)->get();
+        $transaction = UserTransaction::firstWhere('booking_id', $booking->id);
+        $delete = true;
+        foreach ($trips as $trip)
+        {
+            if($trip != null)
+            {
+                if($trip->status == 1)
+                {
+                    $delete = false;
+                }
+                else{
+                    $driverA = Driver::find($trip->driver_id);
+                    $user_id = $booking->user->id;
+                    $user = User::find($user_id);
+                    $dataA = array(
+                        'driver' => $driverA,
+                        'booking' => $booking,
+                        'trip' => $trip,
+                        'user' => $user
+                    );
+                    Mail::to($trip->driver->user->email)->send(new BookingCancelledDriver($dataA));
+                }
+            }
 
-        $booking->delete();
+        }
+        if($delete)
+        {
+            Trip::destroy($trips);
+            $transaction->delete();
+            $booking->delete();
+        }
+
+        $user_id = $booking->user->id;
+        $user = User::find($user_id);
+        $data = array(
+            'driver' => $driverA,
+            'booking' => $booking,
+            'user' => $user
+        );
+        Mail::to($booking->user->email)->send(new BookingCancelled($data));
+
 
         $request->session()->flash('alert-class', 'alert-danger');
+        return redirect()->route('booking.bookings')->with('message', 'Booking Deleted');
+    }
+    public function restore($booking){
 
-        return redirect()->route('bookings')->with('message', 'Booking Deleted');
+        $booking = Booking::withTrashed()
+            ->where('id', $booking)
+            ->first();
+        $booking->restore();
+        return redirect()->route('booking.bookings')->with('message', 'Booking Restored');
     }
 
 
@@ -387,6 +443,8 @@ use DestinationTrait;
 
     public function driverReAssignStore(Request $request, $id)
     {
+        $siteSettings = SiteSettings::all();
+        $booking = Booking::find($id);
         $trips = Trip::where('booking_id', $id)->get();
         $success = array();
         $failure = array();
@@ -422,6 +480,10 @@ use DestinationTrait;
                         'user' => $user
                     );
                     Mail::to($driver->email)->send(new DriverAssigned($data));
+                if($request->send_email1_customer == 1 || $siteSettings[22]->value == 1)
+                {
+                    Mail::to($booking->user->email)->send(new BookingUpdated($dataB));
+                }
             }
         }
 
@@ -463,7 +525,7 @@ use DestinationTrait;
         }
 
 
-        return redirect()->route('bookings');
+        return redirect()->route('booking.bookings');
     }
 
 
@@ -476,11 +538,11 @@ use DestinationTrait;
 
             if($booking->return == 0)
             {
-                $price = $booking->custom_price;
+                $price = $booking->custom_price + $booking->extra_price;
             }
             else{
-                $price = $booking->custom_price/2;
-                $returnPrice = $booking->custom_price/2;
+                $price = ($booking->custom_price + $booking->extra_price)/2;
+                $returnPrice = ($booking->custom_price + $booking->extra_price)/2;
             }
         }
         else{
@@ -528,6 +590,11 @@ use DestinationTrait;
                 $price = round($price + ($booking->car->fair),2);
                 $returnPrice = round($returnPrice + $booking->car->fair, 2);
             }
+            if($booking->extra_price != 0 || $booking->extra_price != null)
+            {
+                $price = round($price + $booking->extra_price, 2);
+                $returnPrice = round($returnPrice + $booking->extra_price, 2);
+            }
             if($booking->return == 0)
             {
                 $returnPrice = 0;
@@ -546,10 +613,11 @@ use DestinationTrait;
     {
         $siteSettings = SiteSettings::all();
         $booking = Booking::find($id);
-        $tripCheck = Trip::where('booking_id', $id)->get();
-        if(!empty($tripCheck)){
-            return redirect()->route('booking.bookings')->with('message', 'Driver Already Assigned');
-        }
+//        $tripCheck = Trip::where('booking_id', $id)->first();
+//        if(!empty($tripCheck)){
+//            return redirect()->route('booking.bookings')->with('message', 'Driver Already Assigned');
+//        }
+
         $earnnings = $this->tripEarnings($id);
         $tripDataA = [
             'driver_id' => $request->driver_id,
@@ -563,8 +631,9 @@ use DestinationTrait;
             'trip_earnings' => $earnnings[0],
         ];
 
-
-        $tripA = Trip::create($tripDataA);
+        $tripA = Trip::updateOrCreate(
+            ['booking_id' => $booking->id],
+            $tripDataA);
 
         $driverA = Driver::find($tripA->driver_id);
         $user_id = $booking->user->id;
@@ -601,8 +670,10 @@ use DestinationTrait;
                 'trip_status' => 0,
                 'trip_earnings' => $earnnings[1],
             ];
-
-            $tripB = Trip::create($tripDataB);
+            $tripB = Trip::updateOrCreate(
+                ['booking_id' => $booking->id],
+                $tripDataB);
+//            $tripB = Trip::create($tripDataB);
 
             $driverB = Driver::find($tripB->driver_id);
             $user_id = $booking->user->id;
@@ -615,13 +686,13 @@ use DestinationTrait;
             );
             if($driverB != null)
             {
-                if($request->send_email1 == 1 || $siteSettings[24]->value == 1)
+                if($request->send_email1_driver == 1 || $siteSettings[24]->value == 1)
                 {
                     Mail::to($driverB->email)->send(new DriverAssigned($dataB));
                 }
 
             }
-            if($request->send_email == 1 || $siteSettings[22]->value == 1)
+            if($request->send_email1_customer == 1 || $siteSettings[22]->value == 1)
             {
                 Mail::to($booking->user->email)->send(new BookingUpdated($dataB));
             }

@@ -137,63 +137,72 @@
                                 <div class="form-row " style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6">
                                         <label for="selectFrom">From</label>
-                                        <select id="selectFrom" name="selectFrom" class="form-control selectFrom">
-                                            <option>Choose a Pick-Up Point</option>
+                                        <select id="selectFrom" name="selectFrom" class="form-control selectFrom" required="required">
+                                            <option value>Choose a Pick-Up Point</option>
                                             <optgroup label="Airports">
                                                 @foreach($airports as $airport)
-                                                    <option value="{{'air'.$airport->id}}">{{$airport->display_name}}</option>
+                                                    @if (old('selectFrom') == 'air'.$airport->id)
+                                                        <option value="{{'air'.$airport->id}}" selected>{{$airport->display_name}}</option>
+                                                    @else
+                                                        <option value="{{'air'.$airport->id}}">{{$airport->display_name}}</option>
+                                                    @endif
                                                 @endforeach
                                             </optgroup>
                                             <optgroup label="Area">
                                                 @foreach($locations as $location)
-                                                    <option value="{{'loc'.$location->id}}">{{$location->display_name}}</option>
+                                                    @if (old('selectFrom') == 'loc'.$location->id)
+                                                        <option value="{{'loc'.$location->id}}" selected>{{$location->display_name}}</option>
+                                                    @else
+                                                        <option value="{{'loc'.$location->id}}">{{$location->display_name}}</option>
+                                                    @endif
+
                                                 @endforeach
                                             </optgroup>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="selectTo">To</label>
-                                        <select id="selectTo" name="selectTo" class="form-control selectTo">
-                                            <option selected>Choose a Drop-Off Point</option>
+                                        <select id="selectTo" name="selectTo" class="form-control selectTo" required="required">
+                                            <option value selected>Choose a Drop-Off Point</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6">
                                         <label for="pickup_address">Pick Up Address <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="pickup_address" name="pickup_address" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" id="pickup_address" value="{{old('pickup_address')}}" name="pickup_address" placeholder="1234 Main St" required="required">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="dropoff_address">Drop Off Address</label>
-                                        <input type="text" class="form-control" id="dropoff_address" name="dropoff_address" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" id="dropoff_address" {{old('dropoff_address')}} name="dropoff_address" placeholder="1234 Main St" required="required">
                                     </div>
                                 </div>
 
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6">
                                         <label for="journey_date">Journey Date <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="journey_date" name="journey_date" placeholder="Journey Date" required="required">
+                                        <input type="text" class="form-control" id="journey_date" {{old('journey_date')}} name="journey_date" placeholder="Journey Date" required="required">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="pickup_time">Journey Time</label>
-                                        <input type="text" class="form-control" id='pickup_time' name="pickup_time" placeholder="Pick Up Time">
+                                        <input type="text" class="form-control" id='pickup_time' {{old('pickup_time')}} name="pickup_time" placeholder="Pick Up Time" required="required">
                                     </div>
                                 </div>
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6">
                                         <label for="flight_number">Flight/Train No. <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="flight_number" name="flight_number" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" id="flight_number" {{old('flight_number')}} name="flight_number" placeholder="1234 Main St" required="required">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="flight_origin">Flight/Train Origin</label>
-                                        <input type="text" class="form-control" id="flight_origin" name="flight_origin" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" id="flight_origin" {{old('flight_origin')}} name="flight_origin" placeholder="1234 Main St" required="required">
                                     </div>
                                 </div>
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6">
                                             <label for="car_type">Car Type</label>
-                                            <select id="car_type" class="form-control" name="car_id">
-                                                <option selected>Choose Car Type</option>
+                                            <select id="car_type" class="form-control" name="car_id" required="required">
+                                                <option value selected>Choose Car Type</option>
                                                 @foreach($cars as $car)
                                                     <option value="{{$car->id}}">{{$car->name.' '.$car->description}}</option>
                                                 @endforeach
@@ -210,32 +219,32 @@
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6" id="rPA" style="display: none">
                                         <label for="return_pickup_address">Return Pick Up Address <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="return_pickup_address" name="return_pickup_address" placeholder="1234 Main St" disabled>
+                                        <input type="text" class="form-control" id="return_pickup_address" {{old('return_pickup_address')}} name="return_pickup_address" placeholder="1234 Main St" disabled required="required">
                                     </div>
                                     <div class="form-group col-md-6" id="rDA" style="display: none">
                                         <label for="return_dropoff_address">Return Drop Off Address</label>
-                                        <input type="text" class="form-control" id="return_dropoff_address" name="return_dropoff_address" placeholder="1234 Main St" disabled>
+                                        <input type="text" class="form-control" id="return_dropoff_address" {{old('return_dropoff_address')}} name="return_dropoff_address" placeholder="1234 Main St" disabled required="required">
                                     </div>
                                 </div>
 
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6" id="rDate" style="display: none">
                                         <label for="return_date">Return Date <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="return_date" name="return_date" placeholder="Return Date" required="required" disabled>
+                                        <input type="text" class="form-control" id="return_date" {{old('return_date')}} name="return_date" placeholder="Return Date" disabled required="required">
                                     </div>
                                     <div class="form-group col-md-6" id="rTime" style="display: none">
                                         <label for="return_time">Return Time</label>
-                                        <input type="text" class="form-control" id='return_time' name="return_time" placeholder="Return Pick Up Time" disabled>
+                                        <input type="text" class="form-control" id='return_time' {{old('return_time')}} name="return_time" placeholder="Return Pick Up Time" disabled required="required">
                                     </div>
                                 </div>
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
                                     <div class="form-group col-md-6" id="rFlight" style="display: none">
                                         <label for="return_flight_number">Return Flight/Train No. <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="return_flight_number" name="return_flight_number" placeholder="Return Flight Number" disabled>
+                                        <input type="text" class="form-control" id="return_flight_number" {{old('return_flight_number')}}  name="return_flight_number" placeholder="Return Flight Number" disabled>
                                     </div>
                                     <div class="form-group col-md-6" id="rOrigin" style="display: none">
                                         <label for="return_flight_origin">Return Flight/Train Origin</label>
-                                        <input type="text" class="form-control" id="return_flight_origin" name="return_flight_origin" placeholder="Return Flight Origin" disabled>
+                                        <input type="text" class="form-control" id="return_flight_origin" {{old('return_flight_origin')}}  name="return_flight_origin" placeholder="Return Flight Origin" disabled>
                                     </div>
                                 </div>
 
@@ -260,17 +269,17 @@
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;">
 
                                     <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Customer Name" disabled>
+                                    <input type="text" class="form-control" id="name" name="name" {{old('name')}} placeholder="Customer Name" disabled>
 
                                 </div>
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important; margin-top: 10px;" >
                                     <div class="form-group col-md-6">
                                         <label for="email">Email <span class="required">*</span></label>
-                                        <input type="text" class="form-control" id="email" name="email" placeholder="Customer Email" disabled>
+                                        <input type="text" class="form-control" id="email" {{old('email')}} name="email" placeholder="Customer Email" disabled>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="phone">Phone</label> <br>
-                                        <input type="tel" class="form-control" id="phone" name="phone_number" placeholder="Customer Phone Number" disabled>
+                                        <input type="tel" class="form-control" id="phone" {{old('phone')}} name="phone_number" placeholder="Customer Phone Number" disabled>
                                     </div>
                                     <input type="hidden" id="countryCode" name="countryCode" value="">
                                 </div>
@@ -279,8 +288,8 @@
 
                                 <div class="form-row mb-4" style="margin-bottom: 0px !important;" id="oldCustomer">
                                     <label for="user_id">Customer</label>
-                                    <select id="user_id" class="form-control UserCustomer" name="user_id">
-                                        <option>Chooose One</option>
+                                    <select id="user_id" class="form-control UserCustomer" name="user_id" required="required">
+                                        <option value>Chooose One</option>
                                         @foreach($users as $user)
                                             <option value="{{$user->id}}">{{$user->name}} -+ {{$user->phone}}</option>
                                         @endforeach
@@ -289,26 +298,24 @@
                                 <div class="form-row mb-4">
                                     <div class="form-group col-md-3">
                                         <label for="adult">Adult</label>
-                                        <input type="number" class="form-control" name="adult" id="adult">
+                                        <input type="number" class="form-control" {{old('adult')}} name="adult" id="adult">
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="child">Child</label>
-                                        <input type="number" class="form-control" name="child" id="child">
+                                        <input type="number" class="form-control" {{old('child')}} name="child" id="child">
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="luggage">Luggage</label>
-                                        <input type="number" class="form-control" name="luggage" id="luggage">
+                                        <input type="number" class="form-control" {{old('luggage')}} name="luggage" id="luggage">
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="carryon">Carry On</label>
-                                        <input type="number" class="form-control" name="carryon" id="carryon">
+                                        <input type="number" class="form-control" {{old('carryon')}} name="carryon" id="carryon">
                                     </div>
                                 </div>
                                 <div class="form-group mb-4">
                                     <label for="addinfo">Additional Information</label>
-                                    <textarea type="text" class="form-control" id="add_info" name="add_info" placeholder="Apartment, studio, or floor">
-
-                                    </textarea>
+                                    <textarea type="text" class="form-control" id="add_info" name="add_info" placeholder="Apartment, studio, or floor">{{old('add_info')}}</textarea>
                                 </div>
                                 <div class="form-row mb-4">
                                     <div class="form-group col-md-4">
@@ -324,7 +331,7 @@
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="custom_price">Custom Price</label>
-                                        <input type="number" class="form-control" id="custom_price" value=0 name="custom_price" placeholder="Enter Price for Custom Trip">
+                                        <input type="number" class="form-control" id="custom_price" value=0 {{old('custom_price')}} name="custom_price" placeholder="Enter Price for Custom Trip">
                                     </div>
 
                                 </div>

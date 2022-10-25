@@ -286,8 +286,8 @@
                                         <input type="number" class="form-control" id="extra_price" value="{{$booking->extra_price}}" name="extra_price" placeholder="Enter Price for Custom Trip">
                                     </div>
                                     <div class="form-group col-md-3">
-                                        <label for="custom_price">Final Price</label>
-                                        <input type="number" class="form-control" id="custom_price" value="{{$booking->final_price}}" name="custom_price" placeholder="Enter Price for Custom Trip">
+                                        <label for="custom_price">Custom Price</label>
+                                        <input type="number" class="form-control" id="custom_price" value="{{$booking->custom_price}}" name="custom_price" placeholder="Enter Price for Custom Trip">
                                     </div>
                                 </div>
 {{--                                <div class="form-group mb-4">--}}

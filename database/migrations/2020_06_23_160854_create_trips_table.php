@@ -24,6 +24,7 @@ class CreateTripsTable extends Migration
             $table->decimal('collectable_by_driver');
             $table->boolean('trip_status');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

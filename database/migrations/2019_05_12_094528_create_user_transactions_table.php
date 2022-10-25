@@ -20,6 +20,7 @@ class CreateUserTransactionsTable extends Migration
             $table->string('payment_id')->nullable();
             $table->bigInteger('booking_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

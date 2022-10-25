@@ -149,6 +149,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
             Route::group( ['prefix' => 'bookings', 'as' => 'booking.'], function() {
             Route::get('/', [BookingController::class, 'index'])->name('bookings');
+            Route::get('/completed', [BookingController::class, 'completed'])->name('completed');
+            Route::get('/cancelled', [BookingController::class, 'cancelled'])->name('cancelled');
             Route::get('quickBooking/create', [QuickBookingController::class, 'create'])->name('quick.bookings.create');
             Route::get('quickBooking', [QuickBookingController::class, 'index'])->name('quick.bookings.index');
             Route::get('quickBooking/{QuickBooking}/final', [QuickBookingController::class, 'finalize'])->name('quick.bookings.final');
@@ -164,7 +166,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::post('driverReAssign/{id}', [BookingController::class, 'driverReAssignStore'])->name('driver.reassign');
             Route::get('confirmation/{id}', [BookingController::class, 'paymentConfirmation'])->name('payment');
             Route::get('completion/{id}', [BookingController::class, 'jobCompletion'])->name('complete');
-            Route::get('delete/{id}', [BookingController::class, 'destroy'])->name('delete');
+            Route::post('delete/{id}', [BookingController::class, 'destroy'])->name('delete');
+            Route::get('restore/{id}', [BookingController::class, 'restore'])->name('restore');
             Route::post('priceUpdate', [BookingController::class, 'priceUpdate'])->name('price.update');
         });
 

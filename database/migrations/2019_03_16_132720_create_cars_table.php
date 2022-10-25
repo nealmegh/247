@@ -22,6 +22,7 @@ class CreateCarsTable extends Migration
             $table->text('description');
             $table->integer('status');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

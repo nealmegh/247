@@ -112,8 +112,8 @@
                             <th class="text-center">Journey Info</th>
                             <th class="text-center">Driver</th>
                             <th class="text-center">Payment</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Actions</th>
+{{--                            <th class="text-center">Status</th>--}}
+{{--                            <th class="text-center">Actions</th>--}}
                         </tr>
                         </thead>
 
@@ -260,35 +260,35 @@
                                     </span>
                                 </td>
 
-                                @if($booking->complete_status == Null)
-                                    <td class="text-center">
+{{--                                @if($booking->complete_status == Null)--}}
+{{--                                    <td class="text-center">--}}
 
 
-                                        @if($job_status == 100)
+{{--                                        @if($job_status == 100)--}}
 {{--                                            <span class="badge outline-badge-danger shadow-none">{{'JOB COMPLETION:'.$job_status.'%'}}</span> --}}
 {{--                                            <br>--}}
-                                            <a href="{{route('booking.complete', $booking->id)}}" class="btn btn-success" >
-                                                Complete Job</a>
-                                        @else
+{{--                                            <a href="{{route('booking.complete', $booking->id)}}" class="btn btn-success" >--}}
+{{--                                                Complete Job</a>--}}
+{{--                                        @else--}}
 {{--                                            <a href="#"  onClick="alert('Complete All the Trips first')" class="btn btn-danger " >--}}
 {{--                                                Job Completion</a>--}}
-                                            <span class="badge outline-badge-danger shadow-none">{{'JOB COMPLETION:'.$job_status.'%'}}</span>
-                                        @endif
+{{--                                            <span class="badge outline-badge-danger shadow-none">{{'JOB COMPLETION:'.$job_status.'%'}}</span>--}}
+{{--                                        @endif--}}
 
 
-                                    </td>
-                                @else
-                                    <td class="text-center"><span class="badge badge-success">{{'Completed'}}</span></td>
-                                @endif
+{{--                                    </td>--}}
+{{--                                @else--}}
+{{--                                    <td class="text-center"><span class="badge badge-success">{{'Completed'}}</span></td>--}}
+{{--                                @endif--}}
 
-                                <td>
-                                    <a  href="{{route('booking.edit', $booking->id)}}" class="btn btn-primary" title="Edit Booking" >
-                                        <i class="far fa-edit"></i>
-                                    </a>
-                                    <a id="{{$booking->id}}" class="btn btn-danger delete-booking" data-value="{{$booking->ref_id}}" onClick="destroy_booking(this.id)" >
-                                        <i class="far fa-trash-alt"></i>
-                                    </a>
-                                </td>
+{{--                                <td>--}}
+{{--                                    <a  href="{{route('booking.edit', $booking->id)}}" class="btn btn-primary" title="Edit Booking" >--}}
+{{--                                        <i class="far fa-edit"></i>--}}
+{{--                                    </a>--}}
+{{--                                    <a id="{{$booking->id}}" class="btn btn-danger delete-booking" data-value="{{$booking->ref_id}}" onClick="destroy_booking(this.id)" >--}}
+{{--                                        <i class="far fa-trash-alt"></i>--}}
+{{--                                    </a>--}}
+{{--                                </td>--}}
                             </tr>
                         @endforeach
 

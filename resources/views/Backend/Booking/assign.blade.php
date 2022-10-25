@@ -52,12 +52,7 @@
 <div class="layout-px-spacing">
 
     <div class="row layout-top-spacing">
-        @if(Session::has('message'))
-            <div class="alert alert-gradient mb-4" role="alert">
-                <button  type="button" class="close" data-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
-                <strong>{{ Session::get('message') }}</strong>
-            </div>
-        @endif
+
             <div class="col-xl-6 col-lg-12 col-sm-12  layout-spacing bipon-form">
                                     <div class="statbox widget box box-shadow">
                                         <div class="widget-header">
@@ -68,11 +63,11 @@
                                             </div>
                                         </div>
                                         <div class="widget-content widget-content-area">
-                                            @if(Route::currentRouteName() == 'booking.reassign')
-                                                <form class="" novalidate method="POST" action="{{ route('booking.driver.reassign', $booking->id) }}">
-                                            @else
+{{--                                            @if(Route::currentRouteName() == 'booking.reassign')--}}
+{{--                                                <form class="" novalidate method="POST" action="{{ route('booking.driver.reassign', $booking->id) }}">--}}
+{{--                                            @else--}}
                                                 <form class="" novalidate method="POST" action="{{ route('booking.driver', $booking->id) }}">
-                                            @endif
+{{--                                            @endif--}}
                                                     @csrf
                                                     <h4>For Original Journey</h4>
 
@@ -111,13 +106,13 @@
 
                                                     <div class="form-row mb-4">
                                                         <label class="new-control new-checkbox checkbox-primary">
-                                                            <input type="checkbox" id="send_email" class="new-control-input" name="send_email" value="1" checked>
+                                                            <input type="checkbox" id="send_email_customer" class="new-control-input" name="send_email" value="1" checked>
                                                             <span class="new-control-indicator"></span>Send Booking Update Email to Customer
                                                         </label>
                                                     </div>
                                                     <div class="form-row mb-4">
                                                         <label class="new-control new-checkbox checkbox-primary">
-                                                            <input type="checkbox" id="send_email1" class="new-control-input" name="send_email1" value="1" checked>
+                                                            <input type="checkbox" id="send_email1_driver" class="new-control-input" name="send_email1" value="1" checked>
                                                             <span class="new-control-indicator"></span>Send Booking Assignment Email to Driver
                                                         </label>
                                                     </div>

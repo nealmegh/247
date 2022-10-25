@@ -35,6 +35,7 @@ class CreateBookingsTable extends Migration
             $table->integer('price');
             $table->text('add_info')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

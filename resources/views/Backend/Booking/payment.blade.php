@@ -71,19 +71,19 @@
                     <div class="widget-content widget-content-area">
                         <div class="widget-content widget-content-area rounded-pills-icon">
 
-                            <ul class="nav nav-pills mb-4 mt-3  justify-content-center" id="rounded-pills-icon-tab" role="tablist">
+                            <ul class="nav nav-pills mb-4 mt-3  justify-content-center " id="rounded-pills-icon-tab" role="tablist">
                                 <li class="nav-item ml-2 mr-2">
-                                    <a class="nav-link mb-2  text-center" id="payInCar" data-toggle="pill" href="#rounded-pills-icon-home" role="tab" aria-controls="rounded-pills-icon-home" aria-selected="true">
+                                    <a class="nav-link mb-2  text-center {{($booking->userTransaction?->trans_id =='Pay In Car'? 'active':'')}}" id="payInCar" data-toggle="pill" href="#rounded-pills-icon-home" role="tab" aria-controls="rounded-pills-icon-home" aria-selected="true">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                                         In Car</a>
                                 </li>
                                 <li class="nav-item ml-2 mr-2">
-                                    <a class="nav-link mb-2 text-center" id="payInOffice" data-toggle="pill" href="#rounded-pills-icon-profile" role="tab" aria-controls="rounded-pills-icon-profile" aria-selected="false">
+                                    <a class="nav-link mb-2 text-center {{($booking->userTransaction?->trans_id =='Pay In Office'? 'active':'')}}" id="payInOffice" data-toggle="pill" href="#rounded-pills-icon-profile" role="tab" aria-controls="rounded-pills-icon-profile" aria-selected="false">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                                     In Office</a>
                                 </li>
                                 <li class="nav-item ml-2 mr-2">
-                                    <a class="nav-link mb-2 text-center" id="thirdParty" data-toggle="pill" href="#rounded-pills-icon-contact" role="tab" aria-controls="rounded-pills-icon-contact" aria-selected="false">
+                                    <a class="nav-link mb-2 text-center {{($booking->userTransaction?->trans_id =='Third Party'? 'active':'')}}" id="thirdParty" data-toggle="pill" href="#rounded-pills-icon-contact" role="tab" aria-controls="rounded-pills-icon-contact" aria-selected="false">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                                     Third Party</a>
                                 </li>
@@ -93,9 +93,9 @@
 
                         </div>
 
-                        @if($booking->confirm == 1)
-                            <div> <p> Payment Already Done.</p></div>
-                        @else
+{{--                        @if($booking->confirm == 1)--}}
+{{--                            <div> <p> Payment Already Done.</p></div>--}}
+{{--                        @else--}}
                             <form class="mx-auto" method="post" action="{{route('cashPayment')}}" style="">
                                 @csrf
                                 <input type="hidden"  name="id" value="{{$booking->id}}">
@@ -133,7 +133,7 @@
 
 {{--                                <button style="margin-top: 1px" name="type" value="Third Party" id="thirdParty" class="btn confirmBtn" type="submit"> {{'Third Party'}} </button>--}}
 {{--                            </form>--}}
-                        @endif
+{{--                        @endif--}}
                     </div>
                     </div>
                 </div>

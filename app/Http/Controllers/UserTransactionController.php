@@ -40,13 +40,20 @@ class UserTransactionController extends Controller
             $amount = $booking->price;
         }
         $transID = 'Paypal';
-        $userTransaction = new UserTransaction();
+
+        $userTransaction = UserTransaction::updateOrCreate(
+            [   'amount' => $amount,
+                'booking_id' => $booking->id,
+                'trans_id' => $transID,
+                'payment_id' => $paymentId
+            ]
+        );
 //
-        $userTransaction->amount = $amount;
-        $userTransaction->booking_id = $booking->id;
-        $userTransaction->trans_id = $transID;
-        $userTransaction->payment_id = $paymentId;
-        $userTransaction->save();
+//        $userTransaction->amount = $amount;
+//        $userTransaction->booking_id = $booking->id;
+//        $userTransaction->trans_id = $transID;
+//        $userTransaction->payment_id = $paymentId;
+//        $userTransaction->save();
         $booking->confirm = 1 ;
         $booking->user_transaction_id = $userTransaction->id;
         $booking->save();
@@ -65,16 +72,23 @@ class UserTransactionController extends Controller
 
     public function cashPayment(Request $request)
     {
+
         $siteSettings = SiteSettings::all();
         $bookingId = $request->id;
         $booking = Booking::find($bookingId);
-        $userTransaction = new UserTransaction();
-
-        $userTransaction->amount = $booking->final_price;
-        $userTransaction->booking_id = $bookingId;
-        $userTransaction->trans_id = $request->type;
-        $userTransaction->payment_id = 'Cash';
-        $userTransaction->save();
+        $userTransaction = UserTransaction::updateOrCreate(
+            ['booking_id' => $booking->id],
+            [   'amount' => $booking->final_price,
+                'trans_id' => $request->type,
+                'payment_id' => 'Cash'
+            ]
+        );
+//        dd($userTransaction);
+//        $userTransaction->amount = $booking->final_price;
+//        $userTransaction->booking_id = $bookingId;
+//        $userTransaction->trans_id = $request->type;
+//        $userTransaction->payment_id = 'Cash';
+//        $userTransaction->save();
         $booking->confirm = 1 ;
         $booking->user_transaction_id = $userTransaction->id;
         $booking->save();

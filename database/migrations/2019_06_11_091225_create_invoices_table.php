@@ -22,6 +22,7 @@ class CreateInvoicesTable extends Migration
             $table->string('payment_type');
             $table->boolean('status');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

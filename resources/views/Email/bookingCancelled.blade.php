@@ -151,7 +151,7 @@
                                                 style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;margin-top: 15px;"
                                         >
                                             Dear {{$data['booking']->user->name}},
-                                            your booking is successfully updated. Please check your booking details below. If there are any concerns please contact our office immediately.
+                                            your booking with below details has been cancelled. If there are any concerns please contact our office immediately.
                                         </p>
                                     </td>
                                 </tr>

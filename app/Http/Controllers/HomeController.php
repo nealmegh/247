@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Driver;
+use App\Models\QuickBooking;
 use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -29,10 +30,11 @@ class HomeController extends Controller
     public function index()
     {
         $bookings = Booking::orderBy('id', 'desc')->take(10)->get();
+        $numberOfQuickBookings = QuickBooking::count();
         $numberOfCustomers = count(User::where('role_id', '2')->get());
         $numberOfTrips = count(Trip::all());
         $numberOfDrivers = count(Driver::all());
-        return view('Backend.Dashboard.index')->with(compact('bookings', 'numberOfCustomers', 'numberOfDrivers', 'numberOfTrips'));
+        return view('Backend.Dashboard.index')->with(compact('bookings', 'numberOfCustomers', 'numberOfDrivers', 'numberOfTrips', 'numberOfQuickBookings'));
     }
     public function reports()
     {

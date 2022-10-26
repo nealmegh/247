@@ -232,6 +232,8 @@ use DestinationTrait;
         $siteSettings = SiteSettings::all();
         $request = $this->setDestination($request);
         $booking =Booking::find($id);
+        $user_id = $booking->user->id;
+        $user = User::find($user_id);
 
         if($booking->complete_status == 1)
         {
@@ -239,10 +241,12 @@ use DestinationTrait;
         }
         $booking->fill($request->all())->save();
         $data = array(
+            'driver' => null,
             'booking' => $booking,
         );
         if($request->send_email == '1' || $siteSettings[22]->value == 1)
         {
+
             Mail::to($booking->user->email)->send(new BookingUpdated($data));
         }
 

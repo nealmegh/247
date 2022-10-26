@@ -281,7 +281,7 @@
                                                     </td>
                                                 </tr>
                                             @endif
-                                            @if($data['driver'] != null)
+                                            @if(array_key_exists('driver', $data)&& $data['driver'] != null)
                                             <tr>
                                             <td
                                             colspan="2"

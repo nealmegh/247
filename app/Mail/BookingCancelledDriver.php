@@ -29,7 +29,7 @@ class BookingCancelledDriver extends Mailable
     public function build()
     {
 
-        return $this->from( env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))->subject('Your
+        return $this->from( env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))->cc('info247ae@gmail.com')->subject('Your
         Trip has been cancelled @'.env('APP_NAME').'')->view('Email.bookingCancelledDriver')->with('data', $this->data);
 
     }

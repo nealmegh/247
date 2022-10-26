@@ -30,7 +30,7 @@ class DriverAssigned extends Mailable
     public function build()
     {
 
-        return $this->from( env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))->subject('You have been Assigned
+        return $this->from( env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))->cc('info247ae@gmail.com')->subject('You have been Assigned
         to A new Trip @'.env('APP_NAME').'')->view('Email.driverAssigned')->with('data', $this->data);
 
     }

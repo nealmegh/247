@@ -5,8 +5,13 @@ namespace App\Http\Controllers;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\Driver;
+use App\Models\Trip;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DriverController extends Controller
 {
@@ -26,6 +31,14 @@ class DriverController extends Controller
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
+
+    public function dashboard(){
+        $user = Auth::user();
+        $driver = Driver::where('user_id', $user->id)->first();
+        $trips = Trip::where('driver_id', $driver->id)->get();
+//        dd($driver);
+        return view('Backend.Driver.Dashboard.index', compact('trips'));
+    }
     public function create()
     {
         return view('Backend.Driver.create');
@@ -60,7 +73,7 @@ class DriverController extends Controller
         }
         else
         {
-            $password = '123456';
+            $password = 'Drive247Trips';
             $data['name'] = $request->name;
             $data['email'] = $request->email;
             $data['password'] = $password;
@@ -77,9 +90,17 @@ class DriverController extends Controller
             {
 
             }
-
         }
+
+        $request->merge([
+            'insurance_date' => $this->setExpiryDates($request->post('insurance_date')),
+            'private_hire_vehicle_license_date' => $this->setExpiryDates($request->post('private_hire_vehicle_license_date')),
+            'private_hire_license_date' => $this->setExpiryDates($request->post('private_hire_license_date')),
+            'driving_license_date' => $this->setExpiryDates($request->post('driving_license_date')),
+        ]);
+
         $driver = Driver::create($request->all());
+        $this->driverImagesUpload($request, $driver);
 
         return redirect()->route('driver.drivers')->with('message', 'Driver Added');
     }
@@ -116,6 +137,7 @@ class DriverController extends Controller
      */
     public function update(Request $request, $id)
     {
+//        dd($request->all());
         $request->validate([
             'first_name' => ['required'],
             'last_name' => ['required'],
@@ -182,8 +204,8 @@ class DriverController extends Controller
 
             }
         }
-
         $driver = Driver::find($id);
+
         $driver->first_name = $request->post('first_name');
         $driver->last_name = $request->post('last_name');
         $driver->private_hire_license = $request->post('private_hire_license');
@@ -194,8 +216,14 @@ class DriverController extends Controller
         $driver->phone_number = $request->post('phone_number');
         $driver->vehicle_reg = $request->post('vehicle_reg');
         $driver->commission = $request->post('commission');
-
+        $driver->dlva_eccc = $request->post('dlva_eccc');
+        $driver->insurance_date = $this->setExpiryDates($request->post('insurance_date'));
+        $driver->private_hire_vehicle_license_date = $this->setExpiryDates($request->post('private_hire_vehicle_license_date'));
+        $driver->private_hire_license_date = $this->setExpiryDates($request->post('private_hire_license_date'));
+        $driver->driving_license_date = $this->setExpiryDates($request->post('driving_license_date'));
+        $driver->driving_license = $request->post('driving_license');
         $driver->save();
+        $this->driverImagesUpload($request, $driver);
 
         $request->session()->flash('message', 'This is a message!');
         $request->session()->flash('alert-class', 'alert-success');
@@ -207,9 +235,76 @@ class DriverController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Driver  $driver
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     * @return string
      */
+    public function setExpiryDates($date)
+    {
+        $datetime = new Carbon($date);
+        return $datetime->format('Y-m-d');
 
+    }
+    public function driverImagesUpload(Request $request, Driver $driver)
+    {
+        $driverImagePath = "images/driver/$driver?->id";
+        if($request->private_hire_license_image)
+        {
+            $privateHireLicenseImage = Str::after($request->private_hire_license_image, 'temp/');
+            Storage::disk('public')->move($request->private_hire_license_image, "$driverImagePath/$privateHireLicenseImage");
+            $driver->private_hire_license_image = "$driverImagePath/$privateHireLicenseImage";
+            $driver->save();
+        }
+        if($request->driving_license_image)
+        {
+            $drivingLicenseImage = Str::after($request->driving_license_image, 'temp/');
+            Storage::disk('public')->move($request->driving_license_image, "$driverImagePath/$drivingLicenseImage");
+            $driver->driving_license_image = "$driverImagePath/$drivingLicenseImage";
+            $driver->save();
+        }
+        if($request->bank_statement_image)
+        {
+            $bankStatementImage = Str::after($request->bank_statement_image, 'temp/');
+            Storage::disk('public')->move($request->bank_statement_image, "$driverImagePath/$bankStatementImage");
+            $driver->bank_statement_image = "$driverImagePath/$bankStatementImage";
+            $driver->save();
+        }
+        if($request->insurance_image)
+        {
+            $insuranceImage = Str::after($request->insurance_image, 'temp/');
+            Storage::disk('public')->move($request->insurance_image, "$driverImagePath/$insuranceImage");
+            $driver->insurance_image = "$driverImagePath/$insuranceImage";
+            $driver->save();
+        }
+        if($request->logbook_image)
+        {
+            $logbookImage = Str::after($request->logbook_image, 'temp/');
+            Storage::disk('public')->move($request->logbook_image, "$driverImagePath/$logbookImage");
+            $driver->logbook_image = "$driverImagePath/$logbookImage";
+            $driver->save();
+        }
+        if($request->coc_image)
+        {
+            $cocImage = Str::after($request->coc_image, 'temp/');
+            Storage::disk('public')->move($request->coc_image, "$driverImagePath/$cocImage");
+            $driver->coc_image = "$driverImagePath/$cocImage";
+            $driver->save();
+        }
+        if($request->private_hire_vehicle_license_image)
+        {
+            $phvlImage = Str::after($request->private_hire_vehicle_license_image, 'temp/');
+            Storage::disk('public')->move($request->private_hire_vehicle_license_image, "$driverImagePath/$phvlImage");
+            $driver->private_hire_vehicle_license_image = "$driverImagePath/$phvlImage";
+            $driver->save();
+        }
+
+//        'coc_image',
+//        'insurance_image',
+//        'logbook_image',
+//        'private_hire_vehicle_license_image',
+//        'private_hire_license_image',
+//        'bank_statement_image',
+//        'driving_license_image',
+
+    }
     public function destroy(Request $request, $driver)
     {
         $driver = Driver::find($driver);
@@ -252,6 +347,37 @@ class DriverController extends Controller
             }
         }
         return redirect()->route('driver.drivers')->with('message', 'Drivers User Profile Created');
+    }
+
+    public function upload(Request $request){
+        if($request->private_hire_license_image)
+        {
+            return $request->file('private_hire_license_image')->store('temp','public');
+        }
+        if($request->driving_license_image)
+        {
+            return $request->file('driving_license_image')->store('temp','public');
+        }
+        if($request->bank_statement_image)
+        {
+            return $request->file('bank_statement_image')->store('temp','public');
+        }
+        if($request->insurance_image)
+        {
+            return $request->file('insurance_image')->store('temp','public');
+        }
+        if($request->logbook_image)
+        {
+            return $request->file('logbook_image')->store('temp','public');
+        }
+        if($request->coc_image)
+        {
+            return $request->file('coc_image')->store('temp','public');
+        }
+        if($request->private_hire_vehicle_license_image)
+        {
+            return $request->file('private_hire_vehicle_license_image')->store('temp','public');
+        }
     }
 
 }

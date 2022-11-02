@@ -23,6 +23,7 @@ use Illuminate\Http\Request;
 use App\Mail\BookingSuccessful;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\DriverAssigned;
 use Illuminate\Support\Facades\Redirect;
@@ -47,7 +48,10 @@ use DestinationTrait;
      */
     public function index()
     {
-        $bookings = Booking::where('complete_status', null)->get();
+        $bookings = Booking::where('complete_status', null)->orderBy('journey_date', 'DESC')->get();
+//        $bookings = DB::table("bookings")->where('complete_status','=',null)->orderBy("journey_date", "DESC")->get();
+
+//        dd($bookings[0]);
         return view('Backend.Booking.index', compact('bookings'));
     }
     public function completed()

@@ -82,6 +82,9 @@ class Booking extends Model
     }
     public function from()
     {
+        if($this->from_to == 'other'){
+            return $this->pickup_address;
+        }
         if($this->from_to == 'loc')
         {
         return $this->location->display_name;
@@ -93,6 +96,9 @@ class Booking extends Model
     }
     public function to()
     {
+        if($this->from_to == 'other'){
+            return $this->dropoff_address;;
+        }
         if($this->from_to == 'loc')
         {
             return $this->airport->display_name;

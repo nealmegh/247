@@ -14,6 +14,13 @@
     <link href={{asset("css/theme/plugins/sweetalerts/sweetalert.css")}} rel="stylesheet" type="text/css" />
     <link href={{asset("css/theme/components/custom-sweetalert.css" )}} rel="stylesheet" type="text/css" />
     <link href={{asset("css/theme/forms/switches.css" )}} rel="stylesheet" type="text/css" />
+    <link href={{asset("css/theme/plugins/flatpickr/custom-flatpickr.css" )}} rel="stylesheet" type="text/css" />
+    <link href={{asset("css/theme/plugins/flatpickr/flatpickr.css" )}} rel="stylesheet" type="text/css" />
+    <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
+    <link
+        href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+        rel="stylesheet"
+    />
     <style>
         .create-button{
             position: relative;
@@ -60,7 +67,7 @@
                         </div>
                     </div>
                     <div class="widget-content widget-content-area">
-                        <form class="form-horizontal form-label-left" novalidate method="post" action="{{route('driver.update', $driver->id )}}">
+                        <form class="form-horizontal form-label-left" method="post" action="{{route('driver.update', $driver->id )}}">
                             @csrf
                             <div class="form-row mb-4">
                                 <label class="control-label" for="first_name">First Name <span class="required">*</span>
@@ -84,10 +91,57 @@
                                 <input value="{{$driver->phone_number}}" type="text" id="phone" name="phone_number" placeholder="Enter Your Phone Number" required="required"  class="form-control">
                             </div>
                             <div class="form-row mb-4">
+                                <label class="control-label" for="dlva_eccc">DVLA ECCC<span class="required">*</span>
+                                </label>
+                                <input value="{{$driver->dlva_eccc}}" type="text" id="dlva_eccc" name="dlva_eccc" required="required"  class="form-control">
+                            </div>
+                            <div class="form-row mb-4">
                                 <label class="control-label" for="private_hire_license">Private Hire License Number <span class="required">*</span>
                                 </label>
                                 <input type="text" value="{{$driver->private_hire_license}}" id="private_hire_license" name="private_hire_license" placeholder="Enter Private Hire License Number" required="required"  class="form-control">
                             </div>
+                            <div class="form-row mb-4">
+                                <label for="private_hire_license_date">Expiry of Private Hire License Number <span class="required">*</span></label>
+                                <input type="text" class="form-control" value="{{$driver->private_hire_license_date}}" id="private_hire_license_date" {{old('private_hire_license_date')}} name="private_hire_license_date" placeholder="Expire Date" required="required">
+                            </div>
+                            <div class="form-row mb-4">
+                                <label for="private_hire_license_image">Private Hire License Number File <span class="required">*</span></label>
+                            </div>
+                            <input type="file" id="private_hire_license_image" name="private_hire_license_image" required="required">
+                            <div class="form-row mb-4">
+                                <label for="driving_license">Driving License Number <span class="required">*</span></label>
+                                <input type="text" class="form-control" value="{{$driver->driving_license}}" id="driving_license" {{old('driving_license')}} name="driving_license" placeholder="License Number" required="required">
+                            </div>
+                            <div class="form-row mb-4">
+                                <label for="driving_license_date">Expiry of Driver's License Number <span class="required">*</span></label>
+                                <input type="text" class="form-control" value="{{$driver->driving_license_date}}" id="driving_license_date" {{old('driving_license_date')}} name="driving_license_date" placeholder="Expire Date" required="required">
+                            </div>
+                            <div class="form-row mb-4">
+                                <label for="driving_license_image">Driving License Number File <span class="required">*</span></label>
+                            </div>
+                            <input type="file" id="driving_license_image" name="driving_license_image" required="required">
+                            <div class="form-row mb-4">
+                                <label for="bank_statement_image">Bank Statement <span class="required">*</span></label>
+                            </div>
+                            <input type="file" id="bank_statement_image"  name="bank_statement_image" required="required">
+{{--                            adasdada--}}
+                            <div class="form-row mb-4">
+                                <label for="insurance_date">Expiry of Insurance <span class="required">*</span></label>
+                                <input type="text" class="form-control" value="{{$driver->insurance_date}}" id="insurance_date" {{old('insurance_date')}} name="insurance_date" placeholder="Expire Date" required="required">
+                            </div>
+                            <div class="form-row mb-4">
+                                <label for="insurance_image">Insurance File <span class="required">*</span></label>
+                            </div>
+                            <input type="file" id="insurance_image" name="insurance_image" required="required">
+                            <div class="form-row mb-4">
+                                <label for="logbook_image">LogBook <span class="required">*</span></label>
+                            </div>
+                            <input type="file" id="logbook_image"  name="logbook_image" required="required">
+                            <div class="form-row mb-4">
+                                <label for="coc_image">Certificate of Compliance <span class="required">*</span></label>
+                            </div>
+                            <input type="file" id="coc_image"  name="coc_image" required="required">
+{{--                            ssssssssssss--}}
                             <div class="form-row mb-4">
                                 <label class="control-label" for="vehicle_reg">Vehicle Reg<span class="required">*</span>
                                 </label>
@@ -103,6 +157,14 @@
                                 </label>
                                 <input type="text" value="{{$driver->vehicle_license}}" id="vehicle_license" name="vehicle_license" placeholder="Enter Vehicle License Number" required="required"  class="form-control">
                             </div>
+                            <div class="form-row mb-4">
+                                <label for="private_hire_vehicle_license_date">Expiry of Private Hire Vehicle License Number <span class="required">*</span></label>
+                                <input type="text" class="form-control" value="{{$driver->private_hire_vehicle_license_date}}" id="private_hire_vehicle_license_date" {{old('private_hire_vehicle_license_date')}} name="private_hire_vehicle_license_date" placeholder="Expire Date" required="required">
+                            </div>
+                            <div class="form-row mb-4">
+                                <label for="private_hire_vehicle_license_image">Private Hire Vehicle License Number File <span class="required">*</span></label>
+                            </div>
+                            <input type="file" id="private_hire_vehicle_license_image" name="private_hire_vehicle_license_image" required="required">
                             <div class="form-row mb-4">
                                 <label class="control-label" for="commission">Commission(%)<span class="required">*</span>
                                 </label>
@@ -139,6 +201,177 @@
     <script src={{asset("js/theme/js/scrollspyNav.js")}}></script>
     <script src={{asset("js/theme/plugins/sweetalerts/sweetalert2.min.js")}}></script>
     <script src={{asset("js/theme/plugins/sweetalerts/custom-sweetalert.js")}}></script>
+    <script src={{asset("js/theme/plugins/flatpickr/flatpickr.js")}}></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-rename/dist/filepond-plugin-file-rename.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+    <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
     <!-- END THEME GLOBAL STYLE -->
     <!-- END PAGE LEVEL CUSTOM SCRIPTS -->
-@endsection
+
+    <script>
+        var f1 = flatpickr(document.getElementById('private_hire_license_date'), {
+            minDate: "today",
+            dateFormat: "d-m-Y"
+        });
+        var f2 = flatpickr(document.getElementById('driving_license_date'), {
+            minDate: "today",
+            dateFormat: "d-m-Y"
+        });
+        var f3 = flatpickr(document.getElementById('insurance_date'), {
+            minDate: "today",
+            dateFormat: "d-m-Y"
+        });
+        var f4 = flatpickr(document.getElementById('private_hire_vehicle_license_date'), {
+            minDate: "today",
+            dateFormat: "d-m-Y"
+        });
+    </script>
+    <script>
+        FilePond.registerPlugin(FilePondPluginImagePreview);
+        FilePond.registerPlugin(FilePondPluginFileRename);
+        FilePond.registerPlugin(FilePondPluginFileValidateSize);
+        FilePond.registerPlugin(FilePondPluginFileValidateType);
+        FilePond.registerPlugin(FilePondPluginImageValidateSize);
+        FilePond.registerPlugin(FilePondPluginImageResize);
+        FilePond.registerPlugin(FilePondPluginImageTransform);
+        // Get a reference to the file input element
+        const inputElement1 = document.querySelector('#private_hire_license_image');
+        // FilePond.setOptions({
+        //     fileRenameFunction: (file) => {
+        //         return `my_new_name${file.extension}`;
+        //     },
+        // });
+        // Create a FilePond instance
+        const pond1 = FilePond.create(inputElement1, {
+            // fileRenameFunction: (file) => {
+            //     return `my_new_name${file.extension}`;
+            // },
+            // allowFileRename: true,
+            maxFileSize: '200KB',
+            acceptedFileTypes: ['image/*', 'application/pdf'],
+            imageValidateSizeMinWidth: 300,
+            imageValidateSizeMinHeight: 200,
+            imageResizeTargetWidth: 500,
+            imageResizeTargetHeight:400,
+            imageResizeUpscale: false,
+            server: {
+                url:'/admin/drivers/upload',
+                headers:{
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            }
+        });
+        const inputElementDL = document.querySelector('#driving_license_image');
+
+        // Create a FilePond instance
+        const pondDL = FilePond.create(inputElementDL, {
+            maxFileSize: '200KB',
+            acceptedFileTypes: ['image/*', 'application/pdf'],
+            imageValidateSizeMinWidth: 300,
+            imageValidateSizeMinHeight: 200,
+            imageResizeTargetWidth: 500,
+            imageResizeTargetHeight:400,
+            imageResizeUpscale: false,
+            server: {
+                url:'/admin/drivers/upload',
+                headers:{
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            }
+        });
+        const inputElementBS = document.querySelector('#bank_statement_image');
+
+        // Create a FilePond instance
+        const pondBS = FilePond.create(inputElementBS, {
+            maxFileSize: '200KB',
+            acceptedFileTypes: ['image/*', 'application/pdf'],
+            imageValidateSizeMinWidth: 300,
+            imageValidateSizeMinHeight: 200,
+            imageResizeTargetWidth: 500,
+            imageResizeTargetHeight:400,
+            imageResizeUpscale: false,
+            server: {
+                url:'/admin/drivers/upload',
+                headers:{
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            }
+        });
+        const inputElementII = document.querySelector('#insurance_image');
+
+        // Create a FilePond instance
+        const pondII = FilePond.create(inputElementII, {
+            maxFileSize: '200KB',
+            acceptedFileTypes: ['image/*', 'application/pdf'],
+            imageValidateSizeMinWidth: 300,
+            imageValidateSizeMinHeight: 200,
+            imageResizeTargetWidth: 500,
+            imageResizeTargetHeight:400,
+            imageResizeUpscale: false,
+            server: {
+                url:'/admin/drivers/upload',
+                headers:{
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            }
+        });
+        const inputElementCC = document.querySelector('#coc_image');
+
+        // Create a FilePond instance
+        const pondCC = FilePond.create(inputElementCC, {
+            maxFileSize: '200KB',
+            acceptedFileTypes: ['image/*', 'application/pdf'],
+            imageValidateSizeMinWidth: 300,
+            imageValidateSizeMinHeight: 200,
+            imageResizeTargetWidth: 500,
+            imageResizeTargetHeight:400,
+            imageResizeUpscale: false,
+            server: {
+                url:'/admin/drivers/upload',
+                headers:{
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            }
+        });
+        const inputElementLB = document.querySelector('#logbook_image');
+
+        // Create a FilePond instance
+        const pondLB = FilePond.create(inputElementLB, {
+            maxFileSize: '200KB',
+            acceptedFileTypes: ['image/*', 'application/pdf'],
+            imageValidateSizeMinWidth: 300,
+            imageValidateSizeMinHeight: 200,
+            imageResizeTargetWidth: 500,
+            imageResizeTargetHeight:400,
+            imageResizeUpscale: false,
+            server: {
+                url:'/admin/drivers/upload',
+                headers:{
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            }
+        });
+        const inputElementVL = document.querySelector('#private_hire_vehicle_license_image');
+
+        // Create a FilePond instance
+        const pondVL = FilePond.create(inputElementVL, {
+            maxFileSize: '200KB',
+            acceptedFileTypes: ['image/*', 'application/pdf'],
+            imageValidateSizeMinWidth: 300,
+            imageValidateSizeMinHeight: 200,
+            imageResizeTargetWidth: 500,
+            imageResizeTargetHeight:400,
+            imageResizeUpscale: false,
+            server: {
+                url:'/admin/drivers/upload',
+                headers:{
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            }
+        });
+    </script>

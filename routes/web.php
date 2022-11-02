@@ -76,7 +76,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::post('update_customer', [App\Actions\Fortify\UpdateUserProfileInformation::class, 'customerUpdate'])->name('customer.update');
     });
 
-
+    Route::group( ['prefix' => 'drivers', 'as' => 'driver.'], function() {
+        Route::get('dashboard', [DriverController::class,'dashboard'])->name('dashboard');
+        Route::post('trips/update/{id}', [TripController::class, 'update'])->name('update.trip');
+    });
     Route::group( ['prefix' => 'admin', 'middleware' => 'can:Admin'], function() {
         Route::group( ['prefix' => 'users', 'as' => 'user.'], function() {
             Route::get('/', [UserController::class, 'index'])->name('users');
@@ -109,6 +112,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::post('update/{id}', [DriverController::class,'update'])->name('update');
             Route::get('delete/{id}', [DriverController::class,'destroy'])->name('delete');
             Route::get('driver_user', [DriverController::class,'user_create'])->name('user');
+            Route::post('upload', [DriverController::class,'upload'])->name('upload');
         });
 
         Route::get('customers', [CustomerController::class,'index'])->name('customers');

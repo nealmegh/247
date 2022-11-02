@@ -3,13 +3,18 @@
 
             <ul class="navbar-item theme-brand flex-row  text-center">
                 <li class="nav-item theme-logo" >
-                    @cannot('Customer')
+                    @can('Admin')
                     <a href={{route('admin.dashboard')}}>
                         <img  src= "{{ asset("img/logo1.png") }}" class="navbar-logo" alt="logo" style="width: 130px !important;">
                     </a>
-                    @endcannot
+                    @endcan
                     @can('Customer')
                         <a href={{route('customer.dashboard')}}>
+                            <img  src= "{{ asset("img/logo1.png") }}" class="navbar-logo" alt="logo" style="width: 130px !important;">
+                        </a>
+                    @endcan
+                    @can('Driver')
+                        <a href={{route('driver.dashboard')}}>
                             <img  src= "{{ asset("img/logo1.png") }}" class="navbar-logo" alt="logo" style="width: 130px !important;">
                         </a>
                     @endcan
@@ -230,7 +235,7 @@ $breadCrumbs = Auth::user()->breadCrumbs();
                     </div>
                 </li>
             </ul>
-            @cannot('Customer')
+            @can('Admin')
             <ul class="navbar-nav flex-row ml-auto ">
                 <li class="nav-item more-dropdown">
                     <div class="dropdown  custom-dropdown-icon">
@@ -245,6 +250,6 @@ $breadCrumbs = Auth::user()->breadCrumbs();
                     </div>
                 </li>
             </ul>
-            @endcannot
+            @endcan
         </header>
     </div>

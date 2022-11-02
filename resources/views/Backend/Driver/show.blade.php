@@ -17,6 +17,9 @@
     <link href={{asset("css/theme/components/custom-sweetalert.css" )}} rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="{{asset("css/theme/elements/alert.css" )}}">
     <link rel="stylesheet" type="text/css" href="{{asset("css/theme/tables/table-basic.css" )}}">
+    <link href={{asset("css/theme/plugins/lightbox/photoswipe.css")}} rel="stylesheet" type="text/css" />
+    <link href={{asset("css/theme/plugins/lightbox/default-skin/default-skin.css")}} rel="stylesheet" type="text/css" />
+    <link href={{asset("css/theme/plugins/lightbox/custom-photswipe.css")}} rel="stylesheet" type="text/css" />
     <style>
         .btn-light { border-color: transparent; }
         .badge-success {
@@ -78,6 +81,9 @@
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Profile</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link " id="documents-tab" data-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="true">Documents</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link " id="home-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="home" aria-selected="true">Trips</a>
                         </li>
 
@@ -134,8 +140,205 @@
                                         <h5>{{$driver->vehicle_license}}</h5>
                                     </div>
                                 </div>
+                                <div class="form-group row mb-4">
+                                    <h5  class="col-xl-4 col-sm-5 col-sm-4 ">DLVA ECCC:</h5>
+                                    <div class="col-xl-8 col-lg-7 col-sm-8 mt-2">
+                                        <h5>{{$driver->dlva_eccc}}</h5>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-4">
+                                    <h5  class="col-xl-4 col-sm-5 col-sm-4 ">Driving License:</h5>
+                                    <div class="col-xl-8 col-lg-7 col-sm-8 mt-2">
+                                        <h5>{{$driver->driving_license}}</h5>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-4">
+                                    <h5  class="col-xl-4 col-sm-5 col-sm-4 ">Driving License Expiry Date:</h5>
+                                    <div class="col-xl-8 col-lg-7 col-sm-8 mt-2">
+                                        @if(strtotime($driver->driving_license_date) < strtotime('3 days') && strtotime($driver->driving_license_date) > strtotime('1 days'))
+                                            <h5 style="color: #e1ad01">{{date('d-m-Y',strtotime($driver->driving_license_date))}}</h5>
+                                        @elseif (strtotime($driver->driving_license_date) < strtotime('1 days'))
+                                            <h5 style="color: red">{{date('d-m-Y',strtotime($driver->driving_license_date))}}</h5>
+                                        @else
+                                            <h5 style="color: green">{{date('d-m-Y',strtotime($driver->driving_license_date))}}</h5>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-4">
+                                    <h5  class="col-xl-4 col-sm-5 col-sm-4 ">Insurance Expiry Date:</h5>
+                                    <div class="col-xl-8 col-lg-7 col-sm-8 mt-2">
+                                        @if(strtotime($driver->insurance_date) < strtotime('3 days') && strtotime($driver->insurance_date) > strtotime('1 days'))
+                                            <h5 style="color: #e1ad01">{{date('d-m-Y',strtotime($driver->insurance_date))}}</h5>
+                                        @elseif (strtotime($driver->insurance_date) < strtotime('1 days'))
+                                            <h5 style="color: red">{{date('d-m-Y',strtotime($driver->insurance_date))}}</h5>
+                                        @else
+                                            <h5 style="color: green">{{date('d-m-Y',strtotime($driver->insurance_date))}}</h5>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-4">
+                                    <h5  class="col-xl-4 col-sm-5 col-sm-4 ">Private Hire License Expiry Date:</h5>
+                                    <div class="col-xl-8 col-lg-7 col-sm-8 mt-2">
+                                        @if(strtotime($driver->private_hire_license_date) < strtotime('3 days') && strtotime($driver->private_hire_license_date) > strtotime('1 days'))
+                                            <h5 style="color: #e1ad01">{{date('d-m-Y',strtotime($driver->private_hire_license_date))}}</h5>
+                                        @elseif (strtotime($driver->private_hire_license_date) < strtotime('1 days'))
+                                            <h5 style="color: red">{{date('d-m-Y',strtotime($driver->private_hire_license_date))}}</h5>
+                                        @else
+                                            <h5 style="color: green">{{date('d-m-Y',strtotime($driver->private_hire_license_date))}}</h5>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-4">
+                                    <h5  class="col-xl-4 col-sm-5 col-sm-4 ">Private Hire Vehicle License Expiry Date:</h5>
+                                    <div class="col-xl-8 col-lg-7 col-sm-8 mt-2">
+                                        @if(strtotime($driver->private_hire_vehicle_license_date) < strtotime('3 days') && strtotime($driver->private_hire_vehicle_license_date) > strtotime('1 days'))
+                                            <h5 style="color: #e1ad01">{{date('d-m-Y',strtotime($driver->private_hire_vehicle_license_date))}}</h5>
+                                        @elseif (strtotime($driver->private_hire_vehicle_license_date) < strtotime('1 days'))
+                                            <h5 style="color: red">{{date('d-m-Y',strtotime($driver->private_hire_vehicle_license_date))}}</h5>
+                                        @else
+                                            <h5 style="color: green">{{date('d-m-Y',strtotime($driver->private_hire_vehicle_license_date))}}</h5>
+                                        @endif
+                                    </div>
+                                </div>
 
                     </div>
+                        </div>
+                        <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+                            <div class="widget-content widget-content-area">
+
+                                <div id="demo-test-gallery" class="demo-gallery" data-pswp-uid="1">
+
+                                    <a class="img-1" href="{{'/storage/'.$driver->insurance_image}}" data-size="1600x1068" data-med="assets/img/1280x857.jpg" data-med-size="1024x683" data-author="">
+                                        <img src="{{'/storage/'.$driver->insurance_image}}" alt="image-gallery">
+                                        <figure>
+                                            @if(strtotime($driver->insurance_date) < strtotime('3 days') && strtotime($driver->insurance_date) > strtotime('1 days'))
+                                                Insurance
+                                                <div style="color: #e1ad01">Expiry date:{{date('d-m-Y',strtotime($driver->insurance_date))}}</div>
+                                            @elseif (strtotime($driver->insurance_date) < strtotime('1 days'))
+                                                Insurance
+                                                <div style="color: red">Expiry date:{{date('d-m-Y',strtotime($driver->insurance_date))}}</div>
+                                            @else
+                                                Insurance
+                                                <div style="color: green">Expiry date:{{date('d-m-Y',strtotime($driver->insurance_date))}}</div>
+                                            @endif
+                                        </figure>
+                                    </a>
+
+                                    <a class="img-2" href="{{'/storage/'.$driver->coc_image}}" data-size="1600x1068" data-med="assets/img/1280x857.jpg" data-med-size="1024x683" >
+                                        <img src="{{'/storage/'.$driver->coc_image}}" alt="image-gallery">
+                                        <figure>Certificate of Compliance</figure>
+                                    </a>
+
+                                    <a class="img-3" href="{{'/storage/'.$driver->logbook_image}}" data-size="1600x1067" data-med="assets/img/1280x857.jpg" data-med-size="1024x683" >
+                                        <img src="{{'/storage/'.$driver->logbook_image}}" alt="image-gallery">
+                                        <figure>Logbook</figure>
+                                    </a>
+
+                                    <a class="img-4" href="{{'/storage/'.$driver->private_hire_vehicle_license_image}}" data-size="1600x1600" data-med="assets/img/1280x857.jpg" data-med-size="1024x1024" >
+                                        <img src="{{'/storage/'.$driver->private_hire_vehicle_license_image}}" alt="image-gallery">
+                                        <figure>
+                                            @if(strtotime($driver->private_hire_vehicle_license_date) < strtotime('3 days') && strtotime($driver->private_hire_vehicle_license_date) > strtotime('1 days'))
+                                                Private Hire Vehicle License
+                                                <div style="color: #e1ad01">Expiry date:{{date('d-m-Y',strtotime($driver->private_hire_vehicle_license_date))}}</div>
+                                            @elseif (strtotime($driver->private_hire_vehicle_license_date) < strtotime('1 days'))
+                                                Private Hire Vehicle License
+                                                <div style="color: red">Expiry date:{{date('d-m-Y',strtotime($driver->private_hire_vehicle_license_date))}}</div>
+                                            @else
+                                                Private Hire Vehicle License
+                                                <div style="color: green">Expiry date:{{date('d-m-Y',strtotime($driver->private_hire_vehicle_license_date))}}</div>
+                                            @endif
+                                        </figure>
+                                    </a>
+
+                                    <a class="img-5" href="{{'/storage/'.$driver->private_hire_license_image}}" data-size="1600x1067" data-med="assets/img/1280x857.jpg" data-med-size="1024x683">
+                                        <img src="{{'/storage/'.$driver->private_hire_license_image}}" alt="image-gallery">
+                                        <figure>
+                                            @if(strtotime($driver->private_hire_license_date) < strtotime('3 days') && strtotime($driver->private_hire_license_date) > strtotime('1 days'))
+                                                Private Hire License
+                                                <div style="color: #e1ad01">Expiry date:{{date('d-m-Y',strtotime($driver->private_hire_license_date))}}</div>
+                                            @elseif (strtotime($driver->private_hire_license_date) < strtotime('1 days'))
+                                                Private Hire License
+                                                <div style="color: red">Expiry date:{{date('d-m-Y',strtotime($driver->private_hire_license_date))}}</div>
+                                            @else
+                                                Private Hire License
+                                                <div style="color: green">Expiry date:{{date('d-m-Y',strtotime($driver->private_hire_license_date))}}</div>
+                                            @endif
+                                        </figure>
+                                    </a>
+
+                                    <a class="img-6" href="{{'/storage/'.$driver->driving_license_image}}" data-size="1600x1067" data-med="assets/img/1280x857.jpg" data-med-size="1024x683">
+                                        <img src="{{'/storage/'.$driver->driving_license_image}}" alt="image-gallery">
+                                        <figure>
+                                            @if(strtotime($driver->driving_license_date) < strtotime('3 days') && strtotime($driver->driving_license_date) > strtotime('1 days'))
+                                                Driving License
+                                                <div style="color: #e1ad01">Expiry date:{{date('d-m-Y',strtotime($driver->driving_license_date))}}</div>
+                                            @elseif (strtotime($driver->driving_license_date) < strtotime('1 days'))
+                                                Driving License
+                                                <div style="color: red">Expiry date:{{date('d-m-Y',strtotime($driver->driving_license_date))}}</div>
+                                            @else
+                                                Driving License
+                                                <div style="color: green">Expiry date:{{date('d-m-Y',strtotime($driver->driving_license_date))}}</div>
+                                            @endif
+                                        </figure>
+                                    </a>
+                                    <a class="img-7" href="{{'/storage/'.$driver->bank_statement_image}}" data-size="1600x1067" data-med="assets/img/1280x857.jpg" data-med-size="1024x683" >
+                                        <img src="{{'/storage/'.$driver->bank_statement_image}}" alt="Bank Statement">
+                                        <figure>Bank Statement</figure>
+                                    </a>
+
+                                </div>
+
+                            </div>
+                            <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+                                <!-- Background of PhotoSwipe. It's a separate element, as animating opacity is faster than rgba(). -->
+                                <div class="pswp__bg"></div>
+
+                                <!-- Slides wrapper with overflow:hidden. -->
+                                <div class="pswp__scroll-wrap">
+                                    <!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
+                                    <!-- don't modify these 3 pswp__item elements, data is added later on. -->
+                                    <div class="pswp__container">
+                                        <div class="pswp__item"></div>
+                                        <div class="pswp__item"></div>
+                                        <div class="pswp__item"></div>
+                                    </div>
+
+                                    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+                                    <div class="pswp__ui pswp__ui--hidden">
+
+                                        <div class="pswp__top-bar">
+
+                                            <!--  Controls are self-explanatory. Order can be changed. -->
+                                            <div class="pswp__counter"></div>
+                                            <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                                            <button class="pswp__button pswp__button--share" title="Share"></button>
+                                            <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                                            <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                                            <!-- element will get class pswp__preloader--active when preloader is running -->
+                                            <div class="pswp__preloader">
+                                                <div class="pswp__preloader__icn">
+                                                    <div class="pswp__preloader__cut">
+                                                        <div class="pswp__preloader__donut"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                                            <div class="pswp__share-tooltip"></div>
+                                        </div>
+                                        <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                                        </button>
+                                        <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                                        </button>
+                                        <div class="pswp__caption">
+                                            <div class="pswp__caption__center"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <table id="html5-extension" class="table table-hover non-hover" style="width:100%">
@@ -192,6 +395,10 @@
     <script src={{asset("js/theme/js/scrollspyNav.js")}}></script>
     <script src={{asset("js/theme/plugins/sweetalerts/sweetalert2.min.js")}}></script>
     <script src={{asset("js/theme/plugins/sweetalerts/custom-sweetalert.js")}}></script>
+    <script src={{asset("js/theme/plugins/lightbox/photoswipe.min.js")}}></script>
+    <script src={{asset("js/theme/plugins/lightbox/photoswipe-ui-default.min.js")}}></script>
+    <script src={{asset("js/theme/plugins/lightbox/custom-photswipe.js")}}></script>
+
     <!-- END THEME GLOBAL STYLE -->
     <!-- END PAGE LEVEL CUSTOM SCRIPTS -->
     <script>

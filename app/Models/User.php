@@ -73,6 +73,10 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Booking');
     }
+    public function driver()
+    {
+        return $this->hasOne('App\Models\Driver');
+    }
     public function quick_bookings()
     {
         return $this->hasMany('App\Models\QuickBooking');

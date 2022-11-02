@@ -19,7 +19,12 @@ class LoginResponse implements LoginResponseContract
                 ? response()->json(['two_factor' => false])
                 : redirect()->intended('customer/dashboard');
         }
-        if(request()->user()->cannot('Customer')){
+        if(request()->user()->can('Driver')){
+            return $request->wantsJson()
+                ? response()->json(['two_factor' => false])
+                : redirect()->intended('drivers/dashboard');
+        }
+        if(request()->user()->cannot('Customer') && request()->user()->can('Driver')){
             return $request->wantsJson()
                 ? response()->json(['two_factor' => false])
                 : redirect()->intended('admin/dashboard');

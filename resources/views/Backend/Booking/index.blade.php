@@ -383,7 +383,7 @@
                 "sSearchPlaceholder": "Search...",
                 "sLengthMenu": "Results :  _MENU_",
             },
-            "order": [[0, 'desc']],
+            "order": [[7, 'asc']],
             "stripeClasses": [],
             "lengthMenu": [7, 10, 20, 50],
             "pageLength": 10,

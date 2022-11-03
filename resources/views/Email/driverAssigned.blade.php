@@ -483,18 +483,18 @@
                                                     {{$data['trip']->collectable_by_driver }}
                                                 </td>
                                             </tr>
-{{--                                            <tr>--}}
-{{--                                                <td style="width:30%;padding:5px 0;">Payment Method</td>--}}
-{{--                                                @if($data['booking']->userTransaction == Null)--}}
-{{--                                                    <td style="width:70%;padding:5px 0;">--}}
-{{--                                                        {{'Not Yet Selected'}}--}}
-{{--                                                    </td>--}}
-{{--                                                @else--}}
-{{--                                                    <td style="width:70%;padding:5px 0;">--}}
-{{--                                                        {{$data['booking']->userTransaction->trans_id}}--}}
-{{--                                                    </td>--}}
-{{--                                                @endif--}}
-{{--                                            </tr>--}}
+                                            <tr>
+                                                <td style="width:30%;padding:5px 0;">Payment Method</td>
+                                                @if($data['booking']->userTransaction == Null)
+                                                    <td style="width:70%;padding:5px 0;">
+                                                        {{'Not Yet Selected'}}
+                                                    </td>
+                                                @else
+                                                    <td style="width:70%;padding:5px 0;">
+                                                        {{$data['booking']->userTransaction->trans_id}}
+                                                    </td>
+                                                @endif
+                                            </tr>
 
                                         </table>
                                     </td>

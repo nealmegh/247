@@ -24,6 +24,17 @@ class SiteSettingsController extends Controller
             $useSettings[$setting->attribute][1] = $setting->value2;
 
         }
+//        dd($useSettings['holiday_dates'][0]);
+//        $holidaysArray  = json_decode($useSettings['holiday_dates'][0]);
+//        foreach ($holidaysArray as $key => $holiday)
+//        {
+//            if($key == 0)
+//            {
+//                $holidays =
+//            }
+//
+//        }
+//        dd($holidays);
         return view('Backend.Settings.index', compact('settings', 'useSettings'));
     }
     public function email()
@@ -104,6 +115,10 @@ class SiteSettingsController extends Controller
     public function update(Request $request)
     {
 
+//        dd(config('app.name'));
+//        dd($request->all());
+
+
         $settings = SiteSettings::all();
 
         foreach ($settings as $setting)
@@ -133,11 +148,31 @@ class SiteSettingsController extends Controller
             }
 
         }
+        $this->updateConfig($request);
 
         return redirect()->route('setting.settings');
 
     }
+//'mailers' => [
+//'smtp' => [
+//'transport' => 'smtp',
+//'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+//'port' => env('MAIL_PORT', 587),
+//'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+//'username' => env('MAIL_USERNAME'),
+//'password' => env('MAIL_PASSWORD'),
+//'timeout' => null,
+//'local_domain' => env('MAIL_EHLO_DOMAIN'),
+//],
 
+    public function updateConfig(Request $request)
+    {
+//        config(['app.name' => $request->site_name]);
+//        config(['mail.mailers.smtp.transport' => $request->site_name]);
+//        config(['app.name' => $request->site_name]);
+//        config(['app.name' => $request->site_name]);
+//        config(['app.name' => $request->site_name]);
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -147,6 +182,7 @@ class SiteSettingsController extends Controller
      */
     public function emailUpdate(Request $request)
     {
+//        dd($request->all());
 
         $settings = SiteSettings::all();
 
@@ -156,22 +192,27 @@ class SiteSettingsController extends Controller
             if(array_key_exists($setting->attribute, $request->all()))
             {
 
-//                if($setting->attribute == 'mail_host')
-//                {
-//                    Config::set('mail.mailers.smtp.host', $request[$setting->attribute]);
-//                }
-//                if($setting->attribute == 'mail_username')
-//                {
-//                    Config::set('mail.mailers.smtp.username', $request[$setting->attribute]);
-//                }
-//                if($setting->attribute == 'mail_password')
-//                {
-//                    Config::set('mail.mailers.smtp.password', $request[$setting->attribute]);
-//                }
-//                if($setting->attribute == 'mail_from_name')
-//                {
-//                    Config::set('mail.mailers.smtp.from.name', $request[$setting->attribute]);
-//                }
+                if($setting->attribute == 'mail_host')
+                {
+                    Config::set('mail.mailers.smtp.host', $request[$setting->attribute]);
+                }
+                if($setting->attribute == 'mail_username')
+                {
+                    Config::set('mail.mailers.smtp.username', $request[$setting->attribute]);
+                }
+                if($setting->attribute == 'mail_password')
+                {
+                    Config::set('mail.mailers.smtp.password', '"'.$request[$setting->attribute.'"']);
+                }
+                if($setting->attribute == 'mail_from_name')
+                {
+                    Config::set('mail.mailers.smtp.from.name', $request[$setting->attribute]);
+                }
+                Config::set('mail.mailers.smtp.port', '465');
+                Config::set('mail.mailers.smtp.encryption', 'ssl');
+
+
+                dd(config('mail.mailers.smtp.encryption'));
                 $setting->value = $request[$setting->attribute];
                 $setting->save();
 

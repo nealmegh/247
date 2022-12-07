@@ -5,32 +5,34 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class BillToDriver extends Mailable
+class CustomerDriverAssign extends Mailable
 {
     use Queueable, SerializesModels;
-
-    public $fileName;
     public $data;
+
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param $data
      */
-    public function __construct($fileName, $data)
+    public function __construct($data)
     {
         $this->data = $data;
-        $this->fileName = $fileName;
     }
 
+    /**
+     * Get the message envelope.
+     *
+     * @return \Illuminate\Mail\Mailables\Envelope
+     */
     public function envelope()
     {
         return new Envelope(
-            subject: 'Latest Bill From '.env('APP_NAME'),
+            subject: 'Driver assigned to your upcoming trip',
         );
     }
 
@@ -42,10 +44,7 @@ class BillToDriver extends Mailable
     public function content()
     {
         return new Content(
-            view: 'Email.billGenerated',
-            with: [
-                'data' => $this->data
-            ],
+            view: 'Email.customerDriverAssigned',
         );
     }
 
@@ -56,10 +55,6 @@ class BillToDriver extends Mailable
      */
     public function attachments()
     {
-        return [
-            Attachment::fromStorage('public/invoices/driver/'.$this->fileName)
-                ->as('Bill.pdf')
-                ->withMime('application/pdf'),
-        ];
+        return [];
     }
 }

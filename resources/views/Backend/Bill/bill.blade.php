@@ -98,7 +98,7 @@
 
 {{--                                            <!--@if(Storage::disk('public')->exists('/csv/'.$bill->id.'.pdf'))-->--}}
 
-                                                <a title="Download PDF" class="btn btn-primary" onclick="return confirm('Are you sure?')" href="{{route('bill.email', $bill->id)}}" >
+                                                <a title="Download PDF" class="btn btn-primary" onclick="return confirm('Are you sure?')" href="{{route('bill.generate', $bill->id)}}" >
                                                     <i class="far fa-save "></i>
                                                 </a>
                                                 {{--<!--@endif-->--}}

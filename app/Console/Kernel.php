@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -24,7 +25,23 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+
         // $schedule->command('inspire')->hourly();
+        $schedule->command('upload:cleanup')
+            ->dailyAt('01:00')
+            ->emailOutputTo('bipon.abrar@gmail.com');
+        $schedule->command('remind:trips')
+            ->twiceDailyAt('1', '9')
+//                ->everyMinute()
+            ->emailOutputTo('bipon.abrar@gmail.com');
+        $schedule->command('remind:customers')
+            ->twiceDailyAt('01', '9')
+//            ->everyMinute()
+            ->emailOutputTo('bipon.abrar@gmail.com');
+//        $schedule->command('check:drivers')
+////            ->Daily('01:00')
+//            ->everyMinute()
+//            ->emailOutputTo('bipon.abrar@gmail.com');
     }
 
     /**

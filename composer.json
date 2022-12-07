@@ -8,7 +8,6 @@
         "php": "^7.3|^8.0",
         "ext-json": "*",
         "barryvdh/laravel-dompdf": "^1.0",
-        "carlos-meneses/laravel-mpdf": "^2.1",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^v9.17.0",
@@ -19,6 +18,7 @@
         "maatwebsite/excel": "^3.1",
         "phpoffice/phpspreadsheet": "^1.23",
         "psr/simple-cache": "^2.0",
+        "spatie/browsershot": "^3.57",
         "symfony/mailer": "^6.1"
     },
     "require-dev": {

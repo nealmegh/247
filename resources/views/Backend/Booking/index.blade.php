@@ -202,7 +202,7 @@
                                             Assign</a>
                                     </td>
                                 @else
-                                    <td class="text-center"> <span class="text-success" style="font-size: 16px !important;">Original: {{$booking->trips[0]->driver->name}}</span> <br>
+                                    <td class=""> <span class="text-success" style="font-size: 16px !important;">Original: {{$booking->trips[0]->driver->name}}</span> <br>
                                         @if($booking->return == 1)
                                             @if(isset($booking->trips[1]))
                                                 <span class="text-success" style="font-size: 16px !important;">Return: {{$booking->trips[1]->driver->name}}</span> <br>
@@ -262,8 +262,6 @@
 
                                 @if($booking->complete_status == Null)
                                     <td class="text-center">
-
-
                                         @if($job_status == 100)
 {{--                                            <span class="badge outline-badge-danger shadow-none">{{'JOB COMPLETION:'.$job_status.'%'}}</span> --}}
 {{--                                            <br>--}}
@@ -274,8 +272,6 @@
 {{--                                                Job Completion</a>--}}
                                             <span class="badge outline-badge-danger shadow-none">{{'JOB COMPLETION:'.$job_status.'%'}}</span>
                                         @endif
-
-
                                     </td>
                                 @else
                                     <td class="text-center"><span class="badge badge-success">{{'Completed'}}</span></td>
@@ -305,7 +301,7 @@
                                 <th class="text-center">Price</th>
                                 <th class="text-center">Payment Status</th>
                                 <th class="text-center">Driver</th>
-                                {{--<th>Phone Number</th>--}}
+                                <th class="text-center">Download Invoice</th>
 
                             </tr>
                             </thead>
@@ -314,14 +310,14 @@
                             <tbody>
                             @foreach($bookings as $booking)
                                 <tr>
-                                    <td>{{$booking->ref_id}}</td>
+                                    <td class="text-center">{{$booking->ref_id}}</td>
                                     <td>{{date('d-m-Y', strtotime($booking->journey_date))}}</td>
                                     <td>{{'From: '.$booking->from()}}<br>
                                         {{'To: '.$booking->to()}}
                                     </td>
                                     {{--@endif--}}
-                                    <td>{{$booking->price}}</td>
-                                    <td>
+                                    <td class="text-center">{{$booking->price}}</td>
+                                    <td class="text-center">
                                         @if($booking->user_transaction_id == null)
                                             <a href="{{route('front.booking.confirm', $booking->id)}}" class="btn btn-sm btn-secondary ">
                                                 Make Payment
@@ -331,12 +327,31 @@
                                             {{$booking->userTransaction->trans_id}}
                                         @endif
                                     </td>
-                                    @if($booking->driver == null)
-                                        <td>
+                                    @if($booking->trips == null)
+                                        <td class="text-center">
                                             {{'Driver Yet to Assign'}}
                                         </td>
                                     @else
-                                        <td>{{$booking->driver->name}}</td>
+
+                                        <td class="text-center">
+                                            @foreach($booking->trips as $bTrips)
+                                            {{$bTrips->driver->name}}
+                                            <br>
+                                            @endforeach
+                                        </td>
+                                    @endif
+
+                                    @if(Storage::disk()->exists('public/invoices/customer/invoice_'.$booking->ref_id.'.pdf'))
+                                        <td class="text-center">
+                                            <a class="btn btn-success delete-booking" target="_blank" href="{{Storage::url('public/invoices/customer/invoice_'.$booking->ref_id.'.pdf')}}"  >
+                                                <i class="far fa-eye"></i>
+                                            </a>
+                                        </td>
+                                        <img src="/images/photos/account/{{Auth::user()->account_id}}.png" alt="">
+                                    @else
+                                        <td class="text-center">
+                                            {{'Invoice is yet to create'}}
+                                        </td>
                                     @endif
                                 </tr>
                             @endforeach

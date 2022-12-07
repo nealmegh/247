@@ -202,7 +202,7 @@
                                             Assign</a>
                                     </td>
                                 @else
-                                    <td class="text-center"> <span class="text-success" style="font-size: 16px !important;">Original: {{$booking->trips[0]->driver->name}}</span> <br>
+                                    <td class=""> <span class="text-success" style="font-size: 16px !important;">Original: {{$booking->trips[0]->driver->name}}</span> <br>
                                         @if($booking->return == 1)
                                             @if(isset($booking->trips[1]))
                                                 <span class="text-success" style="font-size: 16px !important;">Return: {{$booking->trips[1]->driver->name}}</span> <br>

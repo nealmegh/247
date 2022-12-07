@@ -292,10 +292,14 @@
                                             <td style="width:30%;padding:15px 0;">
                                             <p style="margin:0">Driver Name</p>
                                             <p style="margin:0">Vehicle Registration</p>
+                                            <p style="margin:0">Vehicle Make</p>
+                                            <p style="margin:0">Vehicle License</p>
                                             </td>
                                             <td style="width:70%;padding:15px 0;">
                                             <p style="margin:0">{{$data['driver']->name}}</p>
                                             <p style="margin:0">{{$data['driver']->vehicle_reg}}</p>
+                                            <p style="margin:0">{{$data['driver']->vehicle_make}}</p>
+                                            <p style="margin:0">{{$data['driver']->vehicle_license}}</p>
                                             </td>
                                             </tr>
 

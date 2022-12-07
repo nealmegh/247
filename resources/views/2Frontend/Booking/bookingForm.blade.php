@@ -275,6 +275,11 @@
                         <input  type="hidden" name="location_id" value="{{$location}}">
                         <input  type="hidden" name="airport_id" value="{{$airport}}">
                         <input type="hidden" name="from_to" value="{{$maintain}}">
+                        <input type="hidden" id="surChargeS" name="surChargeS" value="{{$siteSettings[51]->value }}">
+                        <input type="hidden" id="surChargeH" name="surChargeH" value="{{$siteSettings[52]->value }}">
+                        <input type="hidden" id="surAdd" name="surAdd" value="0">
+                        <input type="hidden" id="surAddR" name="surAddR" value="0">
+
                         <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
 
 
@@ -286,6 +291,7 @@
                             {{--</div>--}}
                             {{--<button style="margin-top: 1px" id="bookingButton" class="btn confirmBtn1" type="submit" disabled="disabled"> {{'Book Now with Total Fair £'.round($price, 2)}} </button>--}}
                             <h4 id="bookingButton">{{'Total Fair £'.round($price+floatval($siteSettings[0]->value), 2)}}</h4>
+
                             <input style="width:160px" id="bookButton" class="btn submit Btn shadow" type="submit" value="BOOK NOW" disabled>
                             {{--<button style="margin-top: 1px" name="type" value="paypal" id="bookingButton2" class="btn confirmBtn" type="submit" disabled="disabled">{{'Pay By Paypal'}}</button>--}}
                         </div>
@@ -616,18 +622,99 @@
 {{--        });--}}
 {{--    </script>--}}
 <script>
+
     var f1 = flatpickr(document.getElementById('journey_date'), {
-        minDate: "today",
-        dateFormat: "d-m-Y"
+        minDate: new Date().fp_incr(2),
+        maxDate: new Date().fp_incr(90),
+        dateFormat: "d-m-Y",
+        disable: {!! $siteSettings[10]->value !!},
+        onChange: function(selectedDates, dateStr, instance) {
+            f3.set('minDate', dateStr)
+        }
     });
     var f2 = flatpickr(document.getElementById('pickup_time'), {
         enableTime: true,
         noCalendar: true,
-        time_24hr: true
+        time_24hr: true,
+        dateFormat: "H.i",
+        onClose: function(selectedDates, dateStr, instance) {
+
+            let surchargeStart =  parseFloat(document.getElementById('surChargeS').value);
+            // let surchargeStartV = parseFloat(surchargeEnd.value);
+            let surchargeEnd =  parseFloat(document.getElementById('surChargeH').value);
+            // let surchargeEndV = parseFloat(surchargeEnd.value);
+            let surAdd = parseFloat(document.getElementById('surAdd').value);
+            var hiddenPrice = document.getElementById('hiddenPrice');
+            var price = {!! json_encode($price) !!};
+            let surcharge_amount = 0;
+                if( surchargeStart <= dateStr || surchargeEnd >= dateStr)
+                {
+                    if(surAdd == 0) {
+                        surcharge_amount = {!! $siteSettings[53]->value!!};
+                        surcharge_amount = parseFloat(surcharge_amount);
+                        let surcharge = 0
+                        console.log(surcharge_amount, price)
+                        if(surcharge_amount < 1)
+                        {
+                             surcharge = price*surcharge_amount;
+                        }
+                        else
+                        {
+                            surcharge = surcharge_amount;
+                            console.log(surcharge)
+                        }
+
+                    // console.log(hiddenPrice);
+                    var tp = parseFloat(hiddenPrice.value) + surcharge;
+                    $("#hiddenPrice").val(function() {
+                        tp = tp.toFixed(2)
+                        return tp;
+                    });
+                    document.getElementById('surAdd').value = 1;
+                    var button = document.getElementById('bookingButton');
+
+                    button.innerHTML = 'Book Now with Total Fair £'+  tp;
+                }
+
+            }
+            else {
+                    if(surAdd == 1) {
+                        surcharge_amount = {!! $siteSettings[53]->value!!};
+                        surcharge_amount = parseFloat(surcharge_amount);
+                        let surcharge = 0
+                        if(surcharge_amount < 1)
+                        {
+                            surcharge = price*surcharge_amount;
+                        }
+                        else
+                        {
+                            surcharge = surcharge_amount;
+                        }
+                        // console.log(hiddenPrice);
+                        var tp = parseFloat(hiddenPrice.value) - surcharge;
+                        $("#hiddenPrice").val(function() {
+                            tp = tp.toFixed(2)
+                            return tp;
+                        });
+                        document.getElementById('surAdd').value = 0;
+                        var button = document.getElementById('bookingButton');
+
+                        button.innerHTML = 'Book Now with Total Fair £'+  tp;
+                    }
+            }
+
+
+
+
+        }
     });
+    console.log($('#journey_date').attr('value'));
     var f3 = flatpickr(document.getElementById('return_date'), {
-        minDate: "today",
-        dateFormat: "d-m-Y"
+        // minDate: "today",
+        minDate: $('#journey_date').attr('value'),
+        maxDate: new Date().fp_incr(90),
+        disable: {!! $siteSettings[10]->value !!},
+        dateFormat: "d-m-Y",
     });
     var f4 = flatpickr(document.getElementById('return_time'), {
         enableTime: true,

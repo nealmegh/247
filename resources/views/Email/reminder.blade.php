@@ -36,7 +36,7 @@ Destination Address:
 @endif
 @endif
 
-Driver Name: {{$trip->driver->name}}
+Customer Name: {{$trip->driver->name}}
 @endforeach
 
 

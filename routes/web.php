@@ -21,6 +21,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserTransactionController;
 use App\Mail\testEmail;
 use App\Models\QuickBooking;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\Mime\Email;
@@ -113,6 +114,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('delete/{id}', [DriverController::class,'destroy'])->name('delete');
             Route::get('driver_user', [DriverController::class,'user_create'])->name('user');
             Route::post('upload', [DriverController::class,'upload'])->name('upload');
+            Route::get('check', function (){
+                Artisan::call('check:drivers');
+                return redirect()->route('driver.drivers');
+            })->name('check');
         });
 
         Route::get('customers', [CustomerController::class,'index'])->name('customers');

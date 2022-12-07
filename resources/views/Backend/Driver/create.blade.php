@@ -65,7 +65,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="widget-content widget-content-area">
+                        <div class="widget-content widget-content-area">
                         <form class="form-horizontal form-label-left" novalidate method="POST" action="{{ route('driver.store') }}">
                             @csrf
                             <div class="form-row mb-4">

@@ -69,7 +69,7 @@
                     <td>Bill Total</td>
                 </tr>
                 <tr>
-                    <td>{{$bill->invoices[0]->booking->driver->name}}</td>
+                    <td>{{$bill->invoices[0]->booking->driver?->name}}</td>
                     <td># {{$bill->id}}</td>
                     <td><h2 style="margin: 0;">{{$bill->total_payable}} £</h2></td>
                 </tr>
@@ -111,17 +111,17 @@
                     <tr>
                         <td>{{$count}}</td>
                         <td>{{$invoice->id}}</td>
-                        <td>{{$invoice->booking->driver->name}}<br>
-                            {{$invoice->booking->driver->phone_number}}
+                        <td>{{$invoice->booking->driver?->name}}<br>
+                            {{$invoice->booking->driver?->phone_number}}
                         </td>
-                        <td>{{$invoice->booking->user->name}}<br>{{$invoice->booking->user->phone}} </td>
+                        <td>{{$invoice->booking->user?->name}}<br>{{$invoice->booking->user->phone}} </td>
                         <td>{{$invoice->booking_from}}<br>
                             {{$invoice->booking_to}}</td>
                         <td>{{$invoice->payment_type}}</td>
                         <td>@if($invoice->payment_type == 'Third Party')
                                 {{'0%'}}
                             @else
-                                {{$invoice->booking->driver->commission.'%'}}
+                                {{$invoice->booking->driver?->commission.'%'}}
                             @endif
                         </td>
                         @if($invoice->payment_type == 'Cash')
@@ -130,8 +130,8 @@
                             <td class="text-right">{{$invoice->total_amount}}<span class="currency">£</span></td>
                         @endif
                         @if($invoice->payment_type == 'Pay In Car')
-                            <td class="text-right">-{{$invoice->total_amount-($invoice->total_amount*$invoice->booking->driver->commission)/100}}<span class="currency">£</span></td>
-                            <?php $total_commission = $total_commission + ($invoice->total_amount*$invoice->booking->driver->commission)/100;
+                            <td class="text-right">-{{$invoice->total_amount-($invoice->total_amount*$invoice->booking->driver?->commission)/100}}<span class="currency">£</span></td>
+                            <?php $total_commission = $total_commission + ($invoice->total_amount*$invoice->booking->driver?->commission)/100;
                             $total_payable = $total_payable - ($invoice->total_amount-$total_commission);
 
                             ?>
@@ -142,8 +142,8 @@
                                 $total_payable = $total_payable + ($invoice->total_amount - $total_commission);
                                 ?>
                             @else
-                                <td class="text-right">{{$invoice->total_amount-($invoice->total_amount*$invoice->booking->driver->commission)/100}}<span class="currency">£</span></td>
-                                <?php $total_commission = $total_commission +($invoice->total_amount*$invoice->booking->driver->commission)/100;
+                                <td class="text-right">{{$invoice->total_amount-($invoice->total_amount*$invoice->booking->driver?->commission)/100}}<span class="currency">£</span></td>
+                                <?php $total_commission = $total_commission +($invoice->total_amount*$invoice->booking->driver?->commission)/100;
                                 $total_payable = $total_payable + ($invoice->total_amount - $total_commission);
                                 ?>
                             @endif

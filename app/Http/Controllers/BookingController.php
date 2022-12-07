@@ -6,7 +6,14 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Http\Traits\DestinationTrait;
 use App\Mail\BookingCancelled;
 use App\Mail\BookingCancelledDriver;
+use App\Mail\BookingComplete;
+use App\Mail\CustomerDriverAssign;
 use App\Models\Airport;
+use App\Models\Bill;
+use Carbon\Carbon;
+use Illuminate\Mail\Mailables\Attachment;
+use Illuminate\Support\Facades\Storage;
+use PDF;
 use App\Models\Booking;
 use App\Models\Car;
 use App\Models\Driver;
@@ -27,7 +34,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\DriverAssigned;
 use Illuminate\Support\Facades\Redirect;
-use Carbon\Carbon;
 use Laravel\Fortify\Fortify;
 use mysql_xdevapi\Exception;
 
@@ -100,6 +106,12 @@ use DestinationTrait;
 
             $authUser = Auth::user();
             $request->request->add(['book_by' => $authUser->id]);
+            if($request->return == 1)
+            {
+                $return_datetime = new Carbon($request->return_date." ".$request->return_time);
+                $request->return_date = $return_datetime->format('Y-m-d H:i:s');
+                $request->request->add(['return_date' => $return_datetime->format('Y-m-d H:i:s')]);
+            }
 
             $booking = Booking::create($request->all());
             $this->generateRefId($booking);
@@ -436,7 +448,7 @@ use DestinationTrait;
     public function driverAssign($id)
     {
         $booking = Booking::find($id);
-        $drivers = Driver::all();
+        $drivers = Driver::where('status', 1)->get();
         if($booking->user_transaction_id == null)
         {
             return redirect()->back()->with('message', 'You need to define a Payment Method First');
@@ -621,10 +633,7 @@ use DestinationTrait;
     {
         $siteSettings = SiteSettings::all();
         $booking = Booking::find($id);
-//        $tripCheck = Trip::where('booking_id', $id)->first();
-//        if(!empty($tripCheck)){
-//            return redirect()->route('booking.bookings')->with('message', 'Driver Already Assigned');
-//        }
+
 
         $earnnings = $this->tripEarnings($id);
         $tripDataA = [
@@ -640,7 +649,7 @@ use DestinationTrait;
         ];
 
         $tripA = Trip::updateOrCreate(
-            ['booking_id' => $booking->id],
+            ['booking_id' => $booking->id, 'journey_type' => 'origin'],
             $tripDataA);
 
         $driverA = Driver::find($tripA->driver_id);
@@ -652,6 +661,7 @@ use DestinationTrait;
             'trip' => $tripA,
             'user' => $user
         );
+
         if($driverA != null)
         {
             if($request->send_email1 == 1 || $siteSettings[24]->value == 1)
@@ -662,7 +672,7 @@ use DestinationTrait;
         }
         if($request->send_email ==1 || $siteSettings[22]->value == 1)
         {
-            Mail::to($booking->user->email)->send(new BookingUpdated($dataA));
+            Mail::to($booking->user->email)->send(new CustomerDriverAssign($dataA));
         }
 
         if($booking->return == 1)
@@ -679,7 +689,7 @@ use DestinationTrait;
                 'trip_earnings' => $earnnings[1],
             ];
             $tripB = Trip::updateOrCreate(
-                ['booking_id' => $booking->id],
+                ['booking_id' => $booking->id, 'journey_type' => 'return'],
                 $tripDataB);
 //            $tripB = Trip::create($tripDataB);
 
@@ -692,17 +702,19 @@ use DestinationTrait;
                 'trip' => $tripB,
                 'user' => $user
             );
+
             if($driverB != null)
             {
-                if($request->send_email1_driver == 1 || $siteSettings[24]->value == 1)
+                if($request->send_email1 == 1 || $siteSettings[24]->value == 1)
                 {
+
                     Mail::to($driverB->email)->send(new DriverAssigned($dataB));
                 }
 
             }
-            if($request->send_email1_customer == 1 || $siteSettings[22]->value == 1)
+            if($request->send_email == 1 || $siteSettings[22]->value == 1)
             {
-                Mail::to($booking->user->email)->send(new BookingUpdated($dataB));
+                Mail::to($booking->user->email)->send(new CustomerDriverAssign($dataB));
             }
         }
 
@@ -717,7 +729,7 @@ use DestinationTrait;
     {
 
         $booking = Booking::find($id);
-
+        $invoices = array();
         if($booking->trips->isEmpty())
         {
             return Redirect::back()->withErrors(['Can Not complete a Job without assigning a Driver']);
@@ -792,8 +804,28 @@ use DestinationTrait;
                 }
             }
             $invoice->save();
+            $invoices[] = $invoice;
+        }
+
+
+        try{
+            $fileName = 'invoice_'.$booking->ref_id.'.pdf';
+            $pdf = PDF::loadView('Backend.Booking.customerPdf', compact('invoices' , 'booking'));
+
+            Storage::put('public/invoices/customer/'.$fileName, $pdf->output());
+            $user_id = $booking->user->id;
+            $user = User::find($user_id);
+            $data = array(
+                'booking' => $booking,
+                'user' => $user
+            );
+
+            Mail::to($booking->user->email)->send(new BookingComplete($fileName, $data));
+        }
+        catch (\Exception $e){
 
         }
+
 
         return Redirect::back();
 

@@ -151,7 +151,7 @@
                                         <p
                                                 style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;margin-top: 15px;"
                                         >
-                                            Dear {{$data['driver']->name}}, You have been assigned with a new trip from {{$siteSettings[9]->value}}. Please find the details below.
+                                            Dear {{$data['user']->name}}, You have been assigned with a driver for your trip with {{$siteSettings[9]->value}}. Please find the details below.
                                         </p>
                                     </td>
                                 </tr>
@@ -203,6 +203,45 @@
                                                 <td
                                                         colspan="2"
                                                         style="border-bottom:1px solid #ccc"
+                                                ></td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    colspan="2"
+                                                >
+                                                    <table style="width:100%">
+                                                        <tr>
+                                                            <td style="width:30%;padding:5px 0;">Driver</td>
+                                                            <td style="width:70%;padding:5px 0;">
+                                                                {{$data['driver']->name}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width:30%;padding:5px 0;">Vehicle Registration</td>
+                                                            <td style="width:70%;padding:5px 0;">
+                                                                {{$data['driver']->vehicle_reg}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width:30%;padding:5px 0;">Vehicle Make</td>
+                                                            <td style="width:70%;padding:5px 0;">
+                                                                {{$data['driver']->vehicle_make}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width:30%;padding:5px 0;">Vehicle License</td>
+                                                            <td style="width:70%;padding:5px 0;">
+                                                                {{$data['driver']->vehicle_license}}
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td
+                                                    colspan="2"
+                                                    style="border-bottom:1px solid #ccc"
                                                 ></td>
                                             </tr>
 
@@ -328,42 +367,42 @@
 
                                             <tr>
                                                 <td
-                                                    colspan="2"
-                                                    style="border-bottom:1px solid #ccc"
+                                                        colspan="2"
+                                                        style="border-bottom:1px solid #ccc"
                                                 ></td>
                                             </tr>
                                             <tr>
                                                 <td
-                                                    colspan="2"
+                                                        colspan="2"
                                                 >
                                                     <table style="width:100%">
                                                         @if($data['trip']->journey_type == 'origin')
-                                                            <tr>
-                                                                <td style="width:30%;padding:5px 0;">Pick Up Date</td>
-                                                                <td style="width:70%;padding:5px 0;">
-                                                                    {{date('d-m-Y',strtotime($data['booking']->journey_date))}}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="width:30%;padding:5px 0;">Pick Up Time</td>
-                                                                <td style="width:70%;padding:5px 0;">
-                                                                    {{$data['booking']->pickup_time}}
-                                                                </td>
-                                                            </tr>
+                                                        <tr>
+                                                            <td style="width:30%;padding:5px 0;">Pick Up Date</td>
+                                                            <td style="width:70%;padding:5px 0;">
+                                                                {{date('d-m-Y',strtotime($data['booking']->journey_date))}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width:30%;padding:5px 0;">Pick Up Time</td>
+                                                            <td style="width:70%;padding:5px 0;">
+                                                                {{$data['booking']->pickup_time}}
+                                                            </td>
+                                                        </tr>
                                                         @endif
                                                         @if($data['trip']->journey_type == 'return')
-                                                            <tr>
-                                                                <td style="width:30%;padding:5px 0;">Pick Up Date</td>
-                                                                <td style="width:70%;padding:5px 0;">
-                                                                    {{date('d-m-Y',strtotime($data['booking']->return_date))}}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="width:30%;padding:5px 0;">Pick Up Time</td>
-                                                                <td style="width:70%;padding:5px 0;">
-                                                                    {{$data['booking']->return_time}}
-                                                                </td>
-                                                            </tr>
+                                                        <tr>
+                                                            <td style="width:30%;padding:5px 0;">Pick Up Date</td>
+                                                            <td style="width:70%;padding:5px 0;">
+                                                                {{date('d-m-Y',strtotime($data['booking']->return_date))}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width:30%;padding:5px 0;">Pick Up Time</td>
+                                                            <td style="width:70%;padding:5px 0;">
+                                                                {{$data['booking']->return_time}}
+                                                            </td>
+                                                        </tr>
                                                         @endif
                                                         <tr>
                                                             <td style="width:30%;padding:5px 0;">Vehicle</td>
@@ -377,13 +416,13 @@
 
                                             <tr>
                                                 <td
-                                                    colspan="2"
-                                                    style="border-bottom:1px solid #ccc"
+                                                        colspan="2"
+                                                        style="border-bottom:1px solid #ccc"
                                                 ></td>
                                             </tr>
                                             <tr>
                                                 <td
-                                                    colspan="2"
+                                                        colspan="2"
                                                 >
                                                     <table style="width:100%">
                                                         <tr>
@@ -415,42 +454,42 @@
                                             </tr>
                                             <tr>
                                                 <td
-                                                    colspan="2"
-                                                    style="border-bottom:1px solid #ccc"
+                                                        colspan="2"
+                                                        style="border-bottom:1px solid #ccc"
                                                 ></td>
                                             </tr>
                                             <tr>
                                                 <td
-                                                    colspan="2"
+                                                        colspan="2"
                                                 >
                                                     <table style="width:100%">
                                                         @if($data['trip']->journey_type == 'origin')
-                                                            <tr>
-                                                                <td style="width:30%;padding:5px 0;">Flight Number</td>
-                                                                <td style="width:70%;padding:5px 0;">
-                                                                    {{$data['booking']->flight_number}}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="width:30%;padding:5px 0;">Flight Origin</td>
-                                                                <td style="width:70%;padding:5px 0;">
-                                                                    {{$data['booking']->flight_origin}}
-                                                                </td>
-                                                            </tr>
+                                                        <tr>
+                                                            <td style="width:30%;padding:5px 0;">Flight Number</td>
+                                                            <td style="width:70%;padding:5px 0;">
+                                                                {{$data['booking']->flight_number}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width:30%;padding:5px 0;">Flight Origin</td>
+                                                            <td style="width:70%;padding:5px 0;">
+                                                                {{$data['booking']->flight_origin}}
+                                                            </td>
+                                                        </tr>
                                                         @endif
-                                                        @if($data['trip']->journey_type == 'return')
-                                                            <tr>
-                                                                <td style="width:30%;padding:5px 0;">Flight Number</td>
-                                                                <td style="width:70%;padding:5px 0;">
-                                                                    {{$data['booking']->return_flight_number}}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="width:30%;padding:5px 0;">Flight Origin</td>
-                                                                <td style="width:70%;padding:5px 0;">
-                                                                    {{$data['booking']->return_flight_origin}}
-                                                                </td>
-                                                            </tr>
+                                                            @if($data['trip']->journey_type == 'return')
+                                                        <tr>
+                                                            <td style="width:30%;padding:5px 0;">Flight Number</td>
+                                                            <td style="width:70%;padding:5px 0;">
+                                                                {{$data['booking']->return_flight_number}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width:30%;padding:5px 0;">Flight Origin</td>
+                                                            <td style="width:70%;padding:5px 0;">
+                                                                {{$data['booking']->return_flight_origin}}
+                                                            </td>
+                                                        </tr>
                                                         @endif
                                                     </table>
                                                 </td>

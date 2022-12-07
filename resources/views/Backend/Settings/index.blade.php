@@ -13,6 +13,8 @@
     <link href={{asset("css/theme/components/tabs-accordian/custom-tabs.css" )}} rel="stylesheet" type="text/css" />
     <link href={{asset("css/theme/forms/switches.css" )}} rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href={{asset("css/theme/plugins/editors/markdown/simplemde.min.css" )}}>
+    <link href={{asset("css/theme/plugins/flatpickr/custom-flatpickr.css" )}} rel="stylesheet" type="text/css" />
+    <link href={{asset("css/theme/plugins/flatpickr/flatpickr.css" )}} rel="stylesheet" type="text/css" />
     <style>
         .create-button{
             position: relative;
@@ -99,37 +101,60 @@
                             <div class="tab-content" id="rounded-vertical-pills-tabContent">
                                     <div class="tab-pane fade show active" id="rounded-vertical-pills-home" role="tabpanel" aria-labelledby="rounded-vertical-pills-home-tab">
                                         <div class="form-group mb-4">
-                                            <label class="control-label" for="fair">Site Name</label>
+                                            <label class="control-label" for="site_name">Site Name</label>
                                             <input type="text" id="site_name" name="site_name" placeholder="Company Name" value="{{($useSettings['site_name'][0] != Null) ? $useSettings['site_name'][0] :''}}"  class="form-control" >
                                         </div>
                                         <div class="form-group mb-4">
-                                            <label class="control-label" for="fair">Email</label>
+                                            <label class="control-label" for="holiday_dates">Disable Dates</label>
+                                            <input id="holiday_dates" class="form-control date"  type="text" value="{{($useSettings['holiday_dates'][0] != Null) ? $useSettings['holiday_dates'][0] :''}}" name="holiday_dates" placeholder="Specify Dates">
+
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label class="control-label" for="surcharge_time">Surcharge Starts</label>
+                                            <input id="surcharge_time" class="form-control date"  type="text"  value="{{($useSettings['surcharge_time'][0] != Null) ? $useSettings['surcharge_time'][0] :''}}"  name="surcharge_time" placeholder="Specify Time">
+
+
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label class="control-label" for="surcharge_stays">Surcharge Stays</label>
+                                            <input id="surcharge_stays" class="form-control date"  type="text"  value="{{($useSettings['surcharge_stays'][0] != Null) ? $useSettings['surcharge_stays'][0] :''}}"  name="surcharge_stays" placeholder="Specify Hour">
+                                            {{--                                            value="{{($useSettings['surcharge_time'][0] != Null) ? $useSettings['surcharge_time'][0] :''}}"--}}
+
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label class="control-label" for="surcharge_amount">Surcharge Amount</label>
+                                            <input id="surcharge_amount" class="form-control date"  type="text"  value="{{($useSettings['surcharge_amount'][0] != Null) ? $useSettings['surcharge_amount'][0] :''}}"  name="surcharge_amount" placeholder="Specify Amount">
+                                            {{--                                            value="{{($useSettings['surcharge_time'][0] != Null) ? $useSettings['surcharge_time'][0] :''}}"--}}
+
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label class="control-label" for="email">Email</label>
                                             <input type="text" id="email" name="email" placeholder="Company Email" value="{{($useSettings['email'][0] != Null) ? $useSettings['email'][0] :''}}"  class="form-control" >
                                         </div>
                                         <div class="form-group mb-4">
-                                            <label class="control-label" for="fair">Facebook</label>
+                                            <label class="control-label" for="facebook">Facebook</label>
                                             <input type="text" id="facebook" name="facebook" placeholder="Facebook Profile Address" value="{{($useSettings['facebook'][0] != Null) ? $useSettings['facebook'][0] :''}}"  class="form-control" >
                                         </div>
                                         <div class="form-group mb-4">
-                                            <label class="control-label" for="fair">Twitter</label>
+                                            <label class="control-label" for="twitter">Twitter</label>
                                             <input type="text" id="twitter" name="twitter" placeholder="Twitter Profile Address" value="{{($useSettings['twitter'][0] != Null) ? $useSettings['twitter'][0] :''}}"  class="form-control" >
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="rounded-vertical-pills-profile" role="tabpanel" aria-labelledby="rounded-vertical-pills-profile-tab">
                                         <div class="form-group mb-4">
-                                            <label class="control-label" for="fair">Contact Email</label>
+                                            <label class="control-label" for="contact-email">Contact Email</label>
                                             <input type="text" id="contact-email" name="contact-email" placeholder="Contact Email" value="{{($useSettings['contact-email'][0] != Null) ? $useSettings['contact-email'][0] :''}}"  class="form-control" >
                                         </div>
                                         <div class="form-group mb-4">
-                                            <label class="control-label" for="fair">Phone Number</label>
+                                            <label class="control-label" for="phone">Phone Number</label>
                                             <input type="text" id="phone" name="phone" placeholder="Company Phone" value="{{($useSettings['phone'][0] != Null) ? $useSettings['phone'][0] :''}}"  class="form-control" >
                                         </div>
                                         <div class="form-group mb-4">
-                                            <label class="control-label" for="fair">Company Address</label>
+                                            <label class="control-label" for="address">Company Address</label>
                                             <input type="text" id="address" name="address" placeholder="Company Address" value="{{($useSettings['address'][0] != Null) ? $useSettings['address'][0] :''}}"  class="form-control" >
                                         </div>
                                         <div class="form-group mb-4">
-                                            <label class="control-label" for="fair">2nd Address</label>
+                                            <label class="control-label" for="address2">2nd Address</label>
                                             <input type="text" id="address2" name="address2" placeholder="Continue Address" value="{{($useSettings['address2'][0] != Null) ? $useSettings['address2'][0] :''}}"  class="form-control" >
                                         </div>
                                     </div>
@@ -245,6 +270,7 @@
     <script src={{asset("js/theme/plugins/sweetalerts/sweetalert2.min.js")}}></script>
     <script src={{asset("js/theme/plugins/sweetalerts/custom-sweetalert.js")}}></script>
     <script src={{asset("js/theme/plugins/highlight/highlight.pack.js")}}></script>
+    <script src={{asset("js/theme/plugins/flatpickr/flatpickr.js")}}></script>
     <!-- END THEME GLOBAL STYLE -->
     <script>
 
@@ -360,6 +386,29 @@
         new SimpleMDE({
             element: document.getElementById("terms"),
             spellChecker: true,
+        });
+        var f1 = flatpickr(document.getElementById('holiday_dates'), {
+            mode: "multiple",
+            dateFormat: "d-m-Y",
+            defaultDate: {!! $useSettings['holiday_dates'][0] !!}
+        });
+        var f2 = flatpickr(document.getElementById('surcharge_time'), {
+            mode: "multiple",
+            enableTime: true,
+            noCalendar: true,
+            time_24hr: true,
+            dateFormat: "H.i",
+            // dateFormat: "d-m-Y",
+            {{--defaultDate: {!! $useSettings['holiday_dates'][0] !!}--}}
+        });
+        var f3 = flatpickr(document.getElementById('surcharge_stays'), {
+            mode: "multiple",
+            enableTime: true,
+            noCalendar: true,
+            time_24hr: true,
+            dateFormat: "H.i",
+            // dateFormat: "d-m-Y",
+            {{--defaultDate: {!! $useSettings['holiday_dates'][0] !!}--}}
         });
     </script>
 @endsection

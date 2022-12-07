@@ -41,13 +41,13 @@
 
                                 <div class="row">
                                     <div class="col-xl-12 col-md-3 col-sm-6">
-                                        <a href="javascript:void(0);" class="btn btn-primary btn-send">Send Invoice</a>
+                                        <a href="{{route('bill.email', $bill->id)}}" class="btn btn-primary btn-send">Send Email</a>
                                     </div>
                                     <div class="col-xl-12 col-md-3 col-sm-6">
                                         <a href="javascript:void(0);" class="btn btn-secondary btn-print  action-print">Print</a>
                                     </div>
                                     <div class="col-xl-12 col-md-3 col-sm-6">
-                                        <a href="javascript:void(0);" class="btn btn-success btn-download" onclick="savePdf()">Download</a>
+                                        <a href="{{route('bill.generate', $bill->id)}}" class="btn btn-success btn-download" >Download</a>
                                     </div>
 {{--                                    <div class="col-xl-12 col-md-3 col-sm-6">--}}
 {{--                                        <a href="javascript:void(0);" id="h2c_edit" class="btn btn-dark btn-edit">Edit</a>--}}
@@ -67,7 +67,7 @@
 
         </div>
     </div>
-    </div>
+
 
 
 @endsection

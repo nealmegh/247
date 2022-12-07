@@ -54,7 +54,10 @@
                         </div>
                         <div class="create-button col-4">
                             <a href="{{route('driver.create')}}" class="create-button-btn btn btn-success mb-6 mr-4 btn-lg"> Create</a>
+                            <a href="{{route('driver.check')}}" class="create-button-btn btn btn-danger mb-6 mr-4 btn-lg" style="    position: absolute;
+    right: 100%!important;"> Update Status</a>
                         </div>
+
                     </div>
                     <table id="html5-extension" class="table table-hover non-hover" style="width:100%">
                             <thead>

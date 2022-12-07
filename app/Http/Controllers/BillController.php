@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\BookingComplete;
 use App\Models\Bill;
+//use Barryvdh\DomPDF\PDF;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Redirect;
 use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\BillToDriver;
 use Illuminate\Support\Facades\Mail;
+use Spatie\Browsershot\Browsershot;
 
 class BillController extends Controller
 {
@@ -61,26 +66,34 @@ class BillController extends Controller
         $dueTime = Carbon::now()->addMonth();
         return view('Backend.Bill.viewBill', compact('bill', 'dueTime'));
     }
+    public function download($bill)
+    {
 
+    }
     public function show1($bill)
     {
+
         $bill = Bill::find($bill);
-        return view('Backend.Bill.show1', compact('bill'));
+        $currentDateTime = Carbon::now();
+        $dueTime = Carbon::now()->addMonth();
+
+
+        $pdf = PDF::loadView('Backend.Bill.newDownload', compact('bill' , 'dueTime'));
+
+       $pdf->download('247AE_Bill_'.$bill->id.'.pdf');
+
     }
 
     public function generateBill($bill)
     {
-//        dd('ih0');
         $bill = Bill::find($bill);
-        $data = ['bill' => $bill];
-////        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('Backend.Bill.show', $data);
-////        $content = $pdf->download()->getOriginalContent();
-        $pdf = PDF::loadView('Backend.Bill.show', $data);
-        return $pdf->stream('document.pdf');
-//
-////        Storage::put('public/csv/'.$bill->id.'.pdf',$content) ;
-//        return redirect()->route('bills');
-////        return $pdf->download($bill->id.'.pdf');
+        $currentDateTime = Carbon::now();
+        $dueTime = Carbon::now()->addMonth();
+
+
+        $pdf = PDF::loadView('Backend.Bill.newDownload', compact('bill' , 'dueTime'));
+
+        return $pdf->download('247AE_Bill_'.$bill->id.'.pdf');
     }
 
      public function billCollect($bill)
@@ -96,16 +109,29 @@ class BillController extends Controller
      */
     public function emailBill($bill)
     {
-        ini_set('max_execution_time', 1220);
-        $currentDateTime = Carbon::now();
-        $dueTime = Carbon::now()->addMonth();
-
+        try{
         $bill = Bill::find($bill);
-        $data = ['bill' => $bill, 'dueTime' => $dueTime];
+        $fileName = 'invoice_'.$bill->id.'.pdf';
 
-        $pdf = PDF::loadView('Backend.Bill.show2', $data);
+            $dueTime = Carbon::now()->addMonth();
 
-        return $pdf->download($bill->id.'.pdf');
+            $pdf = PDF::loadView('Backend.Bill.newDownload', compact('bill' , 'dueTime'));
+
+            Storage::put('public/invoices/driver/'.$fileName, $pdf->output());
+
+            $driverUser = $bill->invoices[0]->booking->trips[0]->driver->user;
+            $data = array(
+                'user' => $driverUser
+            );
+
+            Mail::to($driverUser->email)->send(new BillToDriver($fileName, $data));
+        }
+        catch (\Exception $e){
+
+        }
+
+
+        return Redirect::back();
 
     }
 

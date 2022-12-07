@@ -123,10 +123,16 @@ trait DestinationTrait {
     }
     private function dateTimeSet(Request $request){
         $datetime = new Carbon($request->journey_date." ".$request->pickup_time);
-
         $request->journey_date = $datetime->format('Y-m-d H:i:s');
 
         $request->request->add(['journey_date' => $datetime->format('Y-m-d H:i:s')]);
+
+        if($request->return == 1)
+        {
+            $return_datetime = new Carbon($request->return_date." ".$request->return_time);
+            $request->return_date = $return_datetime->format('Y-m-d H:i:s');
+            $request->request->add(['return_date' => $return_datetime->format('Y-m-d H:i:s')]);
+        }
         return $request;
     }
     public function newCustomer(Request $request){

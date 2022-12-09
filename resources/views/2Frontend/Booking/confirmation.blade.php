@@ -65,7 +65,7 @@
 
                             </div>
                         @endif
-                        <span class="warning text-center mt-2" style="color: red; ">Please Contact Office if you can't find any payment Methode</span>
+                        <span class="warning text-center mt-2" style="color: red; ">Please Contact Office if you can't find any payment Method</span>
                     </div>
                     @endif
 

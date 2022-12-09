@@ -20,7 +20,7 @@
                         <img src="{{asset('images/2Frontend/64x64x2.jpg')}}" alt="image" />
                     </div>
                     <h4 class="center h4-bottom"><a href="https://search.google.com/local/writereview?placeid=ChIJxd6tJ3lw2EcR3F6wSO2ImIQ&source=g.page.m.kd&laa=lu-desktop-review-solicitation">Best Reviews</a></h4>
-                    <p class="center">Our service reflects on our customers reviews. We are most truested and reliable airport transfer service in cambridge. </p>
+                    <p class="center">Our service reflects on our customers reviews. We are most trusted and reliable airport transfer service in cambridge. </p>
                 </div></a>
             </div>
 

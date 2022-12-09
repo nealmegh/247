@@ -96,7 +96,7 @@
                             <h3>Quick Bookings</h3>
                         </div>
                         <div class="create-button col-4">
-                            <a href="{{(request()->user()->can('Customer'))?'/#book':route('booking.create')}}" class="create-button-btn btn btn-success mb-6 mr-4 btn-lg"> New Booking</a>
+                            <a href="{{(request()->user()->can('Customer'))?'/#book':route('booking.quick.bookings.create')}}" class="create-button-btn btn btn-success mb-6 mr-4 btn-lg"> New Quick Booking</a>
                         </div>
                     </div>
                     @cannot('Customer')

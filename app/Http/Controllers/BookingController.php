@@ -97,6 +97,7 @@ use DestinationTrait;
      */
     public function store(Request $request)
     {
+        dd($request->all());
         try{
 
             $siteSettings = SiteSettings::all();
@@ -825,7 +826,6 @@ use DestinationTrait;
         catch (\Exception $e){
 
         }
-
 
         return Redirect::back();
 

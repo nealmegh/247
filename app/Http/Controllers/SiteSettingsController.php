@@ -212,7 +212,7 @@ class SiteSettingsController extends Controller
                 Config::set('mail.mailers.smtp.encryption', 'ssl');
 
 
-                dd(config('mail.mailers.smtp.encryption'));
+//                dd(config('mail.mailers.smtp.encryption'));
                 $setting->value = $request[$setting->attribute];
                 $setting->save();
 

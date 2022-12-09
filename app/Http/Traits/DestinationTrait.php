@@ -121,7 +121,7 @@ trait DestinationTrait {
 
         return $this->dateTimeSet($request);
     }
-    private function dateTimeSet(Request $request){
+    public function dateTimeSet(Request $request){
         $datetime = new Carbon($request->journey_date." ".$request->pickup_time);
         $request->journey_date = $datetime->format('Y-m-d H:i:s');
 

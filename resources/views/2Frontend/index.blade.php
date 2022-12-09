@@ -54,6 +54,9 @@
             </form>
         </div>
     </section>
+    <section class="booking-form" style="margin-bottom: 40px;width: 80%;">
+        <span style="color: red !important;"> Our listed prices are estimated. Sur charge may add due to cost of living. Please call <strong>01223247247</strong> or email <strong>info247ae@gmail.com</strong> to confirm the fare before booking. </span>
+    </section>
 @endsection
 
 @section('js')

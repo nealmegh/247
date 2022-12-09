@@ -127,7 +127,7 @@
 <div class="add-detail mt-10">
     <div class="w-50 float-left logo mt-10">
         <div>
-        <img class="w-50 float-left" src="{{public_path("img/logoE.png")}}" alt="company">
+        <img class="w-50 float-left" src="{{asset("img/logo1.png")}}" alt="company">
 {{--        <h3 class="in-heading align-self-center">{{$siteSettings[9]->value}}</h3>--}}
         <h3 class="float-left" style="padding-left: 170px !important;">{{$siteSettings[9]->value}}</h3>
         </div>

@@ -17,7 +17,7 @@
                     </div>
                     <div class=" center features-pad-left features-bottom">
                         <h4 class="left h4-bottom"><a href="#">100% On Time</a></h4>
-                        <p class="left">247 Airport Express maintain a highly sophisticated scheduler to maintain 100% on time reproting for best customer satisfaction. </p>
+                        <p class="left">247 Airport Express maintain a highly sophisticated scheduler to maintain 100% on time reporting for best customer satisfaction. </p>
                     </div>
                 </div>
 
@@ -27,7 +27,7 @@
                     </div>
                     <div class="features-pad-left features-bottom">
                         <h4 class="left h4-bottom"><a href="#">Secure Payment</a></h4>
-                        <p class="left">We value your security concern. Thus we ensure most secured online payment for our valued customers. </p>
+                        <p class="left">We value your security concern. Thus, we ensure most secured online payment for our valued customers. </p>
                     </div>
 
                     <!-- <div class="features-icon-left">

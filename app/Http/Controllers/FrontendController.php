@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\DestinationTrait;
+use App\Mail\BookingSuccessful;
 use App\Models\Airport;
 use App\Models\Booking;
 use App\Models\Car;
@@ -11,7 +13,7 @@ use App\Mail\contactForm;
 use App\Models\SiteSettings;
 //use Auth;
 use App\Models\User;
-use App\Role;
+use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
@@ -24,6 +26,7 @@ use Redirect;
 
 class FrontendController extends Controller
 {
+    use DestinationTrait;
     /**
      * Display a listing of the resource.
      *
@@ -174,7 +177,7 @@ class FrontendController extends Controller
      */
     public function bookingStore(Request $request)
     {
-
+//dd($request->all());
         $validator = Validator::make($request->all(),
             [
                 'adult' => ['required', 'string'],
@@ -190,11 +193,11 @@ class FrontendController extends Controller
 
         if ($validator->fails()) {
             return redirect()->back()->withInput($request->all())->withErrors($validator);
-
         }
         else
         {
 // dd($request->all());
+
             $location = Location::find($request->location_id);
             $airport = Airport::find($request->airport_id);
             $car = Car::find($request->car_id);
@@ -229,18 +232,19 @@ class FrontendController extends Controller
                 $returnPrice = 0;
             }
 
-
             if ($request->meet == 1) {
                 $meetPrice = $meetValue;
             }
-
-            $totalPrice = round($meetPrice + $price + $carPrice + $returnPrice, 2);
+            $surcharge = $this->surcharge_calculate($request, $price, $returnPrice, $siteSettings);
+            $totalPrice = round($meetPrice + $price + $carPrice + $returnPrice + $surcharge, 2);
             $hiddenPrice = round($request->hiddenPrice, 2);
-           // dd($totalPrice, $hiddenPrice);
+
             if ($totalPrice != $hiddenPrice) {
+
                 return redirect()->back();
             } else {
                 $request->price = $totalPrice;
+                $request = $this->dateTimeSet($request);
                 $request->request->add(['price' => $totalPrice]);
                 $request->request->add(['discount_type' => 0]);
                 $request->request->add(['discount_value' => 0]);
@@ -249,28 +253,18 @@ class FrontendController extends Controller
                 $authUser = Auth::user();
                 $request->request->add(['book_by' => $authUser->id]);
                 $booking = Booking::create($request->all());
-
-
             }
 
-            $date = Carbon::now();
-//        $refDate = $date
 
-            $day = $date->format('d');
-            $month = $date->format('m');
-            $year = $date->format('Y');
-            $refID = '';
-            if($booking->id < 999)
+            $this->generateRefId($booking);
+
+            if( $siteSettings[22]->value == 1)
             {
-                $refID = $year.$month.$day.'0'.$booking->id;
+                $data = array(
+                    'booking' => $booking,
+                );
+                Mail::to($booking->user->email)->send(new BookingSuccessful($data));
             }
-            else
-            {
-                $refID = $year.$month.$day.$booking->id;
-            }
-
-            $booking->ref_id = $refID;
-            $booking->save();
 
             return redirect()->route('front.booking.confirm', [$booking]);
         }
@@ -306,6 +300,55 @@ class FrontendController extends Controller
     public function show($id)
     {
         //
+    }
+    private function generateRefId($booking){
+        $date = Carbon::now();
+        $day = $date->format('d');
+        $month = $date->format('m');
+        $year = $date->format('Y');
+
+        $rounder = ($booking->id < 999)?'0':'';
+        $refID = $year.$month.$day.$rounder.$booking->id;
+
+        $booking->ref_id = $refID;
+        $booking->save();
+    }
+    private function surcharge_calculate($request, $price, $return_price, $siteSettings)
+    {
+        $start_time = $siteSettings[51]->value;
+        $end_time = $siteSettings[52]->value;
+        $pickup_time = $request->pickup_time;
+        $return_pickup_time = $request->return_time;
+        $surcharge_rate = $siteSettings[53]->value;
+        $surcharge = 0;
+        $return_surcharge = 0;
+        if( $start_time <= $pickup_time || $end_time >= $pickup_time) {
+
+            if($surcharge_rate < 1)
+            {
+                $surcharge = $price*$surcharge;
+            }
+            else
+            {
+                $surcharge = $surcharge_rate;
+            }
+        }
+        if ($request->return == 1) {
+            if( $start_time <= $return_pickup_time || $end_time >= $return_pickup_time) {
+
+                if($surcharge_rate < 1)
+                {
+                    $return_surcharge = $return_price*$surcharge;
+                }
+                else
+                {
+                    $return_surcharge = $surcharge_rate;
+                }
+            }
+
+        }
+
+        return $surcharge+$return_surcharge;
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Http\Controllers\BillController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CustomWebhookController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\FrontendController;
 
@@ -41,12 +42,16 @@ use Symfony\Component\Mime\Email;
 Route::get('/email-test', function (){
     Mail::to('bipon.abrar@gmail.com ')->send(new testEmail());
 
+
 //    if (Mail::failures()) {
 //        return response()->Fail('Sorry! Please try again latter');
 //    }else{
 //        return response()->success('Great! Successfully send in your mail');
 //    }
 });
+Route::post(
+    '/stripe/webhook', [CustomWebhookController::class, 'handleWebhook']
+);
 Route::get('/', [FrontendController::class, 'index'])->name('land');
 Route::get('/email', [FrontendController::class, 'index1'])->name('land1');
 Route::get('/terms', [FrontendController::class, 'terms'])->name('terms');
@@ -72,6 +77,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::any('booking', [FrontendController::class, 'booking'])->name('booking');
         Route::POST('bookingStore', [FrontendController::class, 'bookingStore'])->name('front.booking.store');
         Route::get('bookingConfirmation/{id}', [FrontendController::class, 'bookingConfirmation'])->name('front.booking.confirm');
+        Route::get('payment-confirmation/{id}', [FrontendController::class, 'paymentConfirmation'])->name('front.payment.confirm');
         // Route::POST('bookingStore', 'PaymentController@payWithpaypal')->name('front.booking.store');
 
         Route::post('update_customer', [App\Actions\Fortify\UpdateUserProfileInformation::class, 'customerUpdate'])->name('customer.update');
@@ -219,6 +225,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
     });
+
 
 });
 

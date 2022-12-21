@@ -324,7 +324,7 @@
                                             </a>
 
                                         @else
-                                            {{$booking->userTransaction->trans_id}}
+                                            {{($booking->userTransaction->trans_id == 'Stripe')? 'Paid Online':'Confirmed By Vendor'}}
                                         @endif
                                     </td>
                                     @if($booking->trips == null)

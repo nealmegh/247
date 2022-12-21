@@ -10,6 +10,7 @@
         "barryvdh/laravel-dompdf": "^1.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "laravel/cashier": "^14.5",
         "laravel/framework": "^v9.17.0",
         "laravel/jetstream": "^2.3",
         "laravel/sanctum": "^2.6",

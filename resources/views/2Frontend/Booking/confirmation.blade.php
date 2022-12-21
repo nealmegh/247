@@ -4,6 +4,152 @@
     <link href={{asset("css/theme/plugins/sweetalerts/sweetalert2.min.css")}} rel="stylesheet" type="text/css" />
     <link href={{asset("css/theme/plugins/sweetalerts/sweetalert.css")}} rel="stylesheet" type="text/css" />
     <link href={{asset("css/theme/components/custom-sweetalert.css" )}} rel="stylesheet" type="text/css" />
+    <style>
+        /* Variables */
+        /** {*/
+        /*    box-sizing: border-box;*/
+        /*}*/
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            /*height: 100vh;*/
+            width: 100vw;
+        }
+
+        .stripe-form {
+            margin-top: 25px !important;
+            margin-bottom: 10px !important;
+            width: 30vw;
+            /*min-width: 500px;*/
+            align-self: center;
+            box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1),
+            0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
+            border-radius: 7px;
+            padding: 40px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #payment-message {
+            color: rgb(105, 115, 134);
+            font-size: 16px;
+            line-height: 20px;
+            padding-top: 12px;
+            text-align: center;
+        }
+
+        #payment-element {
+            margin-bottom: 24px;
+        }
+
+        /* Buttons and links */
+        .stripe-button {
+            background: #5469d4;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            border-radius: 4px;
+            border: 0;
+            padding: 12px 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            transition: all 0.2s ease;
+            box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
+            width: 100%;
+        }
+        button:hover {
+            filter: contrast(115%);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        /* spinner/processing state, errors */
+        .spinner,
+        .spinner:before,
+        .spinner:after {
+            border-radius: 50%;
+        }
+        .spinner {
+            color: #ffffff;
+            font-size: 22px;
+            text-indent: -99999px;
+            margin: 0px auto;
+            position: relative;
+            width: 20px;
+            height: 20px;
+            box-shadow: inset 0 0 0 2px;
+            -webkit-transform: translateZ(0);
+            -ms-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+        .spinner:before,
+        .spinner:after {
+            position: absolute;
+            content: "";
+        }
+        .spinner:before {
+            width: 10.4px;
+            height: 20.4px;
+            background: #5469d4;
+            border-radius: 20.4px 0 0 20.4px;
+            top: -0.2px;
+            left: -0.2px;
+            -webkit-transform-origin: 10.4px 10.2px;
+            transform-origin: 10.4px 10.2px;
+            -webkit-animation: loading 2s infinite ease 1.5s;
+            animation: loading 2s infinite ease 1.5s;
+        }
+        .spinner:after {
+            width: 10.4px;
+            height: 10.2px;
+            background: #5469d4;
+            border-radius: 0 10.2px 10.2px 0;
+            top: -0.1px;
+            left: 10.2px;
+            -webkit-transform-origin: 0px 10.2px;
+            transform-origin: 0px 10.2px;
+            -webkit-animation: loading 2s infinite ease;
+            animation: loading 2s infinite ease;
+        }
+
+        @-webkit-keyframes loading {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes loading {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @media only screen and (max-width: 600px) {
+            .stripe-form {
+                width: 75vw;
+                min-width: initial;
+            }
+        }
+    </style>
     <section id="confirm" class="booking-form" style="margin-top: 160px;" >
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -38,7 +184,7 @@
 
 
                     @if($booking->confirm != 1)
-                    <div class="col-md-12 col-sm-12">
+                    <div class="col-md-12 col-sm-12" >
                         {{--{{dd($siteSettings[8]-)}}--}}
                         @if($siteSettings[8]->value != "0" )
                         <form class="form-horizontal " novalidate method="POST" action="{{ route('cashPayment') }}">
@@ -54,17 +200,32 @@
                             {{--<button style="margin-top: 1px" name="type" value="paypal" id="bookingButton2" class="btn confirmBtn" type="submit">{{'Pay By Paypal'}}</button>--}}
                         {{--</form>--}}
 {{--                        <div id="paypal-button"></div>--}}
-                        @if($siteSettings[19]->value != 0)
-                            <div class="row " >
-                                <div class="col-md-3">
-
+                        <div class="text-center" >
+                        <form class="stripe-form" id="payment-form" method="POST" action="{{ route('front.payment.confirm' , $booking->id) }}">
+                            @csrf
+                            <input type="hidden" id="email" value="{{$booking->user->email}}" />
+                                <div id="payment-element">
+                                    <!--Stripe.js injects the Payment Element-->
                                 </div>
-                                <div class="col-md-6">
-                                    <div id="paypal-button-container"></div>
-                                </div>
+                            <button id="submit" class="stripe-button bg-gray-900 text-white px-4 py-2 rounded">
+                                <div class="spinner hidden" id="spinner"></div>
+                                <span id="button-text">Pay now</span>
+                            </button>
+                            <div id="payment-message" class="hidden"></div>
 
-                            </div>
-                        @endif
+                        </form>
+                        </div>
+{{--                        @if($siteSettings[19]->value != 0)--}}
+{{--                            <div class="row " >--}}
+{{--                                <div class="col-md-3">--}}
+
+{{--                                </div>--}}
+{{--                                <div class="col-md-6">--}}
+{{--                                    <div id="paypal-button-container"></div>--}}
+{{--                                </div>--}}
+
+{{--                            </div>--}}
+{{--                        @endif--}}
                         <span class="warning text-center mt-2" style="color: red; ">Please Contact Office if you can't find any payment Method</span>
                     </div>
                     @endif
@@ -80,134 +241,135 @@
 {{--    <script src="https://www.paypalobjects.com/api/checkout.js"></script>--}}
 <script src={{asset("js/theme/plugins/sweetalerts/sweetalert2.min.js")}}></script>
 <script src={{asset("js/theme/plugins/sweetalerts/custom-sweetalert.js")}}></script>
-    <script src="https://www.paypal.com/sdk/js?client-id=Acs1O45WH2Du5S_DV8tIGvBpxohveeYybk7NEC0Mb0uhI95Fk9N9uyq2ixbRNy9_K4W_YBcGs1DlFyKr&currency=GBP&commit=true"></script>
+<script src="https://js.stripe.com/v3/"></script>
 <script>
-    let amount = document.getElementById('hiddenPrice').value;
-    let ref_id = document.getElementById('hiddenID').value;
+    {{--const client_secret = {!!json_encode($client_secret)!!};--}}
+    // This is your test publishable API key.
+    // const stripe = Stripe("pk_test_umbmLGiWZ1lpRsbyK4nPjpq1");
+    // var elements = stripe.elements();
 
-    let j_t = document.getElementById('hiddenTo').value;
-    let j_f = document.getElementById('hiddenTo').value;
-    const bId = document.getElementById('hiddenBId').value;
-    paypal.Buttons({
-        style: {
-            layout: 'vertical',
-            color:  'silver',
-            shape:  'rect',
-            label:  'paypal'
-        },
-        // Sets up the transaction when a payment button is clicked
-        createOrder: (data, actions) => {
-            return actions.order.create({
+    // This is your test publishable API key.
+    const stripe = Stripe("pk_test_umbmLGiWZ1lpRsbyK4nPjpq1");
 
-                purchase_units: [{
-                    reference_id: ref_id,
-                    amount: {
-                        value: amount // Can also reference a variable or function
-                    },
-                    // amount: {
-                    //
-                    //     currency_code: "GBP",
-                    //     value: amount,
-                    //     breakdown: {
-                    //         item_total: {
-                    //             currency_code: "GBP",
-                    //             value: amount
-                    //         }
-                    //     }
-                    // },
-                    // items: [
-                    //     {
-                    //         name: "247 Airport Express Booking",
-                    //         description: "The best item ever",
-                    //         sku: ref_id,
-                    //         unit_amount: {
-                    //             currency_code: "GBP",
-                    //             value: amount
-                    //         },
-                    //         quantity: "1"
-                    //     },
-                    // ]
 
-                }],
-                commit: true
-            });
-        },
-        // Finalize the transaction after payer approval
-        onApprove: (data, actions) => {
-            return actions.order.capture().then(function(orderData) {
-                // Successful capture! For dev/demo purposes:
-                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-                const transaction = orderData.purchase_units[0].payments.captures[0];
-                $.ajax({
-                    type: 'POST',
-                    url: "/payment-status/"+bId,
-                    data: {"_token": "{{ csrf_token() }}", "transaction_id": transaction.id},
-                    success: function (results) {
-                        if (results) {
-                            swal({
-                                title: 'Success!',
-                                text: "Your Payment Went trough!",
-                                type: 'success',
-                                confirmButtonText: 'Okay',
-                                padding: '2em',
-                                showLoaderOnConfirm: true,
-                            }).then(function (response){
-                                window.location.href ='/customer/dashboard';
-                            })
-                        } else {
-                            alert("Error!");
-                        }
-                    }
-                });
-                // alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+    let elements;
 
-                // When ready to go live, remove the alert and show a success message within this page. For example:
-                // const element = document.getElementById('paypal-button-container');
-                // element.innerHTML = '<h3>Thank you for your payment!</h3>';
-                // Or go to another URL:  actions.redirect('thank_you.html');
-            });
+    initialize();
+    checkStatus();
+
+    document
+        .querySelector("#payment-form")
+        .addEventListener("submit", handleSubmit);
+
+    // Fetches a payment intent and captures the client secret
+    function initialize() {
+
+        elements = stripe.elements({ clientSecret: '{{$intent->client_secret}}' });
+
+        const paymentElementOptions = {
+            layout: "tabs",
+        };
+
+        const paymentElement = elements.create("payment", paymentElementOptions);
+        paymentElement.mount("#payment-element");
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        // setLoading(true);
+
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                // Make sure to change this to your payment completion page
+                return_url: "{{route('front.payment.confirm', $booking->id)}}",
+                receipt_email: document.getElementById("email").value,
+            },
+
+        });
+
+        // This point will only be reached if there is an immediate error when
+        // confirming the payment. Otherwise, your customer will be redirected to
+        // your `return_url`. For some payment methods like iDEAL, your customer will
+        // be redirected to an intermediate site first to authorize the payment, then
+        // redirected to the `return_url`.
+        // if (error) {
+            if (error.type === "card_error" || error.type === "validation_error") {
+                showMessage(error.message);
+            } else {
+                showMessage("An unexpected error occured.");
+            }
+        // } else {
+        //     // console.log(setupIntent)
+        //     var form = document.getElementById('payment-form');
+        //     var hiddenInput = document.createElement('input');
+        //     hiddenInput.setAttribute('type', 'hidden');
+        //     hiddenInput.setAttribute('name', 'paymentMethod');
+        //     // hiddenInput.setAttribute('value', setupIntent.payment_method);
+        //     form.appendChild(hiddenInput);
+        //     // Submit the form
+        //     form.submit();
+        // }
+
+        setLoading(false);
+    }
+
+    // Fetches the payment intent status after payment submission
+    async function checkStatus() {
+        const clientSecret = new URLSearchParams(window.location.search).get(
+            "payment_intent_client_secret"
+        );
+
+        if (!clientSecret) {
+            return;
         }
-    }).render('#paypal-button-container');
+
+        const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
+
+        switch (paymentIntent.status) {
+            case "succeeded":
+                showMessage("Payment succeeded!");
+                break;
+            case "processing":
+                showMessage("Your payment is processing.");
+                break;
+            case "requires_payment_method":
+                showMessage("Your payment was not successful, please try again.");
+                break;
+            default:
+                showMessage("Something went wrong.");
+                break;
+        }
+    }
+
+    // ------- UI helpers -------
+
+    function showMessage(messageText) {
+        const messageContainer = document.querySelector("#payment-message");
+
+        messageContainer.classList.remove("hidden");
+        messageContainer.textContent = messageText;
+
+        setTimeout(function () {
+            messageContainer.classList.add("hidden");
+            messageText.textContent = "";
+        }, 4000);
+    }
+
+    // Show a spinner on payment submission
+    function setLoading(isLoading) {
+        if (isLoading) {
+            // Disable the button and show a spinner
+            document.querySelector("#submit").disabled = true;
+            document.querySelector("#spinner").classList.remove("hidden");
+            document.querySelector("#button-text").classList.add("hidden");
+        } else {
+            document.querySelector("#submit").disabled = false;
+            document.querySelector("#spinner").classList.add("hidden");
+            document.querySelector("#button-text").classList.remove("hidden");
+        }
+    }
 </script>
-{{--    <script>--}}
-{{--        paypal.Button.render({--}}
-{{--            env: 'production', // Or 'production'--}}
-{{--            // Set up the payment:--}}
-{{--            // 1. Add a payment callback--}}
-
-{{--            payment: function(data, actions) {--}}
-{{--                var id = {!! json_encode($booking->id) !!};--}}
-
-{{--                // 2. Make a request to your server--}}
-{{--                return actions.request.post('/api/create-payment', {--}}
-{{--                        booking_id: id--}}
-{{--                })--}}
-{{--                    .then(function(res) {--}}
-{{--                        // 3. Return res.id from the response--}}
-{{--                        return res.id;--}}
-{{--                    });--}}
-{{--            },--}}
-{{--            // Execute the payment:--}}
-{{--            // 1. Add an onAuthorize callback--}}
-{{--            onAuthorize: function(data, actions) {--}}
-{{--                var id = {!! json_encode($booking->id) !!};--}}
-{{--                // 2. Make a request to your server--}}
-{{--                return actions.request.get('/api/execute-payment/?paymentID='+data.paymentID+'&payerID='+data.payerID, {--}}
-{{--                    paymentID: data.paymentID,--}}
-{{--                    payerID:   data.payerID,--}}
-
-{{--                })--}}
-{{--                    .then(function(res) {--}}
-{{--                        if (res.error === 'INSTRUMENT_DECLINED') {--}}
-{{--                            return actions.restart();--}}
-{{--                        }--}}
-{{--                        alert("Payment Successful.");--}}
-{{--                        console.log(res.id);--}}
-{{--                        window.location.href = "/payment-status?paymentId="+res.id+"&booking_id="+id+"&type=user";--}}
-{{--                    });--}}
-{{--            }--}}
-{{--        }, '#paypal-button');--}}
-{{--    </script>--}}
 <script>
     $( document ).ready(function() {
         console.log( "ready!" );

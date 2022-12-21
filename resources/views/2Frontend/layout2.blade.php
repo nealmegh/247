@@ -118,16 +118,16 @@
             border: solid #0358b7 1px;
             border-radius: 3px;
         }
-        .confirm
-        {
-            text-align: center;
-            margin-right: 10%;
-            margin-left: 0;
-            width: 100%;
-        }
-        .confirmBtn:hover{
-            color:#e4e3e3;
-        }
+        /*.confirm*/
+        /*{*/
+        /*    text-align: center;*/
+        /*    margin-right: 10%;*/
+        /*    margin-left: 0;*/
+        /*    width: 100%;*/
+        /*}*/
+        /*.confirmBtn:hover{*/
+        /*    color:#e4e3e3;*/
+        /*}*/
 
         .dropbtn {
             background-color: transparent;

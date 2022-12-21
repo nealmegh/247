@@ -17,6 +17,9 @@ use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Stripe\Customer;
+use Stripe\PaymentIntent;
+use Stripe\Stripe;
 use Validator;
 use Illuminate\Http\Request;
 
@@ -163,9 +166,34 @@ class FrontendController extends Controller
     public function bookingConfirmation($id)
     {
         $booking = Booking::find($id);
-        return view('2Frontend.Booking.confirmation', compact('booking'));
+//        dd($booking->user->email);
+        Stripe::setApiKey('sk_test_AfpvjCkwd88clAxlrWS1ZExF');
+        $stripeCustomer = Auth::user()->createOrGetStripeCustomer();
+//        dd($stripeCustomer);
+//        $customer = Customer::create();
+        $intent = PaymentIntent::create([
+            'customer' => $stripeCustomer->id,
+            'description' => $booking->id,
+            'amount' => $booking->final_price*100,
+            'currency' => 'gbp',
+            'automatic_payment_methods' => [
+                'enabled' => 'true',
+            ],
+            'receipt_email' => $booking->user->email,
+        ]);
+        $client_secret = $intent->client_secret;
+//        dd($intent->client_secret);
+//        $intent = Auth::user()->createSetupIntent();
+//        dd($intent);
+        return view('2Frontend.Booking.confirmation', compact('booking', 'intent'));
     }
+    public function paymentConfirmation(Request $request, $id)
+    {
+//        dd($request->all());
+        $booking = Booking::find($id);
 
+        return view('2Frontend.Booking.success', compact('booking'));
+    }
     public function terms()
     {
         return view('2Frontend.terms');

@@ -80,11 +80,18 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="form-group mb-4">
-                                                    <label class="control-label" for="collectable_by_driver">Fair Collect <span class="required">*</span></label>
-                                                    <input type="number" step="0.1" id="collectable_by_driver" name="collectable_by_driver" value="{{$earnings[0]}}" placeholder="Collectable Fair" data-validate-minmax="1,20" required="required" class="form-control" >
+{{--                                                    {{dd($booking->userTransaction)}}--}}
+                                                    @if($booking->userTransaction->trans_id == 'Stripe')
+                                                        <span style="color: green; font-size: 1.5rem !important; margin-bottom: 5px!important;"> User Paid Online </span>
+                                                        <input type="hidden" step="0.1" id="collectable_by_driver" name="collectable_by_driver" value="0">
+                                                    @else
 
-                                                </div>
+                                                        <div class="form-group mb-4">
+                                                            <label class="control-label" for="collectable_by_driver">Fair Collect <span class="required">*</span></label>
+                                                            <input type="number" step="0.1" id="collectable_by_driver" name="collectable_by_driver" value="{{$earnings[0]}}" placeholder="Collectable Fair" data-validate-minmax="1,20" required="required" class="form-control" >
+
+                                                        </div>
+                                                    @endif
                                                     @if($booking->return == 1)
                                                         <h4>For Return Journey</h4>
 
@@ -97,11 +104,16 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
+                                                        @if($booking->userTransaction->trans_id == 'Stripe')
+                                                            <input type="hidden" step="0.1" id="return_collectable_by_driver" name="return_collectable_by_driver" value="0">
+
+                                                        @else
                                                         <div class="form-group mb-4">
                                                             <label class="control-label" for="return_collectable_by_driver">Fair Collect <span class="required">*</span></label>
                                                             <input type="number" step="0.1" id="return_collectable_by_driver" name="return_collectable_by_driver" value="{{$earnings[1]}}" placeholder="Collectable Fair" data-validate-minmax="1,20" required="required" class="form-control" >
 
                                                         </div>
+                                                        @endif
                                                     @endif
 
                                                     <div class="form-row mb-4">
@@ -153,12 +165,12 @@
         <!-- END PAGE LEVEL CUSTOM SCRIPTS -->
     <script>
         $(".userDriver").select2({
-            tags: true,
+            // tags: true,
             placeholder: "Select Driver",
-            allowClear: true
+            allowClear: true,
         });
         $(".userReturnDriver").select2({
-            tags: true,
+            // tags: true,
             placeholder: "Select Driver",
             allowClear: true
         });

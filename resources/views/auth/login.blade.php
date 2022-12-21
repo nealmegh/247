@@ -32,7 +32,9 @@
                             {{ session('status') }}
                         </div>
                         @endif
-
+                        @if($errors->any())
+                            {!! implode('', $errors->all('<div class="alert alert-danger">:message</div>')) !!}
+                        @endif
                         <form class="text-left" method="POST" action="{{ route('login') }}">
                             <div class="form">
                             @csrf

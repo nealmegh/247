@@ -342,18 +342,18 @@
     <!-- END PAGE LEVEL CUSTOM SCRIPTS -->
     <script>
         $(".selectFrom").select2({
-            tags: true,
+            // tags: true,
             placeholder: "Select Pickup Point",
             allowClear: true
         });
         $(".selectTo").select2({
-            tags: true,
+            // tags: true,
             placeholder: "Select Drop Point",
             allowClear: true
         });
         $(".UserCustomer").select2({
-            tags: true,
-            placeholder: "Select Pickup Point",
+            // tags: true,
+            placeholder: "Select Customer",
             allowClear: true
         });
 

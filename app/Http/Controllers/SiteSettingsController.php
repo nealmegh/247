@@ -226,7 +226,7 @@ class SiteSettingsController extends Controller
 
     public function fairRaiseForm()
     {
-        return view('Backend.settings.fairIncrease');
+        return view('Backend.Settings.fairIncrease');
     }
 
     /**

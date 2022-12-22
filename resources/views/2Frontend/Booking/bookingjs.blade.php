@@ -119,6 +119,7 @@
             enableTime: true,
             noCalendar: true,
             time_24hr: true,
+            disableMobile: true,
             dateFormat: "H.i",
             onClose: function(selectedDates, dateStr, instance) {
                 let surchargeStart =  parseFloat(document.getElementById('surChargeS').value);
@@ -171,6 +172,7 @@
             enableTime: true,
             noCalendar: true,
             time_24hr: true,
+            disableMobile: true,
             dateFormat: 'H.i',
             onClose: function(selectedDates, dateStr, instance) {
 

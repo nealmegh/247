@@ -166,11 +166,14 @@ class FrontendController extends Controller
     public function bookingConfirmation($id)
     {
         $booking = Booking::find($id);
-//        dd($booking->user->email);
+        return view('2Frontend.Booking.confirmation', compact('booking'));
+    }
+    public function bookingPayment($id){
+        $booking = Booking::find($id);
+
         Stripe::setApiKey('sk_test_AfpvjCkwd88clAxlrWS1ZExF');
         $stripeCustomer = Auth::user()->createOrGetStripeCustomer();
-//        dd($stripeCustomer);
-//        $customer = Customer::create();
+
         $intent = PaymentIntent::create([
             'customer' => $stripeCustomer->id,
             'description' => $booking->id,
@@ -182,16 +185,13 @@ class FrontendController extends Controller
             'receipt_email' => $booking->user->email,
         ]);
         $client_secret = $intent->client_secret;
-//        dd($intent->client_secret);
-//        $intent = Auth::user()->createSetupIntent();
-//        dd($intent);
-        return view('2Frontend.Booking.confirmation', compact('booking', 'intent'));
+
+        return view('2Frontend.Booking.stripe', compact('booking', 'intent'));
     }
     public function paymentConfirmation(Request $request, $id)
     {
 //        dd($request->all());
         $booking = Booking::find($id);
-
         return view('2Frontend.Booking.success', compact('booking'));
     }
     public function terms()

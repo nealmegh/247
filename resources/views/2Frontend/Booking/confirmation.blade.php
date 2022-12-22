@@ -4,6 +4,10 @@
     <link href={{asset("css/theme/plugins/sweetalerts/sweetalert2.min.css")}} rel="stylesheet" type="text/css" />
     <link href={{asset("css/theme/plugins/sweetalerts/sweetalert.css")}} rel="stylesheet" type="text/css" />
     <link href={{asset("css/theme/components/custom-sweetalert.css" )}} rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{asset("css/theme/widgets/modules-widgets.css" )}}">
+    <link href="{{asset("css/theme/elements/miscellaneous.css" )}}" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap" rel="stylesheet">
+    <link href="{{asset("css/theme/elements/custom-typography.css" )}}" rel="stylesheet" type="text/css" />
     <style>
         /* Variables */
         /** {*/
@@ -150,226 +154,198 @@
             }
         }
     </style>
-    <section id="confirm" class="booking-form" style="margin-top: 160px;" >
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-        <div class="container confirm">
-            <div class="row confirm">
-                <div class="col-md-12 col-sm-12">
-                    <div class="text-center" >
-                        <h2>Please Confirm your payment</h2>
+    <div id="content" class="main-content">
+        <div class="container" style="margin-top: 160px;">
+
+            <div class="container">
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
-                    <div class="text-align-left " style="text-align: left !important; margin-top: 15px !important;">
-                        <h3>Journey Details:</h3>
-                        <h4>Booking ID: {{$booking->ref_id}}</h4>
-                        <h4>Journey Date: {{date('d M Y', strtotime($booking->journey_date))}}</h4>
-                        <h4>Journey From: {{$booking->from()}}</h4>
-                        <h4>Journey To: {{$booking->to()}}</h4>
-                        <h4>Amount to Pay: <strong>£{{$booking->final_price}}</strong></h4>
-                    </div>
+                @endif
+                <div class="row layout-top-spacing">
+                    <div id="jumbotronBasic" class="col-xl-12 layout-spacing">
+                        <div class="statbox widget box box-shadow">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="jumbotron">
+                                        <h2 class="display-4 mb-5  mt-4 text-center text-info" style="font-family: 'Quicksand'; margin-bottom: 10px!important;">Confirm Payment</h2>
+                                        <div class="widget widget-account-invoice-three">
 
-                    <input type="hidden" value="{{$booking->final_price}}" id="hiddenPrice">
-                    <input type="hidden" value="{{$booking->ref_id}}" id="hiddenID">
-                    <input type="hidden" value="{{$booking->from()}}" id="hiddenFrom">
-                    <input type="hidden" value="{{$booking->to()}}" id="hiddenTo">
-                    <input type="hidden" value="{{$booking->id}}" id="hiddenBId">
+                                            <div class="widget-heading">
+                                                <div class="wallet-usr-info">
+                                                    <div class="usr-name">
+                                                        <span><img src="{{ request()->user()->profile_photo_url }}" alt="avatar"> {{$booking->user->name}}</span>
+                                                    </div>
+                                                    <div class="add">
+                                                        <span>Journey Details</span>
+                                                    </div>
+                                                </div>
+                                                <div class="wallet-balance">
+                                                    <p>Amount</p>
+                                                    <h5 class=""><span class="w-currency">£</span>{{number_format((float)$booking->final_price, 2, '.', '')}}</h5>
+                                                </div>
+                                                <div class="wallet-balance" style="margin-top: 5px !important;">
+                                                    <p>Date</p>
+                                                    <h5 class="">{{date('d M Y', strtotime($booking->journey_date))}}</h5>
+                                                </div>
+                                            </div>
+
+                                            <div class="widget-amount">
+
+                                                <div class="w-a-info funds-received">
+                                                    <span>From <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg></span>
+                                                    <p>{{$booking->from()}}</p>
+                                                </div>
+
+                                                <div class="w-a-info funds-spent">
+                                                    <span>To <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+                                                    <p>{{$booking->to()}}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="widget-content">
+
+{{--                                                <div class="bills-stats" >--}}
+{{--                                                    --}}{{--                                    <p>Payment</p>--}}
+{{--                                                    <span style="background-color: #0ba360!important;">Payment Processing</span>--}}
+{{--                                                </div>--}}
+
+                                                <div class="invoice-list">
+                                                    <div class="bills-stats" style="margin-bottom: 5px!important;">
+
+                                                        <span style="background-color: #0e2231!important; color: white"> Main Journey</span>
+                                                    </div>
+                                                    <div class="inv-detail">
+                                                        <div class="info-detail-1">
+                                                            <p>Booking ID</p>
+                                                            <p><span class="bill-amount">{{$booking->ref_id}}</span></p>
+                                                        </div>
+                                                        <div class="info-detail-1">
+                                                            <p>Pick Up</p>
+                                                            <p><span class="bill-amount">{{$booking->pickup_address}}</span></p>
+                                                        </div>
+                                                        <div class="info-detail-1">
+                                                            <p>Drop Off</p>
+                                                            <p><span class="bill-amount">{{$booking->dropoff_address}}</span></p>
+                                                        </div>
+                                                        <div class="info-detail-1">
+                                                            <p>Pick Up Time</p>
+                                                            <p><span class="bill-amount">{{$booking->pickup_time}}</span></p>
+                                                        </div>
+                                                        <div class="info-detail-1">
+                                                            <p>Flight Number</p>
+                                                            <p><span class="bill-amount">{{$booking->flight_number}}</span></p>
+                                                        </div>
+                                                        <div class="info-detail-1">
+                                                            <p>Flight Origin</p>
+                                                            <p><span class="bill-amount">{{$booking->flight_origin}}</span></p>
+                                                        </div>
+                                                        @if($booking->return == 1)
+                                                            <div class="bills-stats" style="margin-bottom: 5px!important; margin-top: 5px!important;">
+
+                                                                <span style="background-color: #0e2231!important; color: white"> Return Journey</span>
+                                                            </div>
+                                                            <div class="info-detail-1">
+                                                                <p>Pick Up</p>
+                                                                <p><span class="bill-amount">{{$booking->return_pickup_address}}</span></p>
+                                                            </div>
+                                                            <div class="info-detail-1">
+                                                                <p>Drop Off</p>
+                                                                <p><span class="bill-amount">{{$booking->return_dropoff_address}}</span></p>
+                                                            </div>
+                                                            <div class="info-detail-1">
+                                                                <p>Pick Up Time</p>
+                                                                <p><span class="bill-amount">{{$booking->return_time}}</span></p>
+                                                            </div>
+                                                            <div class="info-detail-1">
+                                                                <p>Flight Number</p>
+                                                                <p><span class="bill-amount">{{$booking->return_flight_number}}</span></p>
+                                                            </div>
+                                                            <div class="info-detail-1">
+                                                                <p>Flight Origin</p>
+                                                                <p><span class="bill-amount">{{$booking->return_flight_origin}}</span></p>
+                                                            </div>
+                                                        @endif
+                                                        <div class="bills-stats" style="margin-bottom: 5px!important; margin-top: 5px!important;">
+
+                                                            <span style="background-color: #0e2231!important; color: white">Important</span>
+                                                        </div>
+                                                        <div class="info-detail-1">
+                                                            <p>Vehicle</p>
+                                                            <p><span class="bill-amount">{{$booking->car->name}}</span></p>
+                                                        </div>
+
+                                                        <div class="info-detail-1">
+                                                            <p>Adult / Child</p>
+                                                            <p><span class="bill-amount">{{$booking->adult}} / {{$booking->child}}</span></p>
+                                                        </div>
+                                                        <div class="info-detail-1">
+                                                            <p>Luggage / Carry On</p>
+                                                            <p><span class="bill-amount">{{$booking->luggage}} / {{$booking->carryon}}</span></p>
+                                                        </div>
+                                                        <div class="info-detail-1">
+                                                            <p>Additional Info</p>
+                                                            <p><span class="bill-amount">{{$booking->add_info}}</span></p>
+                                                        </div>
+                                                    </div>
+{{--                                                    <span class="warning text-center mt-2" style="color: red; ">Please Contact Office if you can't find any payment Method</span>--}}
+                                                    <div class="inv-action" style="margin-bottom: 10px!important;">
+                                                        <h5 class="alert text-alert"  style="font-family: 'Quicksand'; color: #f95e5e!important;">Please Contact Office if you can't find any payment Method</h5>
+                                                    </div>
+                                                    <div class="inv-action">
+                                                        <a href="{{route('customer.dashboard')}}" class="btn btn-outline-primary view-details">View Dashboard</a>
+                                                        @if($booking->confirm != 1)
+                                                        <a href="{{route('front.booking.payment', $booking->id)}}" class="btn btn-outline-primary pay-now">Pay Online</a>
+                                                            @if($siteSettings[8]->value != "0" )
+                                                                <form class="form-horizontal " novalidate method="POST" action="{{ route('cashPayment') }}">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{$booking->id}}">
+{{--                                                                    <button style="margin-top: 1px" name="type" value="cash" id="bookingButton" class="btn confirmBtn" type="submit"> {{'Pay Cash'}} </button>--}}
+                                                                    <a type="submit" class="btn btn-outline-primary pay-now" style="background: rosybrown!important; color: brown!important;">Pay Cash</a>
+                                                                </form>
+                                                            @endif
+                                                        @endif
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                                            <input type="hidden" value="{{$booking->final_price}}" id="hiddenPrice">
+                                                            <input type="hidden" value="{{$booking->ref_id}}" id="hiddenID">
+                                                            <input type="hidden" value="{{$booking->from()}}" id="hiddenFrom">
+                                                            <input type="hidden" value="{{$booking->to()}}" id="hiddenTo">
+                                                            <input type="hidden" value="{{$booking->id}}" id="hiddenBId">
+
+                                        {{--                    @if($booking->confirm != 1)--}}
+                                        {{--                        <div class="col-md-12 col-sm-12">--}}
+                                        {{--                            <span class="warning text-center mt-2" style="color: red; ">Please Contact Office if you can't find any payment Method</span>--}}
+                                        {{--                        </div>--}}
+                                        {{--                    @endif--}}
 
 
 
-                    @if($booking->confirm != 1)
-                    <div class="col-md-12 col-sm-12" >
-                        {{--{{dd($siteSettings[8]-)}}--}}
-                        @if($siteSettings[8]->value != "0" )
-                        <form class="form-horizontal " novalidate method="POST" action="{{ route('cashPayment') }}">
-                            @csrf
-                            <input type="hidden" name="id" value="{{$booking->id}}">
-                            <button style="margin-top: 1px" name="type" value="cash" id="bookingButton" class="btn confirmBtn" type="submit"> {{'Pay Cash'}} </button>
-                        </form>
-                        @endif
-                        {{--<form class="form-horizontal form-label-left" novalidate method="POST" action="{{ route('paypalPayment') }}">--}}
-                            {{--@csrf--}}
-                            {{--<input type="hidden" name="amount" value="{{$booking->final_price}}">--}}
-                            {{--<input type="hidden" name="booking_id" value="{{$booking->id}}">--}}
-                            {{--<button style="margin-top: 1px" name="type" value="paypal" id="bookingButton2" class="btn confirmBtn" type="submit">{{'Pay By Paypal'}}</button>--}}
-                        {{--</form>--}}
-{{--                        <div id="paypal-button"></div>--}}
-                        <div class="text-center" >
-                        <form class="stripe-form" id="payment-form" method="POST" action="{{ route('front.payment.confirm' , $booking->id) }}">
-                            @csrf
-                            <input type="hidden" id="email" value="{{$booking->user->email}}" />
-                                <div id="payment-element">
-                                    <!--Stripe.js injects the Payment Element-->
+                                    </div>
                                 </div>
-                            <button id="submit" class="stripe-button bg-gray-900 text-white px-4 py-2 rounded">
-                                <div class="spinner hidden" id="spinner"></div>
-                                <span id="button-text">Pay now</span>
-                            </button>
-                            <div id="payment-message" class="hidden"></div>
-
-                        </form>
+                            </div>
                         </div>
-{{--                        @if($siteSettings[19]->value != 0)--}}
-{{--                            <div class="row " >--}}
-{{--                                <div class="col-md-3">--}}
-
-{{--                                </div>--}}
-{{--                                <div class="col-md-6">--}}
-{{--                                    <div id="paypal-button-container"></div>--}}
-{{--                                </div>--}}
-
-{{--                            </div>--}}
-{{--                        @endif--}}
-                        <span class="warning text-center mt-2" style="color: red; ">Please Contact Office if you can't find any payment Method</span>
                     </div>
-                    @endif
-
                 </div>
-
             </div>
         </div>
-    </section>
+    </div>
 @endsection
 
 @section('js')
 {{--    <script src="https://www.paypalobjects.com/api/checkout.js"></script>--}}
 <script src={{asset("js/theme/plugins/sweetalerts/sweetalert2.min.js")}}></script>
 <script src={{asset("js/theme/plugins/sweetalerts/custom-sweetalert.js")}}></script>
-<script src="https://js.stripe.com/v3/"></script>
-<script>
-    {{--const client_secret = {!!json_encode($client_secret)!!};--}}
-    // This is your test publishable API key.
-    // const stripe = Stripe("pk_test_umbmLGiWZ1lpRsbyK4nPjpq1");
-    // var elements = stripe.elements();
 
-    // This is your test publishable API key.
-    const stripe = Stripe("pk_test_umbmLGiWZ1lpRsbyK4nPjpq1");
-
-
-    let elements;
-
-    initialize();
-    checkStatus();
-
-    document
-        .querySelector("#payment-form")
-        .addEventListener("submit", handleSubmit);
-
-    // Fetches a payment intent and captures the client secret
-    function initialize() {
-
-        elements = stripe.elements({ clientSecret: '{{$intent->client_secret}}' });
-
-        const paymentElementOptions = {
-            layout: "tabs",
-        };
-
-        const paymentElement = elements.create("payment", paymentElementOptions);
-        paymentElement.mount("#payment-element");
-    }
-
-    async function handleSubmit(e) {
-        e.preventDefault();
-        // setLoading(true);
-
-        const { error } = await stripe.confirmPayment({
-            elements,
-            confirmParams: {
-                // Make sure to change this to your payment completion page
-                return_url: "{{route('front.payment.confirm', $booking->id)}}",
-                receipt_email: document.getElementById("email").value,
-            },
-
-        });
-
-        // This point will only be reached if there is an immediate error when
-        // confirming the payment. Otherwise, your customer will be redirected to
-        // your `return_url`. For some payment methods like iDEAL, your customer will
-        // be redirected to an intermediate site first to authorize the payment, then
-        // redirected to the `return_url`.
-        // if (error) {
-            if (error.type === "card_error" || error.type === "validation_error") {
-                showMessage(error.message);
-            } else {
-                showMessage("An unexpected error occured.");
-            }
-        // } else {
-        //     // console.log(setupIntent)
-        //     var form = document.getElementById('payment-form');
-        //     var hiddenInput = document.createElement('input');
-        //     hiddenInput.setAttribute('type', 'hidden');
-        //     hiddenInput.setAttribute('name', 'paymentMethod');
-        //     // hiddenInput.setAttribute('value', setupIntent.payment_method);
-        //     form.appendChild(hiddenInput);
-        //     // Submit the form
-        //     form.submit();
-        // }
-
-        setLoading(false);
-    }
-
-    // Fetches the payment intent status after payment submission
-    async function checkStatus() {
-        const clientSecret = new URLSearchParams(window.location.search).get(
-            "payment_intent_client_secret"
-        );
-
-        if (!clientSecret) {
-            return;
-        }
-
-        const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
-
-        switch (paymentIntent.status) {
-            case "succeeded":
-                showMessage("Payment succeeded!");
-                break;
-            case "processing":
-                showMessage("Your payment is processing.");
-                break;
-            case "requires_payment_method":
-                showMessage("Your payment was not successful, please try again.");
-                break;
-            default:
-                showMessage("Something went wrong.");
-                break;
-        }
-    }
-
-    // ------- UI helpers -------
-
-    function showMessage(messageText) {
-        const messageContainer = document.querySelector("#payment-message");
-
-        messageContainer.classList.remove("hidden");
-        messageContainer.textContent = messageText;
-
-        setTimeout(function () {
-            messageContainer.classList.add("hidden");
-            messageText.textContent = "";
-        }, 4000);
-    }
-
-    // Show a spinner on payment submission
-    function setLoading(isLoading) {
-        if (isLoading) {
-            // Disable the button and show a spinner
-            document.querySelector("#submit").disabled = true;
-            document.querySelector("#spinner").classList.remove("hidden");
-            document.querySelector("#button-text").classList.add("hidden");
-        } else {
-            document.querySelector("#submit").disabled = false;
-            document.querySelector("#spinner").classList.add("hidden");
-            document.querySelector("#button-text").classList.remove("hidden");
-        }
-    }
-</script>
 <script>
     $( document ).ready(function() {
         console.log( "ready!" );

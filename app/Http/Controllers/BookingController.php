@@ -198,7 +198,20 @@ use DestinationTrait;
     public function show($booking)
     {
         $booking = Booking::findORFail($booking);
-        return json_encode($booking);
+        $from = $booking->from();
+        $to = $booking->to();
+        $price = number_format((float)$booking->final_price, 2, '.', '');
+        $journeyDate = date('d M Y', strtotime($booking->journey_date));
+        $car = $booking->car->name;
+        $data = [
+            'booking' => $booking,
+            'from' => $from,
+            'to' => $to,
+            'price'=> $price,
+            'journeyDate' => $journeyDate,
+            'carName' => $car
+        ];
+        return json_encode($data);
     }
 
     public function paymentConfirmation($id)

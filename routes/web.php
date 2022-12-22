@@ -77,6 +77,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::any('booking', [FrontendController::class, 'booking'])->name('booking');
         Route::POST('bookingStore', [FrontendController::class, 'bookingStore'])->name('front.booking.store');
         Route::get('bookingConfirmation/{id}', [FrontendController::class, 'bookingConfirmation'])->name('front.booking.confirm');
+        Route::get('booking-payment/{id}', [FrontendController::class, 'bookingPayment'])->name('front.booking.payment');
         Route::get('payment-confirmation/{id}', [FrontendController::class, 'paymentConfirmation'])->name('front.payment.confirm');
         // Route::POST('bookingStore', 'PaymentController@payWithpaypal')->name('front.booking.store');
 

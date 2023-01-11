@@ -50,6 +50,14 @@
             position: absolute;
             right: 0% !important;
         }
+        @media only screen and (max-width: 600px) {
+            .btn-lg, .btn-group-lg > .btn {
+                padding: 0.5rem 0.5rem !important;
+                font-size: 0.9rem!important;
+
+            }
+        }
+
     </style>
     @can('Customer')
         <style>
@@ -397,7 +405,7 @@
                                             </a>
                                         @else
                                             <span class="badge outline-badge-success shadow-none">
-                                                    @if($booking->final_price == null)
+                                                @if($booking->final_price == null)
                                                     {{'£'.$booking->price}}
                                                 @else
                                                     {{'£'.$booking->final_price}}
@@ -407,7 +415,7 @@
                                                 </span>
                                         @endif
                                     @endif
-                                    </span>
+{{--                                    </span>--}}
                                 </td>
 
                                 @if($booking->complete_status == Null)
@@ -469,7 +477,8 @@
                                     <td class="text-center">{{$booking->price}}</td>
                                     <td class="text-center">
                                         @if($booking->user_transaction_id == null)
-                                            <a href="{{route('front.booking.confirm', $booking->id)}}" class="btn btn-sm btn-secondary ">
+                                            <a href="{{route('front.booking.confirm', $booking->id)}}" class="btn btn-sm btn-secondary " style="    background-color: #805dca !important;
+    border-color: #805dca!important;">
                                                 Make Payment
                                             </a>
 

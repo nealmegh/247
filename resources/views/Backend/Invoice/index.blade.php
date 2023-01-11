@@ -127,15 +127,15 @@
     <!-- END PAGE LEVEL CUSTOM SCRIPTS -->
     <script>
         $(".userDriver").select2({
-            tags: true,
+            // tags: true,
             placeholder: "Select Driver",
             allowClear: true
         });
         var f1 = flatpickr(document.getElementById('start_date'), {
-            dateFormat: "d-m-Y"
+            dateFormat: "Y-m-d"
         });
-        var f1 = flatpickr(document.getElementById('end_date'), {
-            dateFormat: "d-m-Y"
+        var f2 = flatpickr(document.getElementById('end_date'), {
+            dateFormat: "Y-m-d"
         });
     </script>
     <script>

@@ -475,6 +475,7 @@
                                                 </td>
                                             </tr>
                                             @endif
+                                            @if($data['booking']->userTransaction->trans_id == 'Pay In Car')
                                             <tr>
                                                 <td
                                                         colspan="2"
@@ -499,7 +500,7 @@
                                                     </td>
                                                 @endif
                                             </tr>
-
+                                            @endif
                                         </table>
                                     </td>
                                 </tr>

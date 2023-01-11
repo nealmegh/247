@@ -114,7 +114,9 @@ class UserTransactionController extends Controller
 //        }
         if($request->send_email ==1 || $siteSettings[22]->value == 1)
         {
-            Mail::to($booking->user->email)->send(new BookingUpdated($data));
+//            Mail::to($booking->user->email)->send(new BookingUpdated($data));
+            Mail::to($booking->user->email)->send(new BookingSuccessful($data));
+
         }
 
         $routeName = ($request->paidBy == 'Customer')?'userProfile':'booking.bookings';

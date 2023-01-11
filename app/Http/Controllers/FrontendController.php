@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\DestinationTrait;
+use App\Mail\BookingCreated;
 use App\Mail\BookingSuccessful;
 use App\Models\Airport;
 use App\Models\Booking;
@@ -291,7 +292,9 @@ class FrontendController extends Controller
                 $data = array(
                     'booking' => $booking,
                 );
-                Mail::to($booking->user->email)->send(new BookingSuccessful($data));
+//                Mail::to($booking->user->email)->send(new BookingSuccessful($data));
+
+                Mail::to($booking->user->email)->bcc('info247ae@gmail.com')->send(new BookingCreated($data));
             }
 
             return redirect()->route('front.booking.confirm', [$booking]);

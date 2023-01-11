@@ -17,41 +17,45 @@ class InvoiceController extends Controller
     public function index()
     {
         $drivers = Driver::all();
-        $driverInvoices = null ;
+        $driverInvoices = array() ;
         $invoices = array();
+//        dd($_GET['start_date']);
         if(!isset($_GET['driver_id']))
         {
             return view('Backend.Invoice.index', compact('drivers'));
         }
-
+//dd($_GET['driver_id']);
             if($_GET['start_date'] != "" && $_GET['end_date'] != "")
             {
-                $invoices = Invoice::where('status', '=', 0)->whereDate('created_at', '>', $_GET['start_date'])->whereDate('created_at', '<', $_GET['end_date'])->get();
-
+                $invoices = Invoice::where('status', '=', 0)->whereDate('booking_date', '>', $_GET['start_date'])->whereDate('booking_date', '<', $_GET['end_date'])->get();
+//dd($invoices);
             }
             elseif ($_GET['start_date'] == "" && $_GET['end_date'] != "")
             {
-                $invoices = Invoice::where('status', '=', 0)->whereDate('created_at', '<', $_GET['end_date'])->get();
+                $invoices = Invoice::where('status', '=', 0)->whereDate('booking_date', '<', $_GET['end_date'])->get();
             }
             elseif ($_GET['start_date'] != "" && $_GET['end_date'] == "")
             {
-                $invoices = Invoice::where('status', '=', 0)->whereDate('created_at', '>', $_GET['start_date'])->get();
+                $invoices = Invoice::where('status', '=', 0)->whereDate('booking_date', '>', $_GET['start_date'])->get();
 //                dd($_GET['start_date'],$invoices);
             }
             else
             {
                 $invoices = Invoice::where('status', '=', 0)->get();
             }
+//            dd('hi');
 
-        foreach ($invoices as $invoice)
+        foreach ($invoices as $key => $invoice)
             {
+//                dd($invoice);
                if($invoice->trip->driver_id == $_GET['driver_id'])
                {
-                   $driverInvoices [] = $invoice;
+                   $driverInvoices[$key] = $invoice;
                }
-
+//
             }
-
+//        dd($driverInvoices);
+//        dd('hi');
         return view('Backend.Invoice.invoice', compact('driverInvoices'));
 
     }

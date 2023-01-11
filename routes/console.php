@@ -7,6 +7,7 @@ use App\Models\Driver;
 use App\Models\Trip;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -106,7 +107,7 @@ Artisan::command('check:drivers', function () {
             $this->info(" System has blocked Driver ".$driver->user->name.' '.now().' ');
         }
     }
-
+    Log::info('checked');
 
 
 })->purpose('Check Drivers Documents Validity');

@@ -62,20 +62,183 @@
 
 @section('main-content')
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Booking Details</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="modal-text" id="modal_booking_number"></p>
+                    {{--                    ################################################--}}
+
+
+
+
+
+
+
+                    <div class="widget widget-account-invoice-three">
+
+                        <div class="widget-heading">
+                            <div class="wallet-usr-info">
+                                <div class="usr-name">
+                                    <span id="modal_booking_number"></span>
+                                </div>
+                                <div class="add">
+                                    <span>Journey Details</span>
+                                </div>
+                            </div>
+                            <div class="wallet-balance">
+                                <p>Amount</p>
+                                <h5 class="" id="bookingPrice"><span class="w-currency">£</span></h5>
+                            </div>
+                            <div class="wallet-balance" style="margin-top: 5px !important;">
+                                <p>Date</p>
+                                <h5 class="" id="journeyDate"></h5>
+                            </div>
+                        </div>
+
+                        <div class="widget-amount">
+
+                            <div class="w-a-info funds-received">
+                                <span>From <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg></span>
+                                <p id="bookingFrom"></p>
+                            </div>
+
+                            <div class="w-a-info funds-spent">
+                                <span>To <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+                                <p id="bookingTo"></p>
+                            </div>
+                        </div>
+
+                        <div class="widget-content">
+
+                            <div class="invoice-list">
+                                <div class="bills-stats" style="margin-bottom: 5px!important;">
+
+                                    <span style="background-color: #0e2231!important; color: white"> Main Journey</span>
+                                </div>
+                                <div class="inv-detail">
+                                    <div class="info-detail-1">
+                                        <p>Booking ID</p>
+                                        <p><span class="bill-amount" id="bookingRefId"></span></p>
+                                    </div>
+                                    <div class="info-detail-1">
+                                        <p>Pick Up</p>
+                                        <p><span class="bill-amount" id="bookingPickup"></span></p>
+                                    </div>
+                                    <div class="info-detail-1">
+                                        <p>Drop Off</p>
+                                        <p><span class="bill-amount" id="bookingDropOff"></span></p>
+                                    </div>
+                                    <div class="info-detail-1">
+                                        <p>Pick Up Time</p>
+                                        <p><span class="bill-amount" id="bookingTime"></span></p>
+                                    </div>
+                                    <div class="info-detail-1">
+                                        <p>Flight Number</p>
+                                        <p><span class="bill-amount" id="bookingFlightNumber"></span></p>
+                                    </div>
+                                    <div class="info-detail-1">
+                                        <p>Flight Origin</p>
+                                        <p><span class="bill-amount" id="bookingFlightOrigin">}</span></p>
+                                    </div>
+                                    <div id="return" style="">
+                                        <div class="bills-stats" style="margin-bottom: 5px!important; margin-top: 5px!important;">
+
+                                            <span style="background-color: #0e2231!important; color: white"> Return Journey</span>
+                                        </div>
+                                        <div class="info-detail-1">
+                                            <p>Pick Up</p>
+                                            <p><span class="bill-amount" id="bookingReturnPickup"></span></p>
+                                        </div>
+                                        <div class="info-detail-1">
+                                            <p>Drop Off</p>
+                                            <p><span class="bill-amount" id="bookingReturnDropOff"></span></p>
+                                        </div>
+                                        <div class="info-detail-1">
+                                            <p>Pick Up Time</p>
+                                            <p><span class="bill-amount" id="bookingReturnTime"></span></p>
+                                        </div>
+                                        <div class="info-detail-1">
+                                            <p>Flight Number</p>
+                                            <p><span class="bill-amount" id="bookingReturnFlight"></span></p>
+                                        </div>
+                                        <div class="info-detail-1">
+                                            <p>Flight Origin</p>
+                                            <p><span class="bill-amount" id="bookingReturnOrigin"></span></p>
+                                        </div>
+                                    </div>
+                                    <div class="bills-stats" style="margin-bottom: 5px!important; margin-top: 5px!important;">
+
+                                        <span style="background-color: #0e2231!important; color: white">Important</span>
+                                    </div>
+                                    <div class="info-detail-1">
+                                        <p>Vehicle</p>
+                                        <p><span class="bill-amount" id="carName"></span></p>
+                                    </div>
+
+                                    <div class="info-detail-1">
+                                        <p>Adult / Child</p>
+                                        <p><span class="bill-amount" id="bookingAdult"></span></p>
+                                    </div>
+                                    <div class="info-detail-1">
+                                        <p>Luggage / Carry On</p>
+                                        <p><span class="bill-amount" id="bookingLuggage"></span></p>
+                                    </div>
+                                    <div class="info-detail-1">
+                                        <p>Additional Info</p>
+                                        <p><span class="bill-amount" id="bookingInfo"></span></p>
+                                    </div>
+                                    <div class="bills-stats" style="margin-bottom: 5px!important;">
+
+                                        <span style="background-color: #0e2231!important; color: white"> Driver</span>
+
+                                    </div>
+                                    <div class="info-detail-1">
+                                        <p>Original Trip</p>
+                                        <p><span class="bill-amount" id="driverName"></span></p>
+                                    </div>
+                                    <div class="info-detail-1">
+                                        <p>Return Trip</p>
+                                        <p><span class="bill-amount" id="rDriverName"></span></p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {{--                    <p class="modal-text" id="modal_booking_number"></p>--}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    {{--                    ###############################################--}}
                 </div>
                 <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
-                    <button type="button" class="btn btn-primary">Save</button>
+                    <button class="btn btn-success" data-dismiss="modal">Okay</button>
+                    {{--                    <button type="button" class="btn btn-primary">Save</button>--}}
                 </div>
             </div>
         </div>
@@ -455,7 +618,7 @@
     </script>
     <script>
         $('.showBooking').on('click', function () {
-           let id = $(this).attr("data-value");
+            let id = $(this).attr("data-value");
             $.ajax
             ({
                 url: '/admin/bookings/show/'+id,
@@ -464,7 +627,40 @@
                 type: 'post',
                 success: function(response)
                 {
-                    document.getElementById('modal_booking_number').innerText = response.id;
+                    console.log(response)
+                    document.getElementById('modal_booking_number').innerText = response.booking.id;
+                    document.getElementById('journeyDate').innerText = response.journeyDate;
+                    document.getElementById('bookingPrice').innerText = response.price;
+                    document.getElementById('bookingFrom').innerText = response.from;
+                    document.getElementById('bookingTo').innerText = response.to;
+                    document.getElementById('bookingInfo').innerText = response.booking.add_info;
+                    document.getElementById('bookingLuggage').innerText = response.booking.luggage+' / '+response.booking.carryon;
+                    document.getElementById('bookingAdult').innerText = response.booking.adult+' / '+response.booking.child;
+                    document.getElementById('carName').innerText = response.carName;
+                    document.getElementById('bookingRefId').innerText = response.booking.ref_id;
+                    document.getElementById('bookingPickup').innerText = response.booking.pickup_address;
+                    document.getElementById('bookingDropOff').innerText = response.booking.dropoff_address;
+                    document.getElementById('bookingTime').innerText = response.booking.pickup_time;
+                    document.getElementById('bookingFlightNumber').innerText = response.booking.flight_number;
+                    document.getElementById('bookingFlightOrigin').innerText = response.booking.flight_origin;
+                    document.getElementById('rDriverName').innerText = response.rDriverName;
+                    document.getElementById('driverName').innerText = response.driverName;
+
+                    if(response.booking.return == 0)
+                    {
+                        var x = document.getElementById("return");
+                        x.style.display = "none";
+                        console.log('no return')
+                    }
+                    else {
+                        var y = document.getElementById("return");
+                        y.style.display = "block";
+                        document.getElementById('bookingReturnPickup').innerText = response.booking.return_pickup_address;
+                        document.getElementById('bookingReturnDropOff').innerText = response.booking.return_dropoff_address;
+                        document.getElementById('bookingReturnTime').innerText = response.booking.return_time;
+                        document.getElementById('bookingReturnFlight').innerText = response.booking.return_flight_number;
+                        document.getElementById('bookingReturnOrigin').innerText = response.booking.return_flight_origin;
+                    }
                 }
             });
 

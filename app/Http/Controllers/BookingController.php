@@ -7,12 +7,19 @@ use App\Http\Traits\DestinationTrait;
 use App\Mail\BookingCancelled;
 use App\Mail\BookingCancelledDriver;
 use App\Mail\BookingComplete;
+use App\Mail\BookingCreated;
 use App\Mail\CustomerDriverAssign;
 use App\Models\Airport;
 use App\Models\Bill;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 use PDF;
 use App\Models\Booking;
 use App\Models\Car;
@@ -35,7 +42,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\DriverAssigned;
 use Illuminate\Support\Facades\Redirect;
 use Laravel\Fortify\Fortify;
-use mysql_xdevapi\Exception;
+//use mysql_xdevapi\Exception;
 
 
 class BookingController extends Controller
@@ -50,7 +57,7 @@ use DestinationTrait;
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response|\Illuminate\View\View
+     * @return Application|Factory|\Illuminate\Contracts\View\View|Response|View
      */
     public function index()
     {
@@ -63,7 +70,7 @@ use DestinationTrait;
     public function completed()
     {
         $bookings = Booking::where('complete_status', 1)->get();
-//        dd($bookings);
+//        dd(count($bookings[0]->trips));
         return view('Backend.Booking.completed', compact('bookings'));
     }
     public function cancelled()
@@ -75,7 +82,7 @@ use DestinationTrait;
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response|\Illuminate\View\View
+     * @return Application|Factory|\Illuminate\Contracts\View\View|View
      */
     public function create()
     {
@@ -92,12 +99,12 @@ use DestinationTrait;
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
-        dd($request->all());
+//        dd($request->all());
         try{
 
             $siteSettings = SiteSettings::all();
@@ -122,13 +129,15 @@ use DestinationTrait;
                 $data = array(
                     'booking' => $booking,
                 );
-                Mail::to($booking->user->email)->send(new BookingSuccessful($data));
+//                Mail::to($booking->user->email)->send(new BookingSuccessful($data));
+                Mail::to($booking->user->email)->bcc('info247ae@gmail.com')->send(new BookingCreated($data));
             }
         }
         catch (Exception $e)
         {
 
         }
+//        dd('hi');
         if($request->quickBook != Null){
             QuickBooking::destroy($request->quickBook);
         }
@@ -193,7 +202,7 @@ use DestinationTrait;
      * Display the specified resource.
      *
      * @param  \App\Booking  $booking
-     * @return false|\Illuminate\Http\Response|string
+     * @return false|Response|string
      */
     public function show($booking)
     {
@@ -203,13 +212,24 @@ use DestinationTrait;
         $price = number_format((float)$booking->final_price, 2, '.', '');
         $journeyDate = date('d M Y', strtotime($booking->journey_date));
         $car = $booking->car->name;
+        $driverName = '';
+        $rDriverName = '';
+        if(count($booking->trips) != 0){
+            $driverName = $booking->trips[0]->driver->user->name;
+            if($booking->return == 1)
+            {
+                $rDriverName = $booking->trips[1]->driver->user->name;
+            }
+        }
         $data = [
             'booking' => $booking,
             'from' => $from,
             'to' => $to,
             'price'=> $price,
             'journeyDate' => $journeyDate,
-            'carName' => $car
+            'carName' => $car,
+            'driverName' => $driverName,
+            'rDriverName' => $rDriverName
         ];
         return json_encode($data);
     }
@@ -224,7 +244,7 @@ use DestinationTrait;
      * Show the form for editing the specified resource.
      *
      * @param  \App\Booking  $booking
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
+     * @return Application|Factory|Response|View
      */
     public function edit($id)
     {
@@ -253,9 +273,9 @@ use DestinationTrait;
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  \App\Booking  $booking
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     * @return RedirectResponse|Response
      */
     public function update(Request $request, $id)
     {
@@ -385,7 +405,7 @@ use DestinationTrait;
                 if($airport->id == $from)
                 {
                     $price = round($airport->pivot->return_price, 2);
-                    $returnPrice = round($airport->pivot->price,2);;
+                    $returnPrice = round($airport->pivot->price,2);
                 }
             }
         }
@@ -395,7 +415,7 @@ use DestinationTrait;
      * Remove the specified resource from storage.
      *
      * @param  \App\Booking  $booking
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     * @return RedirectResponse|Response
      */
     public function destroy(Request $request, $booking)
     {
@@ -516,7 +536,7 @@ use DestinationTrait;
                     Mail::to($driver->email)->send(new DriverAssigned($data));
                 if($request->send_email1_customer == 1 || $siteSettings[22]->value == 1)
                 {
-                    Mail::to($booking->user->email)->send(new BookingUpdated($dataB));
+                    Mail::to($booking->user->email)->send(new BookingUpdated($data));
                 }
             }
         }
@@ -783,7 +803,7 @@ use DestinationTrait;
             }
             else
             {
-                $invoice->payment_type = 'Paypal';
+                $invoice->payment_type = 'Online';
             }
 
             $invoice->status = 0;
